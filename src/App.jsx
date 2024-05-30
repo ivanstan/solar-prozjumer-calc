@@ -190,10 +190,6 @@ function App() {
   }, [utrosenaPlavaTarifaNTUtroseno]);
 
   useEffect(() => {
-    setUtrosenaPlavaTarifaVTUtroseno(0);
-  }, [utrosenaElektricnaEnergija, utrosakUtrosenoVT, donjaGranicaCrvenaTarifa]);
-
-  useEffect(() => {
     if (utrosenaZelenaTarifaVTUtroseno > utrosakUtrosenoVT) {
       setUtrosenaPlavaTarifaVTUtroseno(0);
     } else {
@@ -216,6 +212,41 @@ function App() {
       }
     }
   }, [utrosenaElektricnaEnergija, utrosenaZelenaTarifaNTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoNT]);
+
+  /**
+   * Crvena
+   */
+  const [utrosenaCrvenaTarifaVTUtroseno, setUtrosenaCrvenaTarifaVTUtroseno] = useState(0);
+  const utrosenaCrvenaTarifaVTCenaPoJedinici = 27.3276;
+  const [utrosenaCrvenaTarifaVTIznos, setUtrosenaCrvenaTarifaVTIznos] = useState(0);
+
+  const [utrosenaCrvenaTarifaNTUtroseno, setUtrosenaCrvenaTarifaNTUtroseno] = useState(0);
+  const utrosenaCrvenaTarifaNTCenaPoJedinici = 6.8319;
+  const [utrosenaCrvenaTarifaNTIznos, setUtrosenaCrvenaTarifaNTIznos] = useState(0);
+
+  useEffect(() => {
+    setUtrosenaCrvenaTarifaVTIznos((utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici).toFixed(2))
+  }, [utrosenaCrvenaTarifaVTUtroseno]);
+
+  useEffect(() => {
+    setUtrosenaCrvenaTarifaNTIznos((utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici).toFixed(2))
+  }, [utrosenaCrvenaTarifaNTUtroseno]);
+
+  useEffect(() => {
+    if (utrosenaZelenaTarifaVTUtroseno + utrosenaPlavaTarifaVTUtroseno < utrosakUtrosenoVT) {
+      setUtrosenaCrvenaTarifaVTUtroseno(utrosakUtrosenoVT - utrosenaZelenaTarifaVTUtroseno - utrosenaPlavaTarifaVTUtroseno);
+    } else {
+      setUtrosenaCrvenaTarifaVTUtroseno(0);
+    }
+  }, [utrosenaZelenaTarifaVTUtroseno, utrosenaPlavaTarifaVTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoVT]);
+
+  useEffect(() => {
+    if (utrosenaZelenaTarifaNTUtroseno + utrosenaPlavaTarifaNTUtroseno < utrosakUtrosenoNT) {
+      setUtrosenaCrvenaTarifaNTUtroseno(utrosakUtrosenoNT - utrosenaZelenaTarifaNTUtroseno - utrosenaPlavaTarifaNTUtroseno);
+    } else {
+      setUtrosenaCrvenaTarifaNTUtroseno(0);
+    }
+  }, [utrosenaZelenaTarifaNTUtroseno, utrosenaPlavaTarifaNTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoNT]);
 
   return (<>
     <Typography>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM MERENJU</Typography>
@@ -540,15 +571,15 @@ function App() {
       <tr className="red">
         <td rowSpan={2} colSpan={2}>Crvena zona</td>
         <td>Viša tarifa (VT)</td>
-        <td></td>
-        <td align="right">27.3276</td>
-        <td></td>
+        <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTUtroseno)}</Cell>
+        <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTIznos)}</Cell>
       </tr>
       <tr className="red">
         <td>Niža tarifa (NT)</td>
-        <td></td>
-        <td align="right">6.8319</td>
-        <td align="right"></td>
+        <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTUtroseno)}</Cell>
+        <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
       </tr>
       <tr>
         <td rowSpan={2}>3.</td>
