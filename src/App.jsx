@@ -8,13 +8,15 @@ const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgu
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 const years = Array.from({length: 6}, (v, i) => currentYear - i);
-const numDays = (y, m) => {
-  const month = months.indexOf(m);
 
-  return new Date(y, month + 1, 0).getDate();
+const renderNumber = (value) => {
+  return value == 0 ? '' : value;
 }
 
 function App() {
+  const cenaPoJedinici = 54.258;
+  const trosakGarantovanogSnabdevacaIznos = 160.67;
+
   const [month, setMonth] = useState(months[currentMonth])
   const [year, setYear] = useState(currentYear);
   const [elektronskaDostava, setElektronskaDostava] = useState(true);
@@ -49,6 +51,9 @@ function App() {
 
   const [umanjenjeUgrozeniSaSolar, setUmanjenjeUgrozeniSaSolar] = useState(0);
   const [umanjenjeUgrozeniBezSolra, setUmanjenjeUgrozeniBezSolra] = useState(0);
+
+  const [obracunskaSnagaIznos, setObracunskaSnagaIznos] = useState(0);
+  const [utrosenaElektricnaEnergija, setUtrosenaElektricnaEnergija] = useState(0);
 
   useEffect(() => {
     setUtrosakPreuzetoVT(novoPreuzetoVT - prethodnoPreuzetoVT);
@@ -99,6 +104,119 @@ function App() {
     }
   }, [utrosakPreuzetoNT, utrosakIsporucenoNT, utrosakVisakPrethodnoNT]);
 
+  useEffect(() => {
+      setObracunskaSnagaIznos((obracunskaSnaga * cenaPoJedinici).toFixed(2))
+  }, [obracunskaSnaga, cenaPoJedinici]);
+
+  useEffect(() => {
+    setUtrosenaElektricnaEnergija(utrosakUtrosenoVT + utrosakUtrosenoNT)
+  }, [utrosakUtrosenoVT, utrosakUtrosenoNT]);
+
+  const donjaGranicaZelenaTarifa = 0;
+  const [donjaGranicaPlavaTarifa, setDonjaGranicaPlavaTarifa] = useState(0);
+  const [donjaGranicaCrvenaTarifa, setDonjaGranicaCrvenaTarifa] = useState(0);
+
+  useEffect(() => {
+    setDonjaGranicaPlavaTarifa(Math.round(brojDana * 11.667));
+  }, [brojDana]);
+
+  useEffect(() => {
+    setDonjaGranicaCrvenaTarifa(Math.round(brojDana * 53.333));
+  }, [brojDana]);
+
+  console.log('Donja granica za plavu tarifu: ' + donjaGranicaPlavaTarifa);
+  console.log('Donja granica za crvenu tarifu: ' + donjaGranicaCrvenaTarifa);
+
+  /**
+   * Zelena
+   */
+  const [utrosenaZelenaTarifaVTUtroseno, setUtrosenaZelenaTarifaVTUtroseno] = useState(0);
+  const utrosenaZelenaTarifaVTCenaPoJedinici = 9.1092;
+  const [utrosenaZelenaTarifaVTIznos, setUtrosenaZelenaTarifaVTIznos] = useState(0);
+
+  const [utrosenaZelenaTarifaNTUtroseno, setUtrosenaZelenaTarifaNTUtroseno] = useState(0);
+  const utrosenaZelenaTarifaNTCenaPoJedinici = 2.2773;
+  const [utrosenaZelenaTarifaNTIznos, setUtrosenaZelenaTarifaNTIznos] = useState(0);
+
+  useEffect(() => {
+    setUtrosenaZelenaTarifaVTIznos((utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici).toFixed(2))
+  }, [utrosenaZelenaTarifaVTUtroseno]);
+
+  useEffect(() => {
+    setUtrosenaZelenaTarifaNTIznos((utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici).toFixed(2))
+  }, [utrosenaZelenaTarifaNTUtroseno]);
+
+  useEffect(() => {
+    if (utrosakUtrosenoVT === 0) {
+      setUtrosenaZelenaTarifaVTUtroseno(0);
+    } else {
+      if (donjaGranicaPlavaTarifa < utrosenaElektricnaEnergija) {
+        setUtrosenaZelenaTarifaVTUtroseno(Math.round(utrosakUtrosenoVT * donjaGranicaPlavaTarifa / utrosenaElektricnaEnergija))
+      } else {
+        setUtrosenaZelenaTarifaVTUtroseno(utrosakUtrosenoVT)
+      }
+    }
+  }, [utrosenaElektricnaEnergija, utrosakUtrosenoVT, donjaGranicaPlavaTarifa]);
+
+  useEffect(() => {
+    if (utrosakUtrosenoNT === 0) {
+      setUtrosenaZelenaTarifaNTUtroseno(0);
+    } else {
+      if (donjaGranicaPlavaTarifa < utrosenaElektricnaEnergija) {
+        setUtrosenaZelenaTarifaNTUtroseno(Math.round(utrosakUtrosenoNT * donjaGranicaPlavaTarifa / utrosenaElektricnaEnergija))
+      } else {
+        setUtrosenaZelenaTarifaNTUtroseno(utrosakUtrosenoNT)
+      }
+    }
+  }, [utrosenaElektricnaEnergija, utrosakUtrosenoNT, donjaGranicaPlavaTarifa]);
+
+  /**
+   * Plava
+   */
+  const [utrosenaPlavaTarifaVTUtroseno, setUtrosenaPlavaTarifaVTUtroseno] = useState(0);
+  const utrosenaPlavaTarifaVTCenaPoJedinici = 13.6638;
+  const [utrosenaPlavaTarifaVTIznos, setUtrosenaPlavaTarifaVTIznos] = useState(0);
+
+  const [utrosenaPlavaTarifaNTUtroseno, setUtrosenaPlavaTarifaNTUtroseno] = useState(0);
+  const utrosenaPlavaTarifaNTCenaPoJedinici = 3.4160;
+  const [utrosenaPlavaTarifaNTIznos, setUtrosenaPlavaTarifaNTIznos] = useState(0);
+
+  useEffect(() => {
+    setUtrosenaPlavaTarifaVTIznos((utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici).toFixed(2))
+  }, [utrosenaPlavaTarifaVTUtroseno]);
+
+  useEffect(() => {
+    setUtrosenaPlavaTarifaNTIznos((utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici).toFixed(2))
+  }, [utrosenaPlavaTarifaNTUtroseno]);
+
+  useEffect(() => {
+    setUtrosenaPlavaTarifaVTUtroseno(0);
+  }, [utrosenaElektricnaEnergija, utrosakUtrosenoVT, donjaGranicaCrvenaTarifa]);
+
+  useEffect(() => {
+    if (utrosenaZelenaTarifaVTUtroseno > utrosakUtrosenoVT) {
+      setUtrosenaPlavaTarifaVTUtroseno(0);
+    } else {
+      if (utrosenaZelenaTarifaVTUtroseno < donjaGranicaCrvenaTarifa) {
+        setUtrosenaPlavaTarifaVTUtroseno(utrosakUtrosenoVT - utrosenaZelenaTarifaVTUtroseno);
+      } else {
+        setUtrosenaPlavaTarifaVTUtroseno(Math.round(utrosakUtrosenoVT * donjaGranicaCrvenaTarifa / utrosenaElektricnaEnergija));
+      }
+    }
+  }, [utrosenaElektricnaEnergija, utrosenaZelenaTarifaVTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoVT]);
+
+  useEffect(() => {
+    if (utrosenaZelenaTarifaNTUtroseno > utrosakUtrosenoNT) {
+      setUtrosenaPlavaTarifaNTUtroseno(0);
+    } else {
+      if (utrosenaZelenaTarifaNTUtroseno < donjaGranicaCrvenaTarifa) {
+        setUtrosenaPlavaTarifaNTUtroseno(utrosakUtrosenoNT - utrosenaZelenaTarifaNTUtroseno);
+      } else {
+        setUtrosenaPlavaTarifaNTUtroseno(Math.round(utrosakUtrosenoNT * donjaGranicaCrvenaTarifa / utrosenaElektricnaEnergija));
+      }
+    }
+  }, [utrosenaElektricnaEnergija, utrosenaZelenaTarifaNTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoNT]);
+
   return (<>
     <Typography>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM MERENJU</Typography>
 
@@ -113,7 +231,6 @@ function App() {
           label="Mesec"
           onChange={(e) => {
             setMonth(e.target.value)
-            setBrojDana(numDays(year, e.target.value));
           }}
         >
           {months.map((month) => <MenuItem key={month} value={month}>{month}</MenuItem>)}
@@ -128,7 +245,6 @@ function App() {
           label="Godina"
           onChange={(e) => {
             setYear(e.target.value)
-            setBrojDana(numDays(e.target.value, month));
           }}
         >
           {years.map((year) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
@@ -372,49 +488,51 @@ function App() {
       <tr>
         <td>1.</td>
         <td colSpan={2} align="left">Obračunska snaga (kW)</td>
-        <td align="right">11.04</td>
-        <td align="right">54.258</td>
-        <td align="right">599.01</td>
+        <Cell align="right">{obracunskaSnaga}</Cell>
+        <td align="right">{cenaPoJedinici}</td>
+        <Cell align="right">{obracunskaSnagaIznos}</Cell>
       </tr>
       <tr>
         <td>2.</td>
         <td colSpan={2} align="left">Trošak garantovanog snabdevača</td>
-        <td colSpan="3" align="right">160.67</td>
+        <td></td>
+        <td></td>
+        <td align="right">{trosakGarantovanogSnabdevacaIznos}</td>
       </tr>
       <tr>
         <th colSpan={3}>Utrošena električna energija</th>
-        <td align="right">423</td>
+        <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
         <td></td>
         <td></td>
       </tr>
       <tr className="green">
         <td rowSpan={2} colSpan={2}>Zelena zona</td>
         <td>Viša tarifa (VT)</td>
-        <td></td>
-        <td align="right">9.1092</td>
-        <td></td>
+        <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTUtroseno)}</Cell>
+        <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTIznos)}</Cell>
       </tr>
       <tr className="green">
         <td>Niža tarifa (NT)</td>
-        <td align="right">362</td>
-        <td align="right">2.2773</td>
-        <td align="right">824.38</td>
+        <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTUtroseno)}</Cell>
+        <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTIznos)}</Cell>
       </tr>
       <tr>
         <td colSpan={6}>&nbsp;</td>
       </tr>
       <tr className="blue">
         <td rowSpan={2} colSpan={2}>Plava zona</td>
-        <td align="right">Viša tarifa (VT)</td>
-        <td></td>
-        <td align="right">13.6638</td>
-        <td></td>
+        <td>Viša tarifa (VT)</td>
+        <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTUtroseno)}</Cell>
+        <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTIznos)}</Cell>
       </tr>
       <tr className="blue">
         <td>Niža tarifa (NT)</td>
-        <td align="right">61</td>
-        <td align="right">3.4160</td>
-        <td align="right">208.38</td>
+        <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTUtroseno)}</Cell>
+        <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+        <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTIznos)}</Cell>
       </tr>
       <tr>
         <td colSpan={6}>&nbsp;</td>
@@ -430,18 +548,17 @@ function App() {
         <td>Niža tarifa (NT)</td>
         <td></td>
         <td align="right">6.8319</td>
-        <td></td>
+        <td align="right"></td>
       </tr>
       <tr>
-        <td colSpan={6}>&nbsp;</td>
+        <td rowSpan={2}>3.</td>
+        <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
+        <td rowSpan={2}></td>
+        <td rowSpan={2}></td>
+        <td rowSpan={2}>1,032.76</td>
         <td colSpan={3}>Bez solarnih panela</td>
       </tr>
       <tr>
-        <td>3.</td>
-        <th colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
-        <td></td>
-        <td></td>
-        <td>1,032.76</td>
         <th>Utrošeno (kW/kWh)</th>
         <th>Cena po jedinici</th>
         <th>Iznos (dinara)</th>
@@ -583,12 +700,15 @@ function App() {
         <td align="right">3.879</td>
         <td align="right">0.970</td>
         <td align="right">3,943.97</td>
-        <td colSpan={3}></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>10.</td>
         <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td>6,847.80</td>
         <td></td>
         <td></td>
@@ -597,7 +717,8 @@ function App() {
       <tr>
         <td>11.</td>
         <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">513.59</td>
         <td></td>
         <td></td>
@@ -606,7 +727,8 @@ function App() {
       <tr>
         <td>12.</td>
         <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">7,361.39</td>
         <td></td>
         <td></td>
@@ -615,7 +737,8 @@ function App() {
       <tr>
         <td>13.</td>
         <td colSpan={2} align="left">Iznos PDV (20%)</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">1,472.28</td>
         <td></td>
         <td></td>
@@ -624,7 +747,8 @@ function App() {
       <tr>
         <td>14.</td>
         <td colSpan={2} align="left">Umanjenje za energetski ugrožene kupce</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td>
           <TextField
             style={{maxWidth: 100}}
@@ -651,7 +775,8 @@ function App() {
       <tr>
         <td>15.</td>
         <td colSpan={2} align="left">ZADUŽENJE ZA OBRAČUNSKI PERIOD (1+2+3+5+6+7+8+9+11+13+14)</td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">8,833.66</td>
         <td></td>
         <td></td>
@@ -662,7 +787,8 @@ function App() {
         <td colSpan={2} align="left">
           Taksa za javni medijski servis (ne ulazi u osnovicu za PDV po čl. 17,st.4,t.2ЗPDV)
         </td>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">299.00</td>
         <td></td>
         <td></td>
@@ -670,7 +796,8 @@ function App() {
       </tr>
       <tr>
         <th colSpan={3} align="left">UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD (15+16)</th>
-        <td colSpan={2}></td>
+        <td></td>
+        <td></td>
         <td align="right">9,132.66</td>
         <td></td>
         <td></td>
