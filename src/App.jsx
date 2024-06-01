@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import './App.css'
 import {Button, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 import Cell from "./components/Cell.jsx";
@@ -30,6 +30,7 @@ function App() {
 
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(1000);
+  const [isporucenaElEnergija, setIsporucenaElEnergija] = useState(0);
   const [brojDana, setBrojDana] = useState(2);
 
   const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
@@ -96,6 +97,10 @@ function App() {
   const utrosenaCrvenaTarifaNTCenaPoJedinici = 6.8319;
   const [utrosenaCrvenaTarifaNTIznos, setUtrosenaCrvenaTarifaNTIznos] = useState(0);
 
+  const [ukupnoZaElEnergijuUObracunskomPeriodu, setUkupnoZaElEnergijuUObracunskomPeriodu] = useState(0);
+  const [preuzetaElektricnaEnergija, setPreuzetaElektricnaEnergija] = useState(0);
+  const [preuzetaElektricnaEnergijaBezSolar, setPreuzetaElektricnaEnergijaBezSolar] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -105,6 +110,8 @@ function App() {
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
     let _utrosakIsporucenoNT = novoIsporucenoNT - prethodnoIsporucenoNT;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
+    let _isporucenaElEnergija = utrosakIsporucenoVT + utrosakIsporucenoNT;
+    setIsporucenaElEnergija(_isporucenaElEnergija)
 
     let _utrosakUtrosenoVT = 0
     if (_utrosakPreuzetoVT < (_utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
@@ -166,11 +173,11 @@ function App() {
       }
     }
 
-    let _utrosenaZelenaTarifaVTIznos = (_utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici).toFixed(2);
-    setUtrosenaZelenaTarifaVTIznos(_utrosenaZelenaTarifaVTIznos);
+    let _utrosenaZelenaTarifaVTIznos = _utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici
+    setUtrosenaZelenaTarifaVTIznos(_utrosenaZelenaTarifaVTIznos.toFixed(2));
 
-    let _utrosenaZelenaTarifaNTIznos = (_utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici).toFixed(2);
-    setUtrosenaZelenaTarifaNTIznos(_utrosenaZelenaTarifaNTIznos);
+    let _utrosenaZelenaTarifaNTIznos = _utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici
+    setUtrosenaZelenaTarifaNTIznos(_utrosenaZelenaTarifaNTIznos.toFixed(2));
 
     /**
      * Plava
@@ -198,37 +205,51 @@ function App() {
         _utrosenaPlavaTarifaNTUtroseno = _donjaGranicaCrvenaTarifa - _utrosenaZelenaTarifaNTUtroseno
         setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
       } else {
-
-        console.log(1);
-
         _utrosenaPlavaTarifaNTUtroseno = Math.round((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
         setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
       }
     }
 
-    let _utrosenaPlavaTarifaVTIznos = (_utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici).toFixed(2);
-    setUtrosenaPlavaTarifaVTIznos(_utrosenaPlavaTarifaVTIznos)
+    let _utrosenaPlavaTarifaVTIznos = _utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici
+    setUtrosenaPlavaTarifaVTIznos(_utrosenaPlavaTarifaVTIznos.toFixed(2))
 
-    let _utrosenaPlavaTarifaNTIznos = (_utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici).toFixed(2);
-    setUtrosenaPlavaTarifaNTIznos(_utrosenaPlavaTarifaNTIznos)
+    let _utrosenaPlavaTarifaNTIznos = _utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici
+    setUtrosenaPlavaTarifaNTIznos(_utrosenaPlavaTarifaNTIznos.toFixed(2))
 
     /**
      * Crvena
      */
-    if (utrosenaZelenaTarifaVTUtroseno + utrosenaPlavaTarifaVTUtroseno < utrosakUtrosenoVT) {
-      setUtrosenaCrvenaTarifaVTUtroseno(utrosakUtrosenoVT - utrosenaZelenaTarifaVTUtroseno - utrosenaPlavaTarifaVTUtroseno);
+    let _utrosenaCrvenaTarifaVTUtroseno = 0;
+    if (_utrosenaZelenaTarifaVTUtroseno + _utrosenaPlavaTarifaVTUtroseno < _utrosakUtrosenoVT) {
+      _utrosenaCrvenaTarifaVTUtroseno = _utrosakUtrosenoVT - _utrosenaZelenaTarifaVTUtroseno - _utrosenaPlavaTarifaVTUtroseno;
+      setUtrosenaCrvenaTarifaVTUtroseno(_utrosenaCrvenaTarifaVTUtroseno);
     } else {
-      setUtrosenaCrvenaTarifaVTUtroseno(0);
+      _utrosenaCrvenaTarifaVTUtroseno = 0
+      setUtrosenaCrvenaTarifaVTUtroseno(_utrosenaCrvenaTarifaVTUtroseno);
     }
 
-    if (utrosenaZelenaTarifaNTUtroseno + utrosenaPlavaTarifaNTUtroseno < utrosakUtrosenoNT) {
-      setUtrosenaCrvenaTarifaNTUtroseno(utrosakUtrosenoNT - utrosenaZelenaTarifaNTUtroseno - utrosenaPlavaTarifaNTUtroseno);
+    let _utrosenaCrvenaTarifaNTUtroseno = 0;
+    if (_utrosenaZelenaTarifaNTUtroseno + _utrosenaPlavaTarifaNTUtroseno < _utrosakUtrosenoNT) {
+      _utrosenaCrvenaTarifaNTUtroseno = _utrosakUtrosenoNT - _utrosenaZelenaTarifaNTUtroseno - _utrosenaPlavaTarifaNTUtroseno;
+      setUtrosenaCrvenaTarifaNTUtroseno(_utrosenaCrvenaTarifaNTUtroseno);
     } else {
-      setUtrosenaCrvenaTarifaNTUtroseno(0);
+      _utrosenaCrvenaTarifaNTUtroseno = 0;
+      setUtrosenaCrvenaTarifaNTUtroseno(_utrosenaCrvenaTarifaNTUtroseno);
     }
 
-    setUtrosenaCrvenaTarifaVTIznos((utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici).toFixed(2))
-    setUtrosenaCrvenaTarifaNTIznos((utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici).toFixed(2))
+    let _utrosenaCrvenaTarifaVTIznos = _utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici
+    setUtrosenaCrvenaTarifaVTIznos(_utrosenaCrvenaTarifaVTIznos.toFixed(2))
+    let _utrosenaCrvenaTarifaNTIznos = _utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici
+    setUtrosenaCrvenaTarifaNTIznos(_utrosenaCrvenaTarifaNTIznos.toFixed(2))
+
+    let _ukupnoZaElEnergijuUObracunskomPeriodu = _utrosenaZelenaTarifaVTIznos + _utrosenaZelenaTarifaNTIznos + _utrosenaPlavaTarifaVTIznos + _utrosenaPlavaTarifaNTIznos + _utrosenaCrvenaTarifaVTIznos + _utrosenaCrvenaTarifaNTIznos;
+    setUkupnoZaElEnergijuUObracunskomPeriodu(_ukupnoZaElEnergijuUObracunskomPeriodu.toFixed(2));
+
+    let _preuzetaElektricnaEnergija = _utrosakPreuzetoVT + _utrosakPreuzetoNT;
+    setPreuzetaElektricnaEnergija(_preuzetaElektricnaEnergija)
+
+    let _preuzetaElektricnaEnergijaBezSolar = _preuzetaElektricnaEnergija + proizvedenaElEnergija - _isporucenaElEnergija;
+    setPreuzetaElektricnaEnergijaBezSolar(_preuzetaElektricnaEnergijaBezSolar);
   }
 
   return (<>
@@ -296,7 +317,7 @@ function App() {
         </tr>
         <tr>
           <th>Isporučena el. energija:</th>
-          <td>0 kW/h</td>
+          <td>{isporucenaElEnergija} kW/h</td>
         </tr>
         <tr>
           <th>Broj dana:</th>
@@ -571,7 +592,7 @@ function App() {
         <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
         <td rowSpan={2}></td>
         <td rowSpan={2}></td>
-        <td rowSpan={2}>1,032.76</td>
+        <td rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</td>
         <td colSpan={3}>Bez solarnih panela</td>
       </tr>
       <tr>
@@ -581,10 +602,10 @@ function App() {
       </tr>
       <tr>
         <th colSpan={3}>Preuzeta električna energija</th>
-        <td align="right">1,442</td>
+        <td align="right">{preuzetaElektricnaEnergija}</td>
         <td></td>
         <td></td>
-        <td align="right">2,442</td>
+        <td align="right">{preuzetaElektricnaEnergijaBezSolar}</td>
         <td></td>
         <td></td>
       </tr>
