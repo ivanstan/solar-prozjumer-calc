@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import './App.css'
-import {Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {Button, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 import Cell from "./components/Cell.jsx";
 
 const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
@@ -10,6 +10,11 @@ const currentMonth = new Date().getMonth();
 const years = Array.from({length: 6}, (v, i) => currentYear - i);
 
 const renderNumber = (value) => {
+
+  if (isNaN(value)) {
+    return '';
+  }
+
   return value == 0 ? '' : value;
 }
 
@@ -25,7 +30,7 @@ function App() {
 
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(1000);
-  const [brojDana, setBrojDana] = useState(31); // ToDo: mozda u odnosu na mesec
+  const [brojDana, setBrojDana] = useState(2);
 
   const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
   const [prethodnoPreuzetoNT, setPrethodnoPreuzetoNT] = useState(9492);
@@ -55,77 +60,8 @@ function App() {
   const [obracunskaSnagaIznos, setObracunskaSnagaIznos] = useState(0);
   const [utrosenaElektricnaEnergija, setUtrosenaElektricnaEnergija] = useState(0);
 
-  useEffect(() => {
-    setUtrosakPreuzetoVT(novoPreuzetoVT - prethodnoPreuzetoVT);
-  }, [novoPreuzetoVT, prethodnoPreuzetoVT]);
-
-  useEffect(() => {
-    setUtrosakPreuzetoNT(novoPreuzetoNT - prethodnoPreuzetoNT);
-  }, [prethodnoPreuzetoNT, novoPreuzetoNT]);
-
-  useEffect(() => {
-    setUtrosakIsporucenoVT(novoIsporucenoVT - prethodnoIsporucenoVT);
-  }, [prethodnoIsporucenoVT, novoIsporucenoVT]);
-
-  useEffect(() => {
-    setUtrosakIsporucenoNT(novoIsporucenoNT - prethodnoIsporucenoNT);
-  }, [prethodnoIsporucenoNT, novoIsporucenoNT]);
-
-  useEffect(() => {
-    if (utrosakPreuzetoVT < (utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
-      setUtrosakUtrosenoVT(0);
-    } else {
-      setUtrosakUtrosenoVT(utrosakPreuzetoVT - utrosakIsporucenoVT - utrosakVisakPrethodnoVT);
-    }
-  }, [utrosakPreuzetoVT, utrosakIsporucenoVT, utrosakVisakPrethodnoVT]);
-
-  useEffect(() => {
-    if (utrosakPreuzetoNT < (utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
-      setUtrosakUtrosenoNT(0);
-    } else {
-      setUtrosakUtrosenoNT(utrosakPreuzetoNT - utrosakIsporucenoNT - utrosakVisakPrethodnoNT);
-    }
-  }, [utrosakPreuzetoNT, utrosakIsporucenoNT, utrosakVisakPrethodnoNT]);
-
-
-  useEffect(() => {
-    if (utrosakPreuzetoVT < (utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
-      setUtrosakVisakSledeciVT(utrosakIsporucenoVT + utrosakVisakPrethodnoVT - utrosakPreuzetoVT);
-    } else {
-      setUtrosakVisakSledeciVT(0);
-    }
-  }, [utrosakPreuzetoVT, utrosakIsporucenoVT, utrosakVisakPrethodnoVT]);
-
-  useEffect(() => {
-    if (utrosakPreuzetoNT < (utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
-      setUtrosakVisakSledeciNT(utrosakIsporucenoNT + utrosakVisakPrethodnoNT - utrosakPreuzetoNT);
-    } else {
-      setUtrosakVisakSledeciNT(0);
-    }
-  }, [utrosakPreuzetoNT, utrosakIsporucenoNT, utrosakVisakPrethodnoNT]);
-
-  useEffect(() => {
-      setObracunskaSnagaIznos((obracunskaSnaga * cenaPoJedinici).toFixed(2))
-  }, [obracunskaSnaga, cenaPoJedinici]);
-
-  useEffect(() => {
-    setUtrosenaElektricnaEnergija(utrosakUtrosenoVT + utrosakUtrosenoNT)
-  }, [utrosakUtrosenoVT, utrosakUtrosenoNT]);
-
-  const donjaGranicaZelenaTarifa = 0;
   const [donjaGranicaPlavaTarifa, setDonjaGranicaPlavaTarifa] = useState(0);
   const [donjaGranicaCrvenaTarifa, setDonjaGranicaCrvenaTarifa] = useState(0);
-
-  useEffect(() => {
-    setDonjaGranicaPlavaTarifa(Math.round(brojDana * 11.667));
-  }, [brojDana]);
-
-  useEffect(() => {
-    setDonjaGranicaCrvenaTarifa(Math.round(brojDana * 53.333));
-  }, [brojDana]);
-
-  console.log('Donja granica za plavu tarifu: ' + donjaGranicaPlavaTarifa);
-  console.log('Donja granica za crvenu tarifu: ' + donjaGranicaCrvenaTarifa);
 
   /**
    * Zelena
@@ -138,38 +74,6 @@ function App() {
   const utrosenaZelenaTarifaNTCenaPoJedinici = 2.2773;
   const [utrosenaZelenaTarifaNTIznos, setUtrosenaZelenaTarifaNTIznos] = useState(0);
 
-  useEffect(() => {
-    setUtrosenaZelenaTarifaVTIznos((utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici).toFixed(2))
-  }, [utrosenaZelenaTarifaVTUtroseno]);
-
-  useEffect(() => {
-    setUtrosenaZelenaTarifaNTIznos((utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici).toFixed(2))
-  }, [utrosenaZelenaTarifaNTUtroseno]);
-
-  useEffect(() => {
-    if (utrosakUtrosenoVT === 0) {
-      setUtrosenaZelenaTarifaVTUtroseno(0);
-    } else {
-      if (donjaGranicaPlavaTarifa < utrosenaElektricnaEnergija) {
-        setUtrosenaZelenaTarifaVTUtroseno(Math.round(utrosakUtrosenoVT * donjaGranicaPlavaTarifa / utrosenaElektricnaEnergija))
-      } else {
-        setUtrosenaZelenaTarifaVTUtroseno(utrosakUtrosenoVT)
-      }
-    }
-  }, [utrosenaElektricnaEnergija, utrosakUtrosenoVT, donjaGranicaPlavaTarifa]);
-
-  useEffect(() => {
-    if (utrosakUtrosenoNT === 0) {
-      setUtrosenaZelenaTarifaNTUtroseno(0);
-    } else {
-      if (donjaGranicaPlavaTarifa < utrosenaElektricnaEnergija) {
-        setUtrosenaZelenaTarifaNTUtroseno(Math.round(utrosakUtrosenoNT * donjaGranicaPlavaTarifa / utrosenaElektricnaEnergija))
-      } else {
-        setUtrosenaZelenaTarifaNTUtroseno(utrosakUtrosenoNT)
-      }
-    }
-  }, [utrosenaElektricnaEnergija, utrosakUtrosenoNT, donjaGranicaPlavaTarifa]);
-
   /**
    * Plava
    */
@@ -180,38 +84,6 @@ function App() {
   const [utrosenaPlavaTarifaNTUtroseno, setUtrosenaPlavaTarifaNTUtroseno] = useState(0);
   const utrosenaPlavaTarifaNTCenaPoJedinici = 3.4160;
   const [utrosenaPlavaTarifaNTIznos, setUtrosenaPlavaTarifaNTIznos] = useState(0);
-
-  useEffect(() => {
-    setUtrosenaPlavaTarifaVTIznos((utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici).toFixed(2))
-  }, [utrosenaPlavaTarifaVTUtroseno]);
-
-  useEffect(() => {
-    setUtrosenaPlavaTarifaNTIznos((utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici).toFixed(2))
-  }, [utrosenaPlavaTarifaNTUtroseno]);
-
-  useEffect(() => {
-    if (utrosenaZelenaTarifaVTUtroseno > utrosakUtrosenoVT) {
-      setUtrosenaPlavaTarifaVTUtroseno(0);
-    } else {
-      if (utrosenaZelenaTarifaVTUtroseno < donjaGranicaCrvenaTarifa) {
-        setUtrosenaPlavaTarifaVTUtroseno(utrosakUtrosenoVT - utrosenaZelenaTarifaVTUtroseno);
-      } else {
-        setUtrosenaPlavaTarifaVTUtroseno(Math.round(utrosakUtrosenoVT * donjaGranicaCrvenaTarifa / utrosenaElektricnaEnergija));
-      }
-    }
-  }, [utrosenaElektricnaEnergija, utrosenaZelenaTarifaVTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoVT]);
-
-  useEffect(() => {
-    if (utrosenaZelenaTarifaNTUtroseno > utrosakUtrosenoNT) {
-      setUtrosenaPlavaTarifaNTUtroseno(0);
-    } else {
-      if (utrosenaZelenaTarifaNTUtroseno < donjaGranicaCrvenaTarifa) {
-        setUtrosenaPlavaTarifaNTUtroseno(utrosakUtrosenoNT - utrosenaZelenaTarifaNTUtroseno);
-      } else {
-        setUtrosenaPlavaTarifaNTUtroseno(Math.round(utrosakUtrosenoNT * donjaGranicaCrvenaTarifa / utrosenaElektricnaEnergija));
-      }
-    }
-  }, [utrosenaElektricnaEnergija, utrosenaZelenaTarifaNTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoNT]);
 
   /**
    * Crvena
@@ -224,29 +96,140 @@ function App() {
   const utrosenaCrvenaTarifaNTCenaPoJedinici = 6.8319;
   const [utrosenaCrvenaTarifaNTIznos, setUtrosenaCrvenaTarifaNTIznos] = useState(0);
 
-  useEffect(() => {
-    setUtrosenaCrvenaTarifaVTIznos((utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici).toFixed(2))
-  }, [utrosenaCrvenaTarifaVTUtroseno]);
+  const calculate = () => {
+    let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
+    setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
+    let _utrosakPreuzetoNT = novoPreuzetoNT - prethodnoPreuzetoNT;
+    setUtrosakPreuzetoNT(_utrosakPreuzetoNT);
+    let _utrosakIsporucenoVT = novoIsporucenoVT - prethodnoIsporucenoVT;
+    setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
+    let _utrosakIsporucenoNT = novoIsporucenoNT - prethodnoIsporucenoNT;
+    setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
 
-  useEffect(() => {
-    setUtrosenaCrvenaTarifaNTIznos((utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici).toFixed(2))
-  }, [utrosenaCrvenaTarifaNTUtroseno]);
+    let _utrosakUtrosenoVT = 0
+    if (_utrosakPreuzetoVT < (_utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
+      _utrosakUtrosenoVT = 0
+      setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
+    } else {
+      _utrosakUtrosenoVT = _utrosakPreuzetoVT - _utrosakIsporucenoVT - utrosakVisakPrethodnoVT;
+      setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
+    }
 
-  useEffect(() => {
+    let _utrosakUtrosenoNT = 0
+    if (utrosakPreuzetoNT < (utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
+      _utrosakUtrosenoNT = 0
+      setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+    } else {
+      _utrosakUtrosenoNT = utrosakPreuzetoNT - utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
+      setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+    }
+
+    let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici).toFixed(2);
+    setObracunskaSnagaIznos(_obracunskaSnagaIznos)
+
+    let _utrosenaElektricnaEnergija = _utrosakUtrosenoVT + _utrosakUtrosenoNT;
+    setUtrosenaElektricnaEnergija(_utrosenaElektricnaEnergija);
+
+    let _donjaGranicaPlavaTarifa = Math.round(brojDana * 11.667);
+    setDonjaGranicaPlavaTarifa(_donjaGranicaPlavaTarifa);
+    let _donjaGranicaCrvenaTarifa = Math.round(brojDana * 53.333);
+    setDonjaGranicaCrvenaTarifa(_donjaGranicaCrvenaTarifa);
+
+    /**
+     * Zelena
+     */
+    let _utrosenaZelenaTarifaVTUtroseno = 0;
+    if (_utrosakUtrosenoVT === 0) {
+      _utrosenaZelenaTarifaVTUtroseno = 0
+      setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno);
+    } else {
+      if (_donjaGranicaPlavaTarifa < _utrosenaElektricnaEnergija) {
+        _utrosenaZelenaTarifaVTUtroseno = Math.round(_utrosakUtrosenoVT * _donjaGranicaPlavaTarifa / _utrosenaElektricnaEnergija);
+        setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
+      } else {
+        _utrosenaZelenaTarifaVTUtroseno = _utrosakUtrosenoVT;
+        setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
+      }
+    }
+
+    let _utrosenaZelenaTarifaNTUtroseno = 0;
+    if (_utrosakUtrosenoNT === 0) {
+      _utrosenaZelenaTarifaNTUtroseno = 0
+      setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno);
+    } else {
+      if (_donjaGranicaPlavaTarifa < _utrosenaElektricnaEnergija) {
+        _utrosenaZelenaTarifaNTUtroseno = Math.round(_utrosakUtrosenoNT * _donjaGranicaPlavaTarifa / _utrosenaElektricnaEnergija);
+        setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno)
+      } else {
+        _utrosenaZelenaTarifaNTUtroseno = _utrosakUtrosenoNT;
+        setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno)
+      }
+    }
+
+    let _utrosenaZelenaTarifaVTIznos = (_utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici).toFixed(2);
+    setUtrosenaZelenaTarifaVTIznos(_utrosenaZelenaTarifaVTIznos);
+
+    let _utrosenaZelenaTarifaNTIznos = (_utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici).toFixed(2);
+    setUtrosenaZelenaTarifaNTIznos(_utrosenaZelenaTarifaNTIznos);
+
+    /**
+     * Plava
+     */
+    let _utrosenaPlavaTarifaVTUtroseno = 0;
+    if (_utrosenaZelenaTarifaVTUtroseno > _utrosakUtrosenoVT) {
+      _utrosenaPlavaTarifaVTUtroseno = 0
+      setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
+    } else {
+      if (_utrosenaZelenaTarifaVTUtroseno < _donjaGranicaCrvenaTarifa) {
+        _utrosenaPlavaTarifaVTUtroseno = _utrosakUtrosenoVT - _utrosenaZelenaTarifaVTUtroseno
+        setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
+      } else {
+        _utrosenaPlavaTarifaVTUtroseno = Math.round((_utrosakUtrosenoVT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaVTUtroseno);
+        setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
+      }
+    }
+
+    let _utrosenaPlavaTarifaNTUtroseno = 0;
+    if (_utrosenaZelenaTarifaNTUtroseno > _utrosakUtrosenoNT) {
+      _utrosenaPlavaTarifaNTUtroseno = 0
+      setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
+    } else {
+      if (_utrosenaZelenaTarifaNTUtroseno < _donjaGranicaCrvenaTarifa) {
+        _utrosenaPlavaTarifaNTUtroseno = _donjaGranicaCrvenaTarifa - _utrosenaZelenaTarifaNTUtroseno
+        setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
+      } else {
+
+        console.log(1);
+
+        _utrosenaPlavaTarifaNTUtroseno = Math.round((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
+        setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
+      }
+    }
+
+    let _utrosenaPlavaTarifaVTIznos = (_utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici).toFixed(2);
+    setUtrosenaPlavaTarifaVTIznos(_utrosenaPlavaTarifaVTIznos)
+
+    let _utrosenaPlavaTarifaNTIznos = (_utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici).toFixed(2);
+    setUtrosenaPlavaTarifaNTIznos(_utrosenaPlavaTarifaNTIznos)
+
+    /**
+     * Crvena
+     */
     if (utrosenaZelenaTarifaVTUtroseno + utrosenaPlavaTarifaVTUtroseno < utrosakUtrosenoVT) {
       setUtrosenaCrvenaTarifaVTUtroseno(utrosakUtrosenoVT - utrosenaZelenaTarifaVTUtroseno - utrosenaPlavaTarifaVTUtroseno);
     } else {
       setUtrosenaCrvenaTarifaVTUtroseno(0);
     }
-  }, [utrosenaZelenaTarifaVTUtroseno, utrosenaPlavaTarifaVTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoVT]);
 
-  useEffect(() => {
     if (utrosenaZelenaTarifaNTUtroseno + utrosenaPlavaTarifaNTUtroseno < utrosakUtrosenoNT) {
       setUtrosenaCrvenaTarifaNTUtroseno(utrosakUtrosenoNT - utrosenaZelenaTarifaNTUtroseno - utrosenaPlavaTarifaNTUtroseno);
     } else {
       setUtrosenaCrvenaTarifaNTUtroseno(0);
     }
-  }, [utrosenaZelenaTarifaNTUtroseno, utrosenaPlavaTarifaNTUtroseno, donjaGranicaCrvenaTarifa, utrosakUtrosenoNT]);
+
+    setUtrosenaCrvenaTarifaVTIznos((utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici).toFixed(2))
+    setUtrosenaCrvenaTarifaNTIznos((utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici).toFixed(2))
+  }
 
   return (<>
     <Typography>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM MERENJU</Typography>
@@ -320,7 +303,7 @@ function App() {
           <td>
             <TextField
               type="number"
-              inputProps={{ max: 31, min: 1 }}
+              inputProps={{max: 31, min: 1}}
               variant="outlined"
               value={brojDana}
               onChange={(e) => {
@@ -500,6 +483,8 @@ function App() {
       </tr>
       </tbody>
     </table>
+
+    <Button onClick={calculate}>Izracunaj</Button>
 
     <table border="1">
       <tbody>
