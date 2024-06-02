@@ -111,6 +111,11 @@ function App() {
   const[periodPlavaNTUtroseno, setPeriodPlavaNTUtroseno] = useState(0);
   const[periodPlavaNTIznos, setPeriodPlavaNTIznos] = useState(0);
 
+  const[periodCrvenaVTUtroseno, setPeriodCrvenaVTUtroseno] = useState(0);
+  const[periodCrvenaVTIznos, setPeriodCrvenaVTIznos] = useState(0);
+  const[periodCrvenaNTUtroseno, setPeriodCrvenaNTUtroseno] = useState(0);
+  const[periodCrvenaNTIznos, setPeriodCrvenaNTIznos] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -322,6 +327,27 @@ function App() {
     /**
      * Crvena
      */
+    let _periodCrvenaVTUtroseno = 0;
+    if (_periodZelenaVTUtroseno + _periodPlavaVTUtroseno >= _utrosakPreuzetoVT) {
+      _periodCrvenaVTUtroseno = 0;
+    } else {
+      _periodCrvenaVTUtroseno = _utrosakPreuzetoVT - _periodZelenaVTUtroseno - _periodPlavaVTUtroseno;
+    }
+
+    let _periodCrvenaVTIznos = _periodCrvenaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici;
+    setPeriodCrvenaVTUtroseno(_periodCrvenaVTUtroseno.toFixed(0));
+    setPeriodCrvenaVTIznos(_periodCrvenaVTIznos.toFixed(2));
+
+    let _periodCrvenaNTUtroseno = 0;
+    if (_periodZelenaNTUtroseno + _periodPlavaNTUtroseno >= _utrosakPreuzetoNT) {
+      _periodCrvenaNTUtroseno = 0;
+    } else {
+      _periodCrvenaNTUtroseno = _utrosakPreuzetoNT - _periodZelenaNTUtroseno - _periodPlavaNTUtroseno;
+    }
+
+    let _periodCrvenaNTIznos = _periodCrvenaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici;
+    setPeriodCrvenaNTUtroseno(_periodCrvenaNTUtroseno.toFixed(0));
+    setPeriodCrvenaNTIznos(_periodCrvenaNTIznos.toFixed(2));
   }
 
   useEffect(() => {
@@ -673,7 +699,7 @@ function App() {
         <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
         <td rowSpan={2}></td>
         <td rowSpan={2}></td>
-        <td rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</td>
+        <Cell rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
         <td colSpan={3}>Bez solarnih panela</td>
       </tr>
       <tr>
@@ -683,10 +709,10 @@ function App() {
       </tr>
       <tr>
         <th colSpan={3}>Preuzeta električna energija</th>
-        <td align="right">{preuzetaElektricnaEnergija}</td>
+        <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
         <td></td>
         <td></td>
-        <td align="right">{preuzetaElektricnaEnergijaBezSolar}</td>
+        <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
         <td></td>
         <td></td>
       </tr>
@@ -704,9 +730,9 @@ function App() {
       <tr className="green">
         <td></td>
         <td>Niža tarifa (NT)</td>
-        <td align="right">{periodZelenaNTUtroseno}</td>
+        <Cell align="right">{periodZelenaNTUtroseno}</Cell>
         <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-        <td align="right">{periodZelenaNTIznos}</td>
+        <Cell align="right">{periodZelenaNTIznos}</Cell>
         <td align="right">63</td>
         <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
         <td align="right">143.47</td>
@@ -718,9 +744,9 @@ function App() {
         <td></td>
         <td rowSpan={2}>Plava zona</td>
         <td>Viša tarifa (VT)</td>
-        <td align="right">{periodPlavaVTUtroseno}</td>
+        <Cell align="right">{periodPlavaVTUtroseno}</Cell>
         <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-        <td align="right">{periodPlavaVTIznos}</td>
+        <Cell align="right">{periodPlavaVTIznos}</Cell>
         <td align="right">1066</td>
         <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
         <td align="right">14,565.61</td>
@@ -728,9 +754,9 @@ function App() {
       <tr className="blue">
         <td></td>
         <td>Niža tarifa (NT)</td>
-        <td align="right">{periodPlavaNTUtroseno}</td>
+        <Cell align="right">{periodPlavaNTUtroseno}</Cell>
         <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-        <td align="right">{periodPlavaNTIznos}</td>
+        <Cell align="right">{periodPlavaNTIznos}</Cell>
         <td align="right">225</td>
         <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
         <td align="right">768.60</td>
@@ -742,9 +768,9 @@ function App() {
         <td></td>
         <td rowSpan={2}>Crvena zona</td>
         <td>Viša tarifa (VT)</td>
-        <td></td>
+        <Cell align="right">{periodCrvenaVTUtroseno}</Cell>
         <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-        <td></td>
+        <Cell align="right">{periodCrvenaVTIznos}</Cell>
         <td align="right">651</td>
         <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
         <td align="right">17,790.27</td>
@@ -752,9 +778,9 @@ function App() {
       <tr className="red">
         <td></td>
         <td>Niža tarifa (NT)</td>
-        <td></td>
+        <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-        <td></td>
+        <Cell align="right">{periodCrvenaNTIznos}</Cell>
         <td align="right">138</td>
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
         <td align="right">942.80</td>
