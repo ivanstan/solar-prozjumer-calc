@@ -65,8 +65,10 @@ function App() {
   const [donjaGranicaCrvenaTarifa, setDonjaGranicaCrvenaTarifa] = useState(0);
 
   /**
-   * Zelena
+   * Utrošena električna energija
    */
+
+    // Zelena
   const [utrosenaZelenaTarifaVTUtroseno, setUtrosenaZelenaTarifaVTUtroseno] = useState(0);
   const utrosenaZelenaTarifaVTCenaPoJedinici = 9.1092;
   const [utrosenaZelenaTarifaVTIznos, setUtrosenaZelenaTarifaVTIznos] = useState(0);
@@ -75,9 +77,7 @@ function App() {
   const utrosenaZelenaTarifaNTCenaPoJedinici = 2.2773;
   const [utrosenaZelenaTarifaNTIznos, setUtrosenaZelenaTarifaNTIznos] = useState(0);
 
-  /**
-   * Plava
-   */
+  // Plava
   const [utrosenaPlavaTarifaVTUtroseno, setUtrosenaPlavaTarifaVTUtroseno] = useState(0);
   const utrosenaPlavaTarifaVTCenaPoJedinici = 13.6638;
   const [utrosenaPlavaTarifaVTIznos, setUtrosenaPlavaTarifaVTIznos] = useState(0);
@@ -86,9 +86,7 @@ function App() {
   const utrosenaPlavaTarifaNTCenaPoJedinici = 3.4160;
   const [utrosenaPlavaTarifaNTIznos, setUtrosenaPlavaTarifaNTIznos] = useState(0);
 
-  /**
-   * Crvena
-   */
+  // Crvena
   const [utrosenaCrvenaTarifaVTUtroseno, setUtrosenaCrvenaTarifaVTUtroseno] = useState(0);
   const utrosenaCrvenaTarifaVTCenaPoJedinici = 27.3276;
   const [utrosenaCrvenaTarifaVTIznos, setUtrosenaCrvenaTarifaVTIznos] = useState(0);
@@ -101,20 +99,49 @@ function App() {
   const [preuzetaElektricnaEnergija, setPreuzetaElektricnaEnergija] = useState(0);
   const [preuzetaElektricnaEnergijaBezSolar, setPreuzetaElektricnaEnergijaBezSolar] = useState(0);
 
-  const[periodZelenaVTUtroseno, setPeriodZelenaVTUtroseno] = useState(0);
-  const[periodZelenaVTIznos, setPeriodZelenaVTIznos] = useState(0);
-  const[periodZelenaNTUtroseno, setPeriodZelenaNTUtroseno] = useState(0);
-  const[periodZelenaNTIznos, setPeriodZelenaNTIznos] = useState(0);
+  /**
+   * UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU
+   * Sa solarnim panelima
+   */
+    // Zelena
+  const [periodZelenaVTUtroseno, setPeriodZelenaVTUtroseno] = useState(0);
+  const [periodZelenaVTIznos, setPeriodZelenaVTIznos] = useState(0);
+  const [periodZelenaNTUtroseno, setPeriodZelenaNTUtroseno] = useState(0);
+  const [periodZelenaNTIznos, setPeriodZelenaNTIznos] = useState(0);
 
-  const[periodPlavaVTUtroseno, setPeriodPlavaVTUtroseno] = useState(0);
-  const[periodPlavaVTIznos, setPeriodPlavaVTIznos] = useState(0);
-  const[periodPlavaNTUtroseno, setPeriodPlavaNTUtroseno] = useState(0);
-  const[periodPlavaNTIznos, setPeriodPlavaNTIznos] = useState(0);
+  // Plava
+  const [periodPlavaVTUtroseno, setPeriodPlavaVTUtroseno] = useState(0);
+  const [periodPlavaVTIznos, setPeriodPlavaVTIznos] = useState(0);
+  const [periodPlavaNTUtroseno, setPeriodPlavaNTUtroseno] = useState(0);
+  const [periodPlavaNTIznos, setPeriodPlavaNTIznos] = useState(0);
 
-  const[periodCrvenaVTUtroseno, setPeriodCrvenaVTUtroseno] = useState(0);
-  const[periodCrvenaVTIznos, setPeriodCrvenaVTIznos] = useState(0);
-  const[periodCrvenaNTUtroseno, setPeriodCrvenaNTUtroseno] = useState(0);
-  const[periodCrvenaNTIznos, setPeriodCrvenaNTIznos] = useState(0);
+  // Crvena
+  const [periodCrvenaVTUtroseno, setPeriodCrvenaVTUtroseno] = useState(0);
+  const [periodCrvenaVTIznos, setPeriodCrvenaVTIznos] = useState(0);
+  const [periodCrvenaNTUtroseno, setPeriodCrvenaNTUtroseno] = useState(0);
+  const [periodCrvenaNTIznos, setPeriodCrvenaNTIznos] = useState(0);
+
+  /**
+   * UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU
+   * Bez solarnih panela
+   */
+    // Zelena
+  const [periodZelenaVTUtrosenoBezPanela, setPeriodZelenaVTUtrosenoBezPanela] = useState(0);
+  const [periodZelenaVTIznosBezPanela, setPeriodZelenaVTIznosBezPanela] = useState(0);
+  const [periodZelenaNTUtrosenoBezPanela, setPeriodZelenaNTUtrosenoBezPanela] = useState(0);
+  const [periodZelenaNTIznosBezPanela, setPeriodZelenaNTIznosBezPanela] = useState(0);
+
+  // Plava
+  const [periodPlavaVTUtrosenoBezPanela, setPeriodPlavaVTUtrosenoBezPanela] = useState(0);
+  const [periodPlavaVTIznosBezPanela, setPeriodPlavaVTIznosBezPanela] = useState(0);
+  const [periodPlavaNTUtrosenoBezPanela, setPeriodPlavaNTUtrosenoBezPanela] = useState(0);
+  const [periodPlavaNTIznosBezPanela, setPeriodPlavaNTIznosBezPanela] = useState(0);
+
+  // Crvena
+  const [periodCrvenaVTUtrosenoBezPanela, setPeriodCrvenaVTUtrosenoBezPanela] = useState(0);
+  const [periodCrvenaVTIznosBezPanela, setPeriodCrvenaVTIznosBezPanela] = useState(0);
+  const [periodCrvenaNTUtrosenoBezPanela, setPeriodCrvenaNTUtrosenoBezPanela] = useState(0);
+  const [periodCrvenaNTIznosBezPanela, setPeriodCrvenaNTIznosBezPanela] = useState(0);
 
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
@@ -348,6 +375,91 @@ function App() {
     let _periodCrvenaNTIznos = _periodCrvenaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici;
     setPeriodCrvenaNTUtroseno(_periodCrvenaNTUtroseno.toFixed(0));
     setPeriodCrvenaNTIznos(_periodCrvenaNTIznos.toFixed(2));
+
+    /**
+     * Bez solarnih celija
+     */
+      // Zelena
+    let _periodZelenaVTUtrosenoBezPanela = 0;
+    if (_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija + _utrosakPreuzetoNT === 0) {
+      _periodZelenaVTUtrosenoBezPanela = 0;
+    } else {
+      if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
+        _periodZelenaVTUtrosenoBezPanela = (_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar;
+      } else {
+        _periodZelenaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija;
+      }
+    }
+    setPeriodZelenaVTUtrosenoBezPanela(_periodZelenaVTUtrosenoBezPanela.toFixed(0));
+
+    let _periodZelenaVTIznosBezPanela = _periodZelenaVTUtrosenoBezPanela * utrosenaZelenaTarifaVTCenaPoJedinici;
+    setPeriodZelenaVTIznosBezPanela(_periodZelenaVTIznosBezPanela.toFixed(2));
+
+    let _periodZelenaNTUtrosenoBezPanela = 0;
+    if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
+      _periodZelenaNTUtrosenoBezPanela = _utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar;
+    } else {
+      _periodZelenaNTUtrosenoBezPanela = 0;
+    }
+
+    setPeriodZelenaNTUtrosenoBezPanela(_periodZelenaNTUtrosenoBezPanela.toFixed(0));
+
+    let _periodZelenaNTIznosBezPanela = _periodZelenaNTUtrosenoBezPanela * utrosenaZelenaTarifaNTCenaPoJedinici;
+    setPeriodZelenaNTIznosBezPanela(_periodZelenaNTIznosBezPanela.toFixed(2));
+
+    // Plava
+    let _periodPlavaVTUtrosenoBezPanela = 0;
+    if (_periodZelenaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + _utrosakIsporucenoVT) {
+      _periodPlavaVTUtrosenoBezPanela = 0;
+    } else {
+      if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
+        _periodPlavaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela;
+      } else {
+        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela;
+      }
+    }
+    setPeriodPlavaVTUtrosenoBezPanela(_periodPlavaVTUtrosenoBezPanela.toFixed(0));
+
+    let _periodPlavaVTIznosBezPanela = _periodPlavaVTUtrosenoBezPanela * utrosenaPlavaTarifaVTCenaPoJedinici;
+    setPeriodPlavaVTIznosBezPanela(_periodPlavaVTIznosBezPanela.toFixed(2));
+
+    let _periodPlavaNTUtrosenoBezPanela = 0;
+    if (_periodZelenaNTUtrosenoBezPanela >= _utrosakPreuzetoNT) {
+      _periodPlavaNTUtrosenoBezPanela = 0;
+    } else {
+      if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
+        _periodPlavaNTUtrosenoBezPanela = _utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela;
+      } else {
+        _periodPlavaNTUtrosenoBezPanela = _utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaNTUtrosenoBezPanela;
+      }
+    }
+    setPeriodPlavaNTUtrosenoBezPanela(_periodPlavaNTUtrosenoBezPanela.toFixed(0));
+
+    let _periodPlavaNTIznosBezPanela = _periodPlavaNTUtrosenoBezPanela * utrosenaPlavaTarifaNTCenaPoJedinici;
+    setPeriodPlavaNTIznosBezPanela(_periodPlavaNTIznosBezPanela.toFixed(2));
+
+    // Crvena
+    let _periodCrvenaVTUtrosenoBezPanela = 0;
+    if (_periodZelenaVTUtrosenoBezPanela + _periodPlavaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) {
+      _periodCrvenaVTUtrosenoBezPanela = 0;
+    } else {
+      _periodCrvenaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela;
+    }
+    setPeriodCrvenaVTUtrosenoBezPanela(_periodCrvenaVTUtrosenoBezPanela.toFixed(0));
+
+    let _periodCrvenaVTIznosBezPanela = _periodCrvenaVTUtrosenoBezPanela * utrosenaCrvenaTarifaVTCenaPoJedinici;
+    setPeriodCrvenaVTIznosBezPanela(_periodCrvenaVTIznosBezPanela.toFixed(2));
+
+    let _periodCrvenaNTUtrosenoBezPanela = 0;
+    if (_periodZelenaNTUtrosenoBezPanela + _periodPlavaNTUtrosenoBezPanela >= _utrosakPreuzetoNT) {
+      _periodCrvenaNTUtrosenoBezPanela = 0;
+    } else {
+      _periodCrvenaNTUtrosenoBezPanela = _utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela - _periodPlavaNTUtrosenoBezPanela;
+    }
+    setPeriodCrvenaNTUtrosenoBezPanela(_periodCrvenaNTUtrosenoBezPanela.toFixed(0));
+
+    let _periodCrvenaNTIznosBezPanela = _periodCrvenaNTUtrosenoBezPanela * utrosenaCrvenaTarifaNTCenaPoJedinici;
+    setPeriodCrvenaNTIznosBezPanela(_periodCrvenaNTIznosBezPanela.toFixed(2));
   }
 
   useEffect(() => {
@@ -723,9 +835,9 @@ function App() {
         <Cell align="right">{periodZelenaVTUtroseno}</Cell>
         <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
         <Cell align="right">{periodZelenaVTIznos}</Cell>
-        <td align="right">299</td>
+        <Cell align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
-        <td align="right">2,723.65</td>
+        <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
       </tr>
       <tr className="green">
         <td></td>
@@ -733,9 +845,9 @@ function App() {
         <Cell align="right">{periodZelenaNTUtroseno}</Cell>
         <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
         <Cell align="right">{periodZelenaNTIznos}</Cell>
-        <td align="right">63</td>
+        <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-        <td align="right">143.47</td>
+        <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td colSpan={9}>&nbsp;</td>
@@ -747,9 +859,9 @@ function App() {
         <Cell align="right">{periodPlavaVTUtroseno}</Cell>
         <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
         <Cell align="right">{periodPlavaVTIznos}</Cell>
-        <td align="right">1066</td>
+        <Cell align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-        <td align="right">14,565.61</td>
+        <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
       </tr>
       <tr className="blue">
         <td></td>
@@ -757,9 +869,9 @@ function App() {
         <Cell align="right">{periodPlavaNTUtroseno}</Cell>
         <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
         <Cell align="right">{periodPlavaNTIznos}</Cell>
-        <td align="right">225</td>
+        <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-        <td align="right">768.60</td>
+        <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td colSpan={9}>&nbsp;</td>
@@ -771,9 +883,9 @@ function App() {
         <Cell align="right">{periodCrvenaVTUtroseno}</Cell>
         <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
         <Cell align="right">{periodCrvenaVTIznos}</Cell>
-        <td align="right">651</td>
+        <Cell align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-        <td align="right">17,790.27</td>
+        <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
       </tr>
       <tr className="red">
         <td></td>
@@ -781,9 +893,9 @@ function App() {
         <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
         <Cell align="right">{periodCrvenaNTIznos}</Cell>
-        <td align="right">138</td>
+        <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-        <td align="right">942.80</td>
+        <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td colSpan={9}>&nbsp;</td>
