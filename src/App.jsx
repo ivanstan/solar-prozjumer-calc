@@ -1250,7 +1250,7 @@ function App() {
       </tr>
       <tr>
         <th>Količina uglja</th>
-        <td colSpan="2">{kolicinaUglja}kg/kWh</td>
+        <td colSpan="2">{kolicinaUglja} kg/kWh</td>
       </tr>
       </tbody>
     </table>
