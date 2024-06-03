@@ -143,6 +143,24 @@ function App() {
   const [periodCrvenaNTUtrosenoBezPanela, setPeriodCrvenaNTUtrosenoBezPanela] = useState(0);
   const [periodCrvenaNTIznosBezPanela, setPeriodCrvenaNTIznosBezPanela] = useState(0);
 
+  const [periodUkupnoPreuzetoIznos, setPeriodUkupnoPreuzetoIznos] = useState(0);
+  const [periodUkupnoPreuztoIznosBezPanela, setPeriodUkupnoPreuztoIznosBezPanela] = useState(0);
+
+  const [popustZaElektronskuDostavu, setPopustZaElektronskuDostavu] = useState(0);
+
+  const [popustZaPlacanjePrethodnogRacuna, setPopustZaPlacanjePrethodnogRacuna] = useState(0);
+  const [popustZaPlacanjePrethodnogRacunaBezPanela, setPopustZaPlacanjePrethodnogRacunaBezPanela] = useState(0);
+
+  const naknadaZaPodsticajPovlascenihProizvodjaca = 0.801;
+  const naknadaZaUnapredjenjeEnergetskeEfikasnosti = 0.015;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene1 = 3.879;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene2 = 0.970;
+
+  const [naknadaZaPodsticajPovlascenihProizvodjacaIznos, setNaknadaZaPodsticajPovlascenihProizvodjacaIznos] = useState(0);
+  const [naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela, setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela] = useState(0);
+  const [naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos, setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznos] = useState(0);
+  const [naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela, setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -460,6 +478,30 @@ function App() {
 
     let _periodCrvenaNTIznosBezPanela = _periodCrvenaNTUtrosenoBezPanela * utrosenaCrvenaTarifaNTCenaPoJedinici;
     setPeriodCrvenaNTIznosBezPanela(_periodCrvenaNTIznosBezPanela.toFixed(2));
+
+    let _periodUkupnoPreuzetoIznos = _periodZelenaVTIznos + _periodZelenaNTIznos + _periodPlavaVTIznos + _periodPlavaNTIznos + _periodCrvenaVTIznos + _periodCrvenaNTIznos;
+    setPeriodUkupnoPreuzetoIznos(_periodUkupnoPreuzetoIznos.toFixed(2));
+
+    let _periodUkupnoPreuztoBezPanelaIznos = _periodZelenaVTIznosBezPanela + _periodZelenaNTIznosBezPanela + _periodPlavaVTIznosBezPanela + _periodPlavaNTIznosBezPanela + _periodCrvenaVTIznosBezPanela + _periodCrvenaNTIznosBezPanela;
+    setPeriodUkupnoPreuztoIznosBezPanela(_periodUkupnoPreuztoBezPanelaIznos.toFixed(2));
+
+    let _popustElektronskaDostava = 0;
+    if (elektronskaDostava) {
+      _popustElektronskaDostava = -50;
+    }
+
+    setPopustZaElektronskuDostavu(_popustElektronskaDostava);
+
+    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = _preuzetaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
+    setNaknadaZaPodsticajPovlascenihProizvodjacaIznos(_naknadaZaPodsticajPovlascenihProizvodjacaIznos.toFixed(2));
+
+    let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos = _utrosenaElektricnaEnergija * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
+    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznos(_naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos.toFixed(2));
+
+    let _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela = _preuzetaElektricnaEnergijaBezSolar * naknadaZaPodsticajPovlascenihProizvodjaca;
+    setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela(_naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela.toFixed(2));
+    let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela = _preuzetaElektricnaEnergijaBezSolar * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
+    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela(_naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela.toFixed(2));
   }
 
   useEffect(() => {
@@ -905,56 +947,72 @@ function App() {
         <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
         <td></td>
         <td></td>
-        <td align="right">14,054.37</td>
+        <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
         <td></td>
         <td></td>
-        <td align="right">36,934.40</td>
+        <Cell align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td>5.</td>
         <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
         <td></td>
         <td></td>
+        <td>
+          <TextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={popustZaPlacanjePrethodnogRacuna}
+            onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(e.target.value)}
+          />
+        </td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
+        <td>
+          <TextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={popustZaPlacanjePrethodnogRacunaBezPanela}
+            onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(e.target.value)}
+          />
+        </td>
       </tr>
       <tr>
         <td>6.</td>
         <td colSpan={2} align="left">Popust za elektronsku dostavu računa</td>
         <td></td>
         <td></td>
-        <td align="right">-50.00</td>
+        <Cell align="right">{popustZaElektronskuDostavu}</Cell>
         <td></td>
         <td></td>
-        <td align="right">-50</td>
+        <Cell align="right">{popustZaElektronskuDostavu}</Cell>
       </tr>
       <tr>
         <td>7.</td>
         <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
-        <td align="right">1,442</td>
-        <td align="right">0.801</td>
-        <td align="right">1,155.04</td>
-        <td align="right">2,442</td>
-        <td align="right">0.801</td>
-        <td align="right">1,956.04</td>
+        <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
+        <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
+        <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
+        <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+        <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
+        <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td>8.</td>
         <td colSpan={2} align="left">Naknada za unapređenje energetske efikasnosti</td>
-        <td align="right">423</td>
-        <td align="right">0.015</td>
-        <td align="right">6.35</td>
-        <td align="right">2,442</td>
-        <td align="right">0.015</td>
-        <td align="right">36.63</td>
+        <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
+        <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
+        <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos}</Cell>
+        <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+        <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
+        <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
       </tr>
       <tr>
         <td>9.</td>
         <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
-        <td align="right">3.879</td>
-        <td align="right">0.970</td>
+        <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</td>
+        <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene2}</td>
         <td align="right">3,943.97</td>
         <td></td>
         <td></td>
@@ -965,10 +1023,10 @@ function App() {
         <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
         <td></td>
         <td></td>
-        <td>6,847.80</td>
+        <td align="right">6,847.80</td>
         <td></td>
         <td></td>
-        <td>39,636.75</td>
+        <td align="right">39,636.75</td>
       </tr>
       <tr>
         <td>11.</td>
