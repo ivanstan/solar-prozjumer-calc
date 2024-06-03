@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
+const formatter = new Intl.NumberFormat('sr-RS', {
+  style: 'decimal', // or 'currency', 'percent'
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2
+});
+
 // eslint-disable-next-line react/prop-types
 const Cell = (props) => {
   const { children, ...otherProps } = props;
@@ -19,9 +25,17 @@ const Cell = (props) => {
     }
   }, [children, prevValue]);
 
+  let value = children;
+
+  if (value == 0) {
+    value = '';
+  } else {
+    value = formatter.format(value);
+  }
+
   return (
     <td className={isChanged ? 'changed' : ''} {...otherProps}>
-      {children}
+      {value}
     </td>
   );
 };

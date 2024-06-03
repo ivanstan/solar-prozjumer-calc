@@ -328,7 +328,7 @@ function App() {
      */
     let _periodZelenaVTUtroseno = 0;
     if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergija) {
-      _periodZelenaVTUtroseno = _utrosakPreuzetoVT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija;
+      _periodZelenaVTUtroseno = Math.round(_utrosakPreuzetoVT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija);
     } else {
       _periodZelenaVTUtroseno = _utrosakPreuzetoVT;
     }
@@ -339,7 +339,7 @@ function App() {
 
     let _periodZelenaNTUtroseno = 0;
     if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergija) {
-      _periodZelenaNTUtroseno = _utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija;
+      _periodZelenaNTUtroseno = Math.round(_utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija);
     } else {
       _periodZelenaNTUtroseno = _utrosakPreuzetoNT;
     }
@@ -356,9 +356,9 @@ function App() {
       _periodPlavaVTUtroseno = 0
     } else {
       if (_preuzetaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaVTUtroseno = _utrosakPreuzetoVT - _periodZelenaVTUtroseno
+        _periodPlavaVTUtroseno = Math.round(_utrosakPreuzetoVT - _periodZelenaVTUtroseno)
       } else {
-        _periodPlavaVTUtroseno = _utrosakPreuzetoVT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaVTUtroseno;
+        _periodPlavaVTUtroseno = Math.round(_utrosakPreuzetoVT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaVTUtroseno);
       }
     }
 
@@ -371,9 +371,9 @@ function App() {
       _periodPlavaNTUtroseno = 0
     } else {
       if (_preuzetaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaNTUtroseno = _utrosakPreuzetoNT - _periodZelenaNTUtroseno
+        _periodPlavaNTUtroseno = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtroseno)
       } else {
-        _periodPlavaNTUtroseno = _utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaNTUtroseno;
+        _periodPlavaNTUtroseno = Math.round(_utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaNTUtroseno);
       }
     }
 
@@ -388,7 +388,7 @@ function App() {
     if (_periodZelenaVTUtroseno + _periodPlavaVTUtroseno >= _utrosakPreuzetoVT) {
       _periodCrvenaVTUtroseno = 0;
     } else {
-      _periodCrvenaVTUtroseno = _utrosakPreuzetoVT - _periodZelenaVTUtroseno - _periodPlavaVTUtroseno;
+      _periodCrvenaVTUtroseno = Math.round(_utrosakPreuzetoVT - _periodZelenaVTUtroseno - _periodPlavaVTUtroseno);
     }
 
     let _periodCrvenaVTIznos = _periodCrvenaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici;
@@ -399,7 +399,7 @@ function App() {
     if (_periodZelenaNTUtroseno + _periodPlavaNTUtroseno >= _utrosakPreuzetoNT) {
       _periodCrvenaNTUtroseno = 0;
     } else {
-      _periodCrvenaNTUtroseno = _utrosakPreuzetoNT - _periodZelenaNTUtroseno - _periodPlavaNTUtroseno;
+      _periodCrvenaNTUtroseno = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtroseno - _periodPlavaNTUtroseno);
     }
 
     let _periodCrvenaNTIznos = _periodCrvenaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici;
@@ -415,9 +415,9 @@ function App() {
       _periodZelenaVTUtrosenoBezPanela = 0;
     } else {
       if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
-        _periodZelenaVTUtrosenoBezPanela = (_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar;
+        _periodZelenaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
       } else {
-        _periodZelenaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija;
+        _periodZelenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija);
       }
     }
     setPeriodZelenaVTUtrosenoBezPanela(_periodZelenaVTUtrosenoBezPanela.toFixed(0));
@@ -427,7 +427,7 @@ function App() {
 
     let _periodZelenaNTUtrosenoBezPanela = 0;
     if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
-      _periodZelenaNTUtrosenoBezPanela = _utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar;
+      _periodZelenaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
     } else {
       _periodZelenaNTUtrosenoBezPanela = 0;
     }
@@ -443,9 +443,9 @@ function App() {
       _periodPlavaVTUtrosenoBezPanela = 0;
     } else {
       if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela;
+        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela);
       } else {
-        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela;
+        _periodPlavaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela);
       }
     }
     setPeriodPlavaVTUtrosenoBezPanela(_periodPlavaVTUtrosenoBezPanela.toFixed(0));
@@ -458,9 +458,9 @@ function App() {
       _periodPlavaNTUtrosenoBezPanela = 0;
     } else {
       if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaNTUtrosenoBezPanela = _utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela;
+        _periodPlavaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela);
       } else {
-        _periodPlavaNTUtrosenoBezPanela = _utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaNTUtrosenoBezPanela;
+        _periodPlavaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaNTUtrosenoBezPanela);
       }
     }
     setPeriodPlavaNTUtrosenoBezPanela(_periodPlavaNTUtrosenoBezPanela.toFixed(0));
@@ -473,7 +473,7 @@ function App() {
     if (_periodZelenaVTUtrosenoBezPanela + _periodPlavaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) {
       _periodCrvenaVTUtrosenoBezPanela = 0;
     } else {
-      _periodCrvenaVTUtrosenoBezPanela = _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela;
+      _periodCrvenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela);
     }
     setPeriodCrvenaVTUtrosenoBezPanela(_periodCrvenaVTUtrosenoBezPanela.toFixed(0));
 
@@ -484,7 +484,7 @@ function App() {
     if (_periodZelenaNTUtrosenoBezPanela + _periodPlavaNTUtrosenoBezPanela >= _utrosakPreuzetoNT) {
       _periodCrvenaNTUtrosenoBezPanela = 0;
     } else {
-      _periodCrvenaNTUtrosenoBezPanela = _utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela - _periodPlavaNTUtrosenoBezPanela;
+      _periodCrvenaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela - _periodPlavaNTUtrosenoBezPanela);
     }
     setPeriodCrvenaNTUtrosenoBezPanela(_periodCrvenaNTUtrosenoBezPanela.toFixed(0));
 
