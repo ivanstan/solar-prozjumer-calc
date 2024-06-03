@@ -582,23 +582,12 @@ function App() {
     let _procenatDirektnePotrosnje = _direktnoPotroseno / proizvedenaElEnergija * 100;
     setDirektnoPotrosenoProcenata(_procenatDirektnePotrosnje.toFixed(2));
 
-    console.log(proizvedenaElEnergija)
-
     let _emisijaCO2 = proizvedenaElEnergija * 1.03 ;
     setEmisijaCO2(_emisijaCO2);
 
     let _kolicinaUglja = proizvedenaElEnergija * 0.8;
     setKolicinaUglja(_kolicinaUglja);
   }
-
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('Calculated');
-
-      calculate();
-      calculate();
-    }, 3000);
-  }, []);
 
   return (<>
     <Typography>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM MERENJU</Typography>
@@ -670,13 +659,12 @@ function App() {
               variant="outlined"
               value={proizvedenaElEnergija}
               onChange={(e) => setProizvedenaElEnergija(e.target.value)}
-            />
-            0
+            /> kWh
           </td>
         </tr>
         <tr>
           <th>Isporučena el. energija:</th>
-          <td>{isporucenaElEnergija} kW/h</td>
+          <td>{isporucenaElEnergija} kWh</td>
         </tr>
         <tr>
           <th>Broj dana:</th>
@@ -864,7 +852,13 @@ function App() {
       </tbody>
     </table>
 
-    <Button onClick={calculate}>Izracunaj</Button>
+    <Button onClick={() => {
+      calculate()
+      calculate()
+      calculate()
+      calculate()
+      calculate()
+    }}>Izracunaj</Button>
 
     <table border="1">
       <tbody>
