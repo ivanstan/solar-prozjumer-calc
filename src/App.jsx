@@ -173,6 +173,13 @@ function App() {
   const [iznosPdv, setIznosPdv] = useState(0);
   const [iznosPdvBezPanela, setIznosPdvBezPanela] = useState(0);
 
+  const [taksaZaMedijskiServis, setTaksaZaMedijskiServis] = useState(299);
+  const [zaduzenjeZaObracunskiPeriod, setZaduzenjeZaObracunskiPeriod] = useState(0);
+  const [zaduzenjeZaObracunskiPeriodBezPanela, setZaduzenjeZaObracunskiPeriodBezPanela] = useState(0);
+
+  const [ukupnoZaduzenje, setUkupnoZaduzenje] = useState(0);
+  const [ukupnoZaduzenjeBezPanela, setUkupnoZaduzenjeBezPanela] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -530,17 +537,29 @@ function App() {
     let _iznostAkcizeBezPanela = _osnovicaZaObracunAkcizeBezPanela * 0.075;
     setIznosAkcizeBezPanela(_iznostAkcizeBezPanela.toFixed(2))
 
-    let _osnovicaZaPdf = _osnovicaZaObracunAkcize + _iznosAkcize;
-    setOsnovicaZaPdv(_osnovicaZaPdf.toFixed(2));
+    let _osnovicaZaPdv = _osnovicaZaObracunAkcize + _iznosAkcize;
+    setOsnovicaZaPdv(_osnovicaZaPdv.toFixed(2));
 
     let _osnovicaZaPdvBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznostAkcizeBezPanela;
     setOsnovicaZaPdvBezPanela(_osnovicaZaPdvBezPanela.toFixed(2));
 
-    let _iznosPdv = _osnovicaZaPdf * 0.2;
+    let _iznosPdv = _osnovicaZaPdv * 0.2;
     setIznosPdv(_iznosPdv.toFixed(2));
 
     let _iznosPdvBezPanela = _osnovicaZaPdvBezPanela * 0.2;
     setIznosPdvBezPanela(_iznosPdvBezPanela.toFixed(2));
+
+    let _zaduzenjeZaObracunskiPeriod = _osnovicaZaObracunAkcize + _iznosPdv + _iznosAkcize;
+    setZaduzenjeZaObracunskiPeriod(_zaduzenjeZaObracunskiPeriod.toFixed(2));
+
+    let zaduzenjeZaObracunskiPeriodBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznosPdvBezPanela + _iznostAkcizeBezPanela;
+    setZaduzenjeZaObracunskiPeriodBezPanela(zaduzenjeZaObracunskiPeriodBezPanela.toFixed(2));
+
+    let _ukupnoZaduzenje = _zaduzenjeZaObracunskiPeriod + taksaZaMedijskiServis;
+    setUkupnoZaduzenje(_ukupnoZaduzenje.toFixed(2));
+
+    let _ukupnoZaduzenjeBezPanela = zaduzenjeZaObracunskiPeriodBezPanela + taksaZaMedijskiServis;
+    setUkupnoZaduzenjeBezPanela(_ukupnoZaduzenjeBezPanela.toFixed(2));
   }
 
   useEffect(() => {
@@ -1050,8 +1069,8 @@ function App() {
       <tr>
         <td>9.</td>
         <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
-        <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</td>
-        <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene2}</td>
+        <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</Cell>
+        <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene2}</Cell>
         <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
         <td></td>
         <td></td>
@@ -1062,20 +1081,20 @@ function App() {
         <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
         <td></td>
         <td></td>
-        <td align="right">{osnovicaZaObracunAkcize}</td>
+        <Cell align="right">{osnovicaZaObracunAkcize}</Cell>
         <td></td>
         <td></td>
-        <td align="right">{osnovicaZaObracunAkcizeBezPanela}</td>
+        <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
       </tr>
       <tr>
         <td>11.</td>
         <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
         <td></td>
         <td></td>
-        <td align="right">{iznosAkcize}</td>
+        <Cell align="right">{iznosAkcize}</Cell>
         <td></td>
         <td></td>
-        <td align="right">{iznosAkcizeBezPanela}</td>
+        <Cell align="right">{iznosAkcizeBezPanela}</Cell>
       </tr>
       <tr>
         <td>12.</td>
@@ -1092,10 +1111,10 @@ function App() {
         <td colSpan={2} align="left">Iznos PDV (20%)</td>
         <td></td>
         <td></td>
-        <td align="right">{iznosPdv}</td>
+        <Cell align="right">{iznosPdv}</Cell>
         <td></td>
         <td></td>
-        <td align="right">{iznosPdvBezPanela}</td>
+        <Cell align="right">{iznosPdvBezPanela}</Cell>
       </tr>
       <tr>
         <td>14.</td>
@@ -1130,10 +1149,10 @@ function App() {
         <td colSpan={2} align="left">ZADUŽENJE ZA OBRAČUNSKI PERIOD (1+2+3+5+6+7+8+9+11+13+14)</td>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{zaduzenjeZaObracunskiPeriod}</Cell>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
       </tr>
       <tr>
         <td>16.</td>
@@ -1142,19 +1161,19 @@ function App() {
         </td>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{taksaZaMedijskiServis}</Cell>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{taksaZaMedijskiServis}</Cell>
       </tr>
       <tr>
         <th colSpan={3} align="left">UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD (15+16)</th>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{ukupnoZaduzenje}</Cell>
         <td></td>
         <td></td>
-        <td align="right">0</td>
+        <Cell align="right">{ukupnoZaduzenjeBezPanela}</Cell>
       </tr>
       </tbody>
     </table>
