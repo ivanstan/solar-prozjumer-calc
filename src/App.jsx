@@ -161,6 +161,18 @@ function App() {
   const [naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos, setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznos] = useState(0);
   const [naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela, setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela] = useState(0);
 
+  const [naknadaZaObracunRazlikuPreuzeteUtroseneIznos, setNaknadaZaObracunRazlikuPreuzeteUtroseneIznos] = useState(0);
+  const [osnovicaZaObracunAkcize, setOsnovicaZaObracunAkcize] = useState(0);
+  const [osnovicaZaObracunAkcizeBezPanela, setOsnovicaZaObracunAkcizeBezPanela] = useState(0);
+
+  const [iznosAkcize, setIznosAkcize] = useState(0);
+  const [iznosAkcizeBezPanela, setIznosAkcizeBezPanela] = useState(0);
+
+  const [osnovicaZaPdv, setOsnovicaZaPdv] = useState(0);
+  const [osnovicaZaPdvBezPanela, setOsnovicaZaPdvBezPanela] = useState(0);
+  const [iznosPdv, setIznosPdv] = useState(0);
+  const [iznosPdvBezPanela, setIznosPdvBezPanela] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -191,8 +203,8 @@ function App() {
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     }
 
-    let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici).toFixed(2);
-    setObracunskaSnagaIznos(_obracunskaSnagaIznos)
+    let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici);
+    setObracunskaSnagaIznos(_obracunskaSnagaIznos.toFixed(2))
 
     let _utrosenaElektricnaEnergija = _utrosakUtrosenoVT + _utrosakUtrosenoNT;
     setUtrosenaElektricnaEnergija(_utrosenaElektricnaEnergija);
@@ -502,6 +514,33 @@ function App() {
     setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela(_naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela.toFixed(2));
     let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela = _preuzetaElektricnaEnergijaBezSolar * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
     setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela(_naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela.toFixed(2));
+
+    let _naknadaZaObracunRazlikuPreuzeteUtroseneIznos = (_utrosakPreuzetoVT - _utrosakUtrosenoVT) * naknadaZaObracunRazlikuPreuzeteUtrosene1 + (_utrosakPreuzetoNT - _utrosakUtrosenoNT) * naknadaZaObracunRazlikuPreuzeteUtrosene2;
+    setNaknadaZaObracunRazlikuPreuzeteUtroseneIznos(_naknadaZaObracunRazlikuPreuzeteUtroseneIznos.toFixed(2));
+
+    let _osnovicaZaObracunAkcize = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _ukupnoZaElEnergijuUObracunskomPeriodu + popustZaPlacanjePrethodnogRacuna + _naknadaZaPodsticajPovlascenihProizvodjacaIznos + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
+    setOsnovicaZaObracunAkcize(_osnovicaZaObracunAkcize.toFixed(2));
+
+    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos + popustZaPlacanjePrethodnogRacunaBezPanela + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
+    setOsnovicaZaObracunAkcizeBezPanela(_osnovicaZaObracunAkcizeBezPanela.toFixed(2));
+
+    let _iznosAkcize = _osnovicaZaObracunAkcize * 0.075;
+    setIznosAkcize(_iznosAkcize.toFixed(2))
+
+    let _iznostAkcizeBezPanela = _osnovicaZaObracunAkcizeBezPanela * 0.075;
+    setIznosAkcizeBezPanela(_iznostAkcizeBezPanela.toFixed(2))
+
+    let _osnovicaZaPdf = _osnovicaZaObracunAkcize + _iznosAkcize;
+    setOsnovicaZaPdv(_osnovicaZaPdf.toFixed(2));
+
+    let _osnovicaZaPdfBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznostAkcizeBezPanela;
+    setOsnovicaZaPdvBezPanela(_osnovicaZaPdfBezPanela.toFixed(2));
+
+    let _iznosPdv = _osnovicaZaPdf * 0.2;
+    setIznosPdv(_iznosPdv.toFixed(2));
+
+    let _iznosPdvBezPanela = _osnovicaZaPdfBezPanela * 0.2;
+    setIznosPdvBezPanela(_iznosPdvBezPanela.toFixed(2));
   }
 
   useEffect(() => {
@@ -1013,7 +1052,7 @@ function App() {
         <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
         <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</td>
         <td align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene2}</td>
-        <td align="right">3,943.97</td>
+        <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
         <td></td>
         <td></td>
         <td></td>
@@ -1023,40 +1062,40 @@ function App() {
         <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
         <td></td>
         <td></td>
-        <td align="right">6,847.80</td>
+        <td align="right">{osnovicaZaObracunAkcize}</td>
         <td></td>
         <td></td>
-        <td align="right">39,636.75</td>
+        <td align="right">{osnovicaZaObracunAkcizeBezPanela}</td>
       </tr>
       <tr>
         <td>11.</td>
         <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
         <td></td>
         <td></td>
-        <td align="right">513.59</td>
+        <td align="right">{iznosAkcize}</td>
         <td></td>
         <td></td>
-        <td align="right">2,972.76</td>
+        <td align="right">{iznosAkcizeBezPanela}</td>
       </tr>
       <tr>
         <td>12.</td>
         <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
         <td></td>
         <td></td>
-        <td align="right">7,361.39</td>
+        <Cell align="right">{osnovicaZaPdv}</Cell>
         <td></td>
         <td></td>
-        <td align="right">42,609.51</td>
+        <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
       </tr>
       <tr>
         <td>13.</td>
         <td colSpan={2} align="left">Iznos PDV (20%)</td>
         <td></td>
         <td></td>
-        <td align="right">1,472.28</td>
+        <td align="right">{iznosPdv}</td>
         <td></td>
         <td></td>
-        <td align="right">8,521.90</td>
+        <td align="right">{iznosPdvBezPanela}</td>
       </tr>
       <tr>
         <td>14.</td>
@@ -1091,10 +1130,10 @@ function App() {
         <td colSpan={2} align="left">ZADUŽENJE ZA OBRAČUNSKI PERIOD (1+2+3+5+6+7+8+9+11+13+14)</td>
         <td></td>
         <td></td>
-        <td align="right">8,833.66</td>
+        <td align="right">0</td>
         <td></td>
         <td></td>
-        <td align="right">51,131.41</td>
+        <td align="right">0</td>
       </tr>
       <tr>
         <td>16.</td>
@@ -1103,19 +1142,19 @@ function App() {
         </td>
         <td></td>
         <td></td>
-        <td align="right">299.00</td>
+        <td align="right">0</td>
         <td></td>
         <td></td>
-        <td align="right">299.00</td>
+        <td align="right">0</td>
       </tr>
       <tr>
         <th colSpan={3} align="left">UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD (15+16)</th>
         <td></td>
         <td></td>
-        <td align="right">9,132.66</td>
+        <td align="right">0</td>
         <td></td>
         <td></td>
-        <td align="right">51,430.41</td>
+        <td align="right">0</td>
       </tr>
       </tbody>
     </table>
