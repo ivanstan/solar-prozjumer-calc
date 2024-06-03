@@ -180,6 +180,15 @@ function App() {
   const [ukupnoZaduzenje, setUkupnoZaduzenje] = useState(0);
   const [ukupnoZaduzenjeBezPanela, setUkupnoZaduzenjeBezPanela] = useState(0);
 
+  const [ustedaUDinarima, setUstedaUDinarima] = useState(0);
+  const [ustedaUProcentima, setUstedaUProcentima] = useState(0);
+
+  const [direktnoPotroseno, setDirektnoPotroseno] = useState(0);
+  const [direktnoPotrosenoProcenata, setDirektnoPotrosenoProcenata] = useState(0);
+
+  const [emisijaCO2, setEmisijaCO2] = useState(0);
+  const [kolicinaUglja, setKolicinaUglja] = useState(0);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
@@ -560,6 +569,26 @@ function App() {
 
     let _ukupnoZaduzenjeBezPanela = zaduzenjeZaObracunskiPeriodBezPanela + taksaZaMedijskiServis;
     setUkupnoZaduzenjeBezPanela(_ukupnoZaduzenjeBezPanela.toFixed(2));
+
+    let _usetedaUDinarima = _ukupnoZaduzenjeBezPanela - _ukupnoZaduzenje;
+    setUstedaUDinarima(_usetedaUDinarima.toFixed(2));
+
+    let _ustedaUProcentima = 100 - (_ukupnoZaduzenje / _ukupnoZaduzenjeBezPanela * 100);
+    setUstedaUProcentima(_ustedaUProcentima.toFixed(2));
+
+    let _direktnoPotroseno = proizvedenaElEnergija - utrosakIsporucenoVT;
+    setDirektnoPotroseno(_direktnoPotroseno);
+
+    let _procenatDirektnePotrosnje = _direktnoPotroseno / proizvedenaElEnergija * 100;
+    setDirektnoPotrosenoProcenata(_procenatDirektnePotrosnje.toFixed(2));
+
+    console.log(proizvedenaElEnergija)
+
+    let _emisijaCO2 = proizvedenaElEnergija * 1.03 ;
+    setEmisijaCO2(_emisijaCO2);
+
+    let _kolicinaUglja = proizvedenaElEnergija * 0.8;
+    setKolicinaUglja(_kolicinaUglja);
   }
 
   useEffect(() => {
@@ -612,13 +641,24 @@ function App() {
         <tr>
           <th>Obračunska snaga:</th>
           <td>
-            <TextField
+            <Select
               type="number"
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={obracunskaSnaga}
               onChange={(e) => setObracunskaSnaga(e.target.value)}
-            />kW
+            >
+              <MenuItem value={6.90}>6.90</MenuItem>
+              <MenuItem value={11.04}>11.04</MenuItem>
+              <MenuItem value={13.80}>13.80</MenuItem>
+              <MenuItem value={17.25}>17.25</MenuItem>
+              <MenuItem value={22.07}>22.07</MenuItem>
+              <MenuItem value={24.15}>24.15</MenuItem>
+              <MenuItem value={27.60}>27.60</MenuItem>
+              <MenuItem value={34.50}>34.50</MenuItem>
+              <MenuItem value={43.47}>43.47</MenuItem>
+            </Select>
+            kW
           </td>
         </tr>
         <tr>
@@ -1182,48 +1222,41 @@ function App() {
       <tbody>
       <tr>
         <th>UŠTEDA U DINARIMA</th>
-        <td>42,297.75</td>
+        <Cell>{ustedaUDinarima}</Cell>
         <td>RSD</td>
       </tr>
       <tr>
         <th>UŠTEDA U PROCENTIMA</th>
-        <td>82.24</td>
+        <Cell>{ustedaUProcentima}</Cell>
         <td>%</td>
       </tr>
       <tr>
-        <th colSpan="3"></th>
-      </tr>
-      <tr>
         <th>UKUPNO PROIZVEDENA EL. ENERGIJA</th>
-        <td>1,000</td>
+        <Cell>{proizvedenaElEnergija}</Cell>
         <td>kWh</td>
       </tr>
       <tr>
         <th>PREDATO KAO VIŠAK</th>
-        <td>331</td>
+        <Cell>{utrosakIsporucenoVT}</Cell>
         <td>kWh</td>
       </tr>
       <tr>
         <th>DIREKTNO POTROŠENO</th>
-        <td>669</td>
+        <td>{direktnoPotroseno}</td>
         <td>kWh</td>
       </tr>
       <tr>
         <th>PROCENAT DIREKTNE POTROŠNJE</th>
-        <td>66.90</td>
+        <td>{direktnoPotrosenoProcenata}</td>
         <td>%</td>
       </tr>
       <tr>
-        <th>UGALJ C</th>
-        <td colSpan="2"></td>
+        <th>Emisija CO2</th>
+        <td colSpan="2">{emisijaCO2} kg CO<sub>2</sub>/KWh</td>
       </tr>
       <tr>
-        <th>CO2</th>
-        <td colSpan="2"></td>
-      </tr>
-      <tr>
-        <th>drveće</th>
-        <td colSpan="2"></td>
+        <th>Količina uglja</th>
+        <td colSpan="2">{kolicinaUglja}kg/kWh</td>
       </tr>
       </tbody>
     </table>
