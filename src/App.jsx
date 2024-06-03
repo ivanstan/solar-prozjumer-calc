@@ -518,10 +518,10 @@ function App() {
     let _naknadaZaObracunRazlikuPreuzeteUtroseneIznos = (_utrosakPreuzetoVT - _utrosakUtrosenoVT) * naknadaZaObracunRazlikuPreuzeteUtrosene1 + (_utrosakPreuzetoNT - _utrosakUtrosenoNT) * naknadaZaObracunRazlikuPreuzeteUtrosene2;
     setNaknadaZaObracunRazlikuPreuzeteUtroseneIznos(_naknadaZaObracunRazlikuPreuzeteUtroseneIznos.toFixed(2));
 
-    let _osnovicaZaObracunAkcize = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _ukupnoZaElEnergijuUObracunskomPeriodu + popustZaPlacanjePrethodnogRacuna + _naknadaZaPodsticajPovlascenihProizvodjacaIznos + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
+    let _osnovicaZaObracunAkcize = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _popustElektronskaDostava + _ukupnoZaElEnergijuUObracunskomPeriodu + popustZaPlacanjePrethodnogRacuna + _naknadaZaPodsticajPovlascenihProizvodjacaIznos + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
     setOsnovicaZaObracunAkcize(_osnovicaZaObracunAkcize.toFixed(2));
 
-    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos + popustZaPlacanjePrethodnogRacunaBezPanela + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
+    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos + popustZaPlacanjePrethodnogRacunaBezPanela + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela;
     setOsnovicaZaObracunAkcizeBezPanela(_osnovicaZaObracunAkcizeBezPanela.toFixed(2));
 
     let _iznosAkcize = _osnovicaZaObracunAkcize * 0.075;
@@ -533,13 +533,13 @@ function App() {
     let _osnovicaZaPdf = _osnovicaZaObracunAkcize + _iznosAkcize;
     setOsnovicaZaPdv(_osnovicaZaPdf.toFixed(2));
 
-    let _osnovicaZaPdfBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznostAkcizeBezPanela;
-    setOsnovicaZaPdvBezPanela(_osnovicaZaPdfBezPanela.toFixed(2));
+    let _osnovicaZaPdvBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznostAkcizeBezPanela;
+    setOsnovicaZaPdvBezPanela(_osnovicaZaPdvBezPanela.toFixed(2));
 
     let _iznosPdv = _osnovicaZaPdf * 0.2;
     setIznosPdv(_iznosPdv.toFixed(2));
 
-    let _iznosPdvBezPanela = _osnovicaZaPdfBezPanela * 0.2;
+    let _iznosPdvBezPanela = _osnovicaZaPdvBezPanela * 0.2;
     setIznosPdvBezPanela(_iznosPdvBezPanela.toFixed(2));
   }
 
@@ -1085,7 +1085,7 @@ function App() {
         <Cell align="right">{osnovicaZaPdv}</Cell>
         <td></td>
         <td></td>
-        <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
+        <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
       </tr>
       <tr>
         <td>13.</td>
