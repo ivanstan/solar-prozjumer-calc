@@ -189,6 +189,35 @@ function App() {
   const [emisijaCO2, setEmisijaCO2] = useState(0);
   const [kolicinaUglja, setKolicinaUglja] = useState(0);
 
+  useEffect(() => {
+    calculate();
+  }, [
+    month,
+    year,
+    elektronskaDostava,
+    popustPlacanje,
+    taksaMedijskiServis,
+    obracunskaSnaga,
+    proizvedenaElEnergija,
+    brojDana,
+    prethodnoPreuzetoVT,
+    prethodnoPreuzetoNT,
+    prethodnoIsporucenoVT,
+    prethodnoIsporucenoNT,
+    novoPreuzetoVT,
+    novoPreuzetoNT,
+    novoIsporucenoVT,
+    novoIsporucenoNT,
+    utrosakVisakPrethodnoVT,
+    utrosakVisakPrethodnoNT,
+    umanjenjeUgrozeniSaSolar,
+    umanjenjeUgrozeniBezSolra
+  ]);
+
+  useEffect(() => {
+    calculate()
+  }, []);
+
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
