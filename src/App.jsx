@@ -248,6 +248,24 @@ function App() {
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     }
 
+    let _utrosakVisakSledeciVT = 0;
+    if (_utrosakPreuzetoVT < _utrosakIsporucenoVT + utrosakVisakPrethodnoVT) {
+      _utrosakVisakSledeciVT = _utrosakIsporucenoVT + utrosakVisakPrethodnoVT - _utrosakPreuzetoVT
+    } else {
+      _utrosakVisakSledeciVT = 0;
+    }
+
+    setUtrosakVisakSledeciVT(_utrosakVisakSledeciVT);
+
+    let _utrosakVisakSledeciNT = 0;
+    if (_utrosakPreuzetoNT < _utrosakIsporucenoNT + utrosakVisakPrethodnoNT) {
+      _utrosakVisakSledeciNT = _utrosakIsporucenoNT + utrosakVisakPrethodnoNT - _utrosakPreuzetoNT
+    } else {
+      _utrosakVisakSledeciNT = 0;
+    }
+
+    setUtrosakVisakSledeciNT(_utrosakVisakSledeciNT);
+
     let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici);
     setObracunskaSnagaIznos(_obracunskaSnagaIznos.toFixed(2))
 
