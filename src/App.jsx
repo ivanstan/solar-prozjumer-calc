@@ -240,11 +240,11 @@ function App() {
     }
 
     let _utrosakUtrosenoNT = 0
-    if (utrosakPreuzetoNT < (_utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
+    if (_utrosakPreuzetoNT < (_utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
       _utrosakUtrosenoNT = 0
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     } else {
-      _utrosakUtrosenoNT = utrosakPreuzetoNT - _utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
+      _utrosakUtrosenoNT = _utrosakPreuzetoNT - _utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     }
 
@@ -472,15 +472,15 @@ function App() {
     /**
      * Bez solarnih celija
      */
-      // Zelena
+    // Zelena
     let _periodZelenaVTUtrosenoBezPanela = 0;
     if (_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija + _utrosakPreuzetoNT === 0) {
       _periodZelenaVTUtrosenoBezPanela = 0;
     } else {
       if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
-        _periodZelenaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
+        _periodZelenaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
       } else {
-        _periodZelenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija);
+        _periodZelenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija);
       }
     }
     setPeriodZelenaVTUtrosenoBezPanela(_periodZelenaVTUtrosenoBezPanela.toFixed(0));
@@ -506,9 +506,9 @@ function App() {
       _periodPlavaVTUtrosenoBezPanela = 0;
     } else {
       if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela);
+        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela);
       } else {
-        _periodPlavaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela);
+        _periodPlavaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela);
       }
     }
     setPeriodPlavaVTUtrosenoBezPanela(_periodPlavaVTUtrosenoBezPanela.toFixed(0));
@@ -533,10 +533,10 @@ function App() {
 
     // Crvena
     let _periodCrvenaVTUtrosenoBezPanela = 0;
-    if (_periodZelenaVTUtrosenoBezPanela + _periodPlavaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija) {
+    if (_periodZelenaVTUtrosenoBezPanela + _periodPlavaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) {
       _periodCrvenaVTUtrosenoBezPanela = 0;
     } else {
-      _periodCrvenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela);
+      _periodCrvenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela);
     }
     setPeriodCrvenaVTUtrosenoBezPanela(_periodCrvenaVTUtrosenoBezPanela.toFixed(0));
 
@@ -623,7 +623,7 @@ function App() {
     let _ustedaUProcentima = 100 - (_ukupnoZaduzenje / _ukupnoZaduzenjeBezPanela * 100);
     setUstedaUProcentima(_ustedaUProcentima.toFixed(2));
 
-    let _direktnoPotroseno = proizvedenaElEnergija - utrosakIsporucenoVT;
+    let _direktnoPotroseno = proizvedenaElEnergija - _utrosakIsporucenoVT;
     setDirektnoPotroseno(_direktnoPotroseno);
 
     let _procenatDirektnePotrosnje = _direktnoPotroseno / proizvedenaElEnergija * 100;
