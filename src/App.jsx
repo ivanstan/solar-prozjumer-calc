@@ -227,7 +227,7 @@ function App() {
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
     let _utrosakIsporucenoNT = novoIsporucenoNT - prethodnoIsporucenoNT;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
-    let _isporucenaElEnergija = utrosakIsporucenoVT + utrosakIsporucenoNT;
+    let _isporucenaElEnergija = _utrosakIsporucenoVT + _utrosakIsporucenoNT;
     setIsporucenaElEnergija(_isporucenaElEnergija)
 
     let _utrosakUtrosenoVT = 0
@@ -240,11 +240,11 @@ function App() {
     }
 
     let _utrosakUtrosenoNT = 0
-    if (utrosakPreuzetoNT < (utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
+    if (utrosakPreuzetoNT < (_utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
       _utrosakUtrosenoNT = 0
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     } else {
-      _utrosakUtrosenoNT = utrosakPreuzetoNT - utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
+      _utrosakUtrosenoNT = utrosakPreuzetoNT - _utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
       setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     }
 
@@ -899,13 +899,13 @@ function App() {
       </tbody>
     </table>
 
-    <Button onClick={() => {
-      calculate()
-      calculate()
-      calculate()
-      calculate()
-      calculate()
-    }}>Izracunaj</Button>
+    {/*<Button onClick={() => {*/}
+    {/*  calculate()*/}
+    {/*  calculate()*/}
+    {/*  calculate()*/}
+    {/*  calculate()*/}
+    {/*  calculate()*/}
+    {/*}}>Izracunaj</Button>*/}
 
     <table border="1">
       <tbody>
