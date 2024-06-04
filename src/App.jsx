@@ -211,12 +211,23 @@ function App() {
     utrosakVisakPrethodnoVT,
     utrosakVisakPrethodnoNT,
     umanjenjeUgrozeniSaSolar,
-    umanjenjeUgrozeniBezSolra
+    umanjenjeUgrozeniBezSolra,
+    taksaZaMedijskiServis
   ]);
 
   useEffect(() => {
     calculate()
   }, []);
+
+  useEffect(() => {
+    const _taksa = taksaMedijskiServis ? 299 : 0;
+
+    setTaksaZaMedijskiServis(_taksa);
+  }, [taksaMedijskiServis]);
+
+  useEffect(() => {
+
+  }, [elektronskaDostava]);
 
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
