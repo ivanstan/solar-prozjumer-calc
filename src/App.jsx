@@ -1,6 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import './App.css'
-import {Button, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  styled,
+  TextField,
+  Typography
+} from "@mui/material";
 import Cell from "./components/Cell.jsx";
 import If from './components/If.jsx';
 
@@ -9,6 +19,24 @@ const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgu
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 const years = Array.from({length: 6}, (v, i) => currentYear - i);
+
+const CustomTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    padding: '5px',
+    maxWidth: 70,
+  },
+}));
+
+const CustomSelect = styled(Select)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    padding: '5px',
+    maxWidth: 70,
+  },
+}));
+
+const tdStyle = {
+  backgroundColor: "#B0C4DE"
+}
 
 const renderNumber = (value) => {
 
@@ -668,7 +696,7 @@ function App() {
 
       <FormControl>
         <InputLabel id="input-month">Mesec</InputLabel>
-        <Select
+        <CustomSelect
           labelId="input-month"
           value={month}
           label="Mesec"
@@ -677,12 +705,12 @@ function App() {
           }}
         >
           {months.map((month) => <MenuItem key={month} value={month}>{month}</MenuItem>)}
-        </Select>
+        </CustomSelect>
       </FormControl>
 
       <FormControl>
         <InputLabel id="input-year">Godina</InputLabel>
-        <Select
+        <CustomSelect
           labelId="input-year"
           value={year}
           label="Godina"
@@ -691,71 +719,13 @@ function App() {
           }}
         >
           {years.map((year) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
-        </Select>
+        </CustomSelect>
       </FormControl>
     </div>
 
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-      <table border="1">
-        <tbody>
-        <tr>
-          <th>Obračunska snaga:</th>
-          <td>
-            <Select
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={obracunskaSnaga}
-              onChange={(e) => setObracunskaSnaga(e.target.value)}
-            >
-              <MenuItem value={6.90}>6.90</MenuItem>
-              <MenuItem value={11.04}>11.04</MenuItem>
-              <MenuItem value={13.80}>13.80</MenuItem>
-              <MenuItem value={17.25}>17.25</MenuItem>
-              <MenuItem value={22.07}>22.07</MenuItem>
-              <MenuItem value={24.15}>24.15</MenuItem>
-              <MenuItem value={27.60}>27.60</MenuItem>
-              <MenuItem value={34.50}>34.50</MenuItem>
-              <MenuItem value={43.47}>43.47</MenuItem>
-            </Select>
-            kW
-          </td>
-        </tr>
-        <tr>
-          <th>Proizvedena el. energija:</th>
-          <td>
-            <TextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={proizvedenaElEnergija}
-              onChange={(e) => setProizvedenaElEnergija(e.target.value)}
-            /> kWh
-          </td>
-        </tr>
-        <tr>
-          <th>Isporučena el. energija:</th>
-          <td>{isporucenaElEnergija} kWh</td>
-        </tr>
-        <tr>
-          <th>Broj dana:</th>
-          <td>
-            <TextField
-              type="number"
-              inputProps={{max: 31, min: 1}}
-              variant="outlined"
-              value={brojDana}
-              onChange={(e) => {
-                if (e.target.value === '' || (e.target.value >= 1 && e.target.value <= 31)) {
-                  setBrojDana(e.target.value)
-                }
-              }}
-            />
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <table border="1">
+
+      <table>
         <tbody>
         <tr>
           <th>Popust za elektronsku dostavu računa</th>
@@ -779,159 +749,222 @@ function App() {
       </table>
     </div>
 
+    <div style={{display: 'flex'}}>
+      <table>
+        <thead>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>Obračunska snaga:</th>
+          <td>
+            <CustomSelect
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={obracunskaSnaga}
+              onChange={(e) => setObracunskaSnaga(e.target.value)}
+            >
+              <MenuItem value={6.90}>6.90</MenuItem>
+              <MenuItem value={11.04}>11.04</MenuItem>
+              <MenuItem value={13.80}>13.80</MenuItem>
+              <MenuItem value={17.25}>17.25</MenuItem>
+              <MenuItem value={22.07}>22.07</MenuItem>
+              <MenuItem value={24.15}>24.15</MenuItem>
+              <MenuItem value={27.60}>27.60</MenuItem>
+              <MenuItem value={34.50}>34.50</MenuItem>
+              <MenuItem value={43.47}>43.47</MenuItem>
+            </CustomSelect>
+          </td>
+          <td>
+            kW
+          </td>
+        </tr>
+        <tr>
+          <th>Proizvedena el. energija:</th>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={proizvedenaElEnergija}
+              onChange={(e) => setProizvedenaElEnergija(e.target.value)}
+            />
+          </td>
+          <td>
+            kWh
+          </td>
+        </tr>
+        <tr>
+          <th>Isporučena el. energija:</th>
+          <td>{isporucenaElEnergija}</td>
+          <td>kWh</td>
+        </tr>
+        <tr>
+          <th>Broj dana:</th>
+          <td>
+            <CustomTextField
+              type="number"
+              inputProps={{max: 31, min: 1}}
+              variant="outlined"
+              value={brojDana}
+              onChange={(e) => {
+                if (e.target.value === '' || (e.target.value >= 1 && e.target.value <= 31)) {
+                  setBrojDana(e.target.value)
+                }
+              }}
+            />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+        <tr>
+          <th rowSpan="2">STANJE ZA OBRAČUN</th>
+          <th colSpan="2">Preuzeta el. energija</th>
+          <th colSpan="2">Isporučena el. energija</th>
+          <th colSpan="2">Višak el. en. iz preth. obr.</th>
+          <th colSpan="2">Utrošena el. energija</th>
+          <th colSpan="2">Višak el. en. Za sledeći obr.</th>
+        </tr>
+        <tr>
+          <th style={tdStyle}>VT</th>
+          <th>NT</th>
+          <th style={tdStyle}>VT</th>
+          <th>NT</th>
+          <th style={tdStyle}>VT</th>
+          <th>NT</th>
+          <th style={tdStyle}>VT</th>
+          <th>NT</th>
+          <th style={tdStyle}>VT</th>
+          <th>NT</th>
+        </tr>
+        <tr>
+          <td>Prethodno</td>
+          <td  style={tdStyle}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={prethodnoPreuzetoVT}
+              onChange={(e) => setPrethodnoPreuzetoVT(e.target.value)}
+            />
+          </td>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={prethodnoPreuzetoNT}
+              onChange={(e) => setPrethodnoPreuzetoNT(e.target.value)}
+            />
+          </td>
+          <td  style={tdStyle}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={prethodnoIsporucenoVT}
+              onChange={(e) => setPrethodnoIsporucenoVT(e.target.value)}
+            />
+          </td>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={prethodnoIsporucenoNT}
+              onChange={(e) => setPrethodnoIsporucenoNT(e.target.value)}
+            />
+          </td>
+          <td  style={tdStyle}></td>
+          <td></td>
+          <td style={tdStyle}></td>
+          <td></td>
+          <td style={tdStyle}></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Novo</td>
+          <td style={tdStyle}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={novoPreuzetoVT}
+              onChange={(e) => setNovoPreuzetoVT(e.target.value)}
+            />
+          </td>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={novoPreuzetoNT}
+              onChange={(e) => setNovoPreuzetoNT(e.target.value)}
+            />
+          </td>
+          <td style={tdStyle}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={novoIsporucenoVT}
+              onChange={(e) => setNovoIsporucenoVT(e.target.value)}
+            />
+          </td>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={novoIsporucenoNT}
+              onChange={(e) => setNovoIsporucenoNT(e.target.value)}
+            />
+          </td>
+          <td style={tdStyle}></td>
+          <td></td>
+          <td style={tdStyle}></td>
+          <td></td>
+          <td style={tdStyle}></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Utrošak</td>
+          <Cell style={tdStyle}>{utrosakPreuzetoVT}</Cell>
+          <Cell>{utrosakPreuzetoNT}</Cell>
+          <Cell style={tdStyle}>{utrosakIsporucenoVT}</Cell>
+          <Cell>{utrosakIsporucenoNT}</Cell>
+          <td style={tdStyle}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={utrosakVisakPrethodnoVT}
+              onChange={(e) => setUtrosakVisakPrethodnoVT(e.target.value)}
+            />
+          </td>
+          <td>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={utrosakVisakPrethodnoNT}
+              onChange={(e) => setUtrosakVisakPrethodnoNT(e.target.value)}
+            />
+          </td>
+          <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>
+          <Cell>{utrosakUtrosenoNT}</Cell>
+          <Cell style={tdStyle}>{utrosakVisakSledeciVT}</Cell>
+          <Cell>{utrosakVisakSledeciNT}</Cell>
+        </tr>
+        </tbody>
+      </table>
+    </div>
     <table>
-      <tbody>
-      <tr>
-        <th rowSpan="2">STANJE ZA OBRAČUN</th>
-        <th colSpan="2">Preuzeta el. energija</th>
-        <th colSpan="2">Isporučena el. energija</th>
-        <th colSpan="2">Višak el. en. iz preth. obr.</th>
-        <th colSpan="2">Utrošena el. energija</th>
-        <th colSpan="2">Višak el. en. Za sledeći obr.</th>
-      </tr>
-      <tr>
-        <th>VT</th>
-        <th>NT</th>
-        <th>VT</th>
-        <th>NT</th>
-        <th>VT</th>
-        <th>NT</th>
-        <th>VT</th>
-        <th>NT</th>
-        <th>VT</th>
-        <th>NT</th>
-      </tr>
-      <tr>
-        <td>Prethodno</td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={prethodnoPreuzetoVT}
-            onChange={(e) => setPrethodnoPreuzetoVT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={prethodnoPreuzetoNT}
-            onChange={(e) => setPrethodnoPreuzetoNT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={prethodnoIsporucenoVT}
-            onChange={(e) => setPrethodnoIsporucenoVT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={prethodnoIsporucenoNT}
-            onChange={(e) => setPrethodnoIsporucenoNT(e.target.value)}
-          />
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Novo</td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoPreuzetoVT}
-            onChange={(e) => setNovoPreuzetoVT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoPreuzetoNT}
-            onChange={(e) => setNovoPreuzetoNT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoIsporucenoVT}
-            onChange={(e) => setNovoIsporucenoVT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoIsporucenoNT}
-            onChange={(e) => setNovoIsporucenoNT(e.target.value)}
-          />
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>Utrošak</td>
-        <Cell>{utrosakPreuzetoVT}</Cell>
-        <Cell>{utrosakPreuzetoNT}</Cell>
-        <Cell>{utrosakIsporucenoVT}</Cell>
-        <Cell>{utrosakIsporucenoNT}</Cell>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={utrosakVisakPrethodnoVT}
-            onChange={(e) => setUtrosakVisakPrethodnoVT(e.target.value)}
-          />
-        </td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={utrosakVisakPrethodnoNT}
-            onChange={(e) => setUtrosakVisakPrethodnoNT(e.target.value)}
-          />
-        </td>
-        <Cell>{utrosakUtrosenoVT}</Cell>
-        <Cell>{utrosakUtrosenoNT}</Cell>
-        <Cell>{utrosakVisakSledeciVT}</Cell>
-        <Cell>{utrosakVisakSledeciNT}</Cell>
-      </tr>
-      </tbody>
-    </table>
-
-    {/*<Button onClick={() => {*/}
-    {/*  calculate()*/}
-    {/*  calculate()*/}
-    {/*  calculate()*/}
-    {/*  calculate()*/}
-    {/*  calculate()*/}
-    {/*}}>Izracunaj</Button>*/}
-
-    <table border="1">
       <tbody>
       <tr>
         <th colSpan={6}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
@@ -1115,14 +1148,14 @@ function App() {
         <td></td>
         <Cell align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>5.</td>
         <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
         <td></td>
         <td></td>
         <td align="right">
           <If condition={popustPlacanje}>
-            <TextField
+            <CustomTextField
               type="number"
               // inputProps={{ step: "0.01" }}
               variant="outlined"
@@ -1138,7 +1171,7 @@ function App() {
         <td></td>
         <td align="right">
           <If condition={popustPlacanje}>
-            <TextField
+            <CustomTextField
               type="number"
               // inputProps={{ step: "0.01" }}
               variant="outlined"
@@ -1161,7 +1194,7 @@ function App() {
         <td></td>
         <Cell align="right">{popustZaElektronskuDostavu}</Cell>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>7.</td>
         <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
         <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
@@ -1181,7 +1214,7 @@ function App() {
         <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
         <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>9.</td>
         <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
         <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</Cell>
@@ -1201,7 +1234,7 @@ function App() {
         <td></td>
         <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>11.</td>
         <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
         <td></td>
@@ -1221,7 +1254,7 @@ function App() {
         <td></td>
         <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>13.</td>
         <td colSpan={2} align="left">Iznos PDV (20%)</td>
         <td></td>
@@ -1237,7 +1270,7 @@ function App() {
         <td></td>
         <td></td>
         <td>
-          <TextField
+          <CustomTextField
             style={{maxWidth: 100}}
             type="number"
             // inputProps={{ step: "0.01" }}
@@ -1249,7 +1282,7 @@ function App() {
         <td></td>
         <td></td>
         <td>
-          <TextField
+          <CustomTextField
             style={{maxWidth: 100}}
             type="number"
             // inputProps={{ step: "0.01" }}
@@ -1259,9 +1292,11 @@ function App() {
           />
         </td>
       </tr>
-      <tr>
+      <tr style={tdStyle}>
         <td>15.</td>
-        <td colSpan={2} align="left">ZADUŽENJE ZA OBRAČUNSKI PERIOD (1+2+3+5+6+7+8+9+11+13+14)</td>
+        <td colSpan={2} align="left">
+          <strong>ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (1+2+3+5+6+7+8+9+11+13+14)
+        </td>
         <td></td>
         <td></td>
         <Cell align="right">{zaduzenjeZaObracunskiPeriod}</Cell>
@@ -1281,8 +1316,10 @@ function App() {
         <td></td>
         <Cell align="right">{taksaZaMedijskiServis}</Cell>
       </tr>
-      <tr>
-        <th colSpan={3} align="left">UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD (15+16)</th>
+      <tr style={tdStyle}>
+        <td colSpan={3} align="left">
+          <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
+        </td>
         <td></td>
         <td></td>
         <Cell align="right">{ukupnoZaduzenje}</Cell>
@@ -1293,7 +1330,7 @@ function App() {
       </tbody>
     </table>
 
-    <table border="1">
+    <table>
       <tbody>
       <tr>
         <th>UŠTEDA U DINARIMA</th>
