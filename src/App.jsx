@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import './App.css'
 import {Button, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 import Cell from "./components/Cell.jsx";
+import If from './components/If.jsx';
 
 const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
 
@@ -212,7 +213,9 @@ function App() {
     utrosakVisakPrethodnoNT,
     umanjenjeUgrozeniSaSolar,
     umanjenjeUgrozeniBezSolra,
-    taksaZaMedijskiServis
+    taksaZaMedijskiServis,
+    popustZaPlacanjePrethodnogRacuna,
+    popustZaPlacanjePrethodnogRacunaBezPanela,
   ]);
 
   useEffect(() => {
@@ -226,8 +229,15 @@ function App() {
   }, [taksaMedijskiServis]);
 
   useEffect(() => {
-
+    if (elektronskaDostava === false) {
+      setPopustZaPlacanjePrethodnogRacuna(0);
+      setPopustZaPlacanjePrethodnogRacunaBezPanela(0);
+    }
   }, [elektronskaDostava]);
+
+  useEffect(( ) => {
+
+  }, [popustPlacanje]);
 
   const calculate = () => {
     let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
@@ -1107,25 +1117,35 @@ function App() {
         <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
         <td></td>
         <td></td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={popustZaPlacanjePrethodnogRacuna}
-            onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(e.target.value)}
-          />
+        <td align="right">
+          <If condition={popustPlacanje}>
+            <TextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={popustZaPlacanjePrethodnogRacuna}
+              onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(parseFloat(e.target.value))}
+            />
+          </If>
+          <If condition={!popustPlacanje}>
+            {popustZaPlacanjePrethodnogRacuna}
+          </If>
         </td>
         <td></td>
         <td></td>
-        <td>
-          <TextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={popustZaPlacanjePrethodnogRacunaBezPanela}
-            onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(e.target.value)}
-          />
+        <td align="right">
+          <If condition={popustPlacanje}>
+            <TextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={popustZaPlacanjePrethodnogRacunaBezPanela}
+              onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}
+            />
+          </If>
+          <If condition={!popustPlacanje}>
+            {popustZaPlacanjePrethodnogRacunaBezPanela}
+          </If>
         </td>
       </tr>
       <tr>
@@ -1220,7 +1240,7 @@ function App() {
             // inputProps={{ step: "0.01" }}
             variant="outlined"
             value={umanjenjeUgrozeniBezSolra}
-            onChange={(e) => setUmanjenjeUgrozeniBezSolra(e.target.value)}
+            onChange={(e) => setUmanjenjeUgrozeniBezSolra(parseFloat(e.target.value))}
           />
         </td>
         <td></td>
@@ -1232,7 +1252,7 @@ function App() {
             // inputProps={{ step: "0.01" }}
             variant="outlined"
             value={umanjenjeUgrozeniSaSolar}
-            onChange={(e) => setUmanjenjeUgrozeniSaSolar(e.target.value)}
+            onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
           />
         </td>
       </tr>
