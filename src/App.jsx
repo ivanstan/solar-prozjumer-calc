@@ -724,7 +724,6 @@ function App() {
     </div>
 
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-
       <table>
         <tbody>
         <tr>
@@ -1322,10 +1321,10 @@ function App() {
         </td>
         <td></td>
         <td></td>
-        <Cell align="right">{ukupnoZaduzenje}</Cell>
+        <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenje}</Cell>
         <td></td>
         <td></td>
-        <Cell align="right">{ukupnoZaduzenjeBezPanela}</Cell>
+        <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenjeBezPanela}</Cell>
       </tr>
       </tbody>
     </table>
