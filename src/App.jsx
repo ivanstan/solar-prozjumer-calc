@@ -236,7 +236,10 @@ function App() {
   }, [elektronskaDostava]);
 
   useEffect(( ) => {
-
+    if (popustPlacanje === false) {
+      setPopustZaPlacanjePrethodnogRacuna(0);
+      setPopustZaPlacanjePrethodnogRacunaBezPanela(0);
+    }
   }, [popustPlacanje]);
 
   const calculate = () => {
@@ -626,10 +629,10 @@ function App() {
     let _iznosPdvBezPanela = _osnovicaZaPdvBezPanela * 0.2;
     setIznosPdvBezPanela(_iznosPdvBezPanela.toFixed(2));
 
-    let _zaduzenjeZaObracunskiPeriod = _osnovicaZaObracunAkcize + _iznosPdv + _iznosAkcize;
+    let _zaduzenjeZaObracunskiPeriod = _osnovicaZaObracunAkcize + _iznosPdv + _iznosAkcize - umanjenjeUgrozeniSaSolar;
     setZaduzenjeZaObracunskiPeriod(_zaduzenjeZaObracunskiPeriod.toFixed(2));
 
-    let zaduzenjeZaObracunskiPeriodBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznosPdvBezPanela + _iznostAkcizeBezPanela;
+    let zaduzenjeZaObracunskiPeriodBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznosPdvBezPanela + _iznostAkcizeBezPanela - umanjenjeUgrozeniBezSolra;
     setZaduzenjeZaObracunskiPeriodBezPanela(zaduzenjeZaObracunskiPeriodBezPanela.toFixed(2));
 
     let _ukupnoZaduzenje = _zaduzenjeZaObracunskiPeriod + taksaZaMedijskiServis;
@@ -1239,8 +1242,8 @@ function App() {
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={umanjenjeUgrozeniBezSolra}
-            onChange={(e) => setUmanjenjeUgrozeniBezSolra(parseFloat(e.target.value))}
+            value={umanjenjeUgrozeniSaSolar}
+            onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
           />
         </td>
         <td></td>
@@ -1251,8 +1254,8 @@ function App() {
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={umanjenjeUgrozeniSaSolar}
-            onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
+            value={umanjenjeUgrozeniBezSolra}
+            onChange={(e) => setUmanjenjeUgrozeniBezSolra(parseFloat(e.target.value))}
           />
         </td>
       </tr>
