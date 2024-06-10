@@ -53,6 +53,10 @@ table td {
     border: none;
 }
 
+.border-bottom {
+    border-bottom: 1px solid #385CD3;
+}
+
 .frame {
     border: 1px solid #385CD3;
     padding: 1px;
