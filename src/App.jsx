@@ -750,7 +750,7 @@ function App() {
     </div>
 
     <div style={{display: 'flex'}}>
-      <table>
+      <table style={{borderRight: 'none'}}>
         <thead>
         <tr>
           <td>&nbsp;</td>
