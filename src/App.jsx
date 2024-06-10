@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import Cell from "./components/Cell.jsx";
 import If from './components/If.jsx';
+import {PieChart} from "@mui/x-charts";
 
 const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
 
@@ -35,7 +36,7 @@ const CustomSelect = styled(Select)(({ theme }) => ({
 }));
 
 const tdStyle = {
-  backgroundColor: "#B0C4DE"
+  backgroundColor: "#829AE7",
 }
 
 const renderNumber = (value) => {
@@ -751,9 +752,9 @@ function App() {
     <div style={{display: 'flex'}}>
       <table>
         <thead>
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
         </thead>
         <tbody>
         <tr>
@@ -843,7 +844,7 @@ function App() {
         </tr>
         <tr>
           <td>Prethodno</td>
-          <td  style={tdStyle}>
+          <td style={tdStyle}>
             <CustomTextField
               type="number"
               // inputProps={{ step: "0.01" }}
@@ -861,7 +862,7 @@ function App() {
               onChange={(e) => setPrethodnoPreuzetoNT(e.target.value)}
             />
           </td>
-          <td  style={tdStyle}>
+          <td style={tdStyle}>
             <CustomTextField
               type="number"
               // inputProps={{ step: "0.01" }}
@@ -879,7 +880,7 @@ function App() {
               onChange={(e) => setPrethodnoIsporucenoNT(e.target.value)}
             />
           </td>
-          <td  style={tdStyle}></td>
+          <td style={tdStyle}></td>
           <td></td>
           <td style={tdStyle}></td>
           <td></td>
@@ -1329,48 +1330,71 @@ function App() {
       </tbody>
     </table>
 
-    <table>
-      <tbody>
-      <tr>
-        <th>UŠTEDA U DINARIMA</th>
-        <Cell>{ustedaUDinarima}</Cell>
-        <td>RSD</td>
-      </tr>
-      <tr>
-        <th>UŠTEDA U PROCENTIMA</th>
-        <Cell>{ustedaUProcentima}</Cell>
-        <td>%</td>
-      </tr>
-      <tr>
-        <th>UKUPNO PROIZVEDENA EL. ENERGIJA</th>
-        <Cell>{proizvedenaElEnergija}</Cell>
-        <td>kWh</td>
-      </tr>
-      <tr>
-        <th>PREDATO KAO VIŠAK</th>
-        <Cell>{utrosakIsporucenoVT}</Cell>
-        <td>kWh</td>
-      </tr>
-      <tr>
-        <th>DIREKTNO POTROŠENO</th>
-        <td>{direktnoPotroseno}</td>
-        <td>kWh</td>
-      </tr>
-      <tr>
-        <th>PROCENAT DIREKTNE POTROŠNJE</th>
-        <td>{direktnoPotrosenoProcenata}</td>
-        <td>%</td>
-      </tr>
-      <tr>
-        <th>Emisija CO2</th>
-        <td colSpan="2">{emisijaCO2} kg CO<sub>2</sub>/KWh</td>
-      </tr>
-      <tr>
-        <th>Količina uglja</th>
-        <td colSpan="2">{kolicinaUglja} kg/kWh</td>
-      </tr>
-      </tbody>
-    </table>
+
+    <div>
+      <PieChart
+        margin={{ left: 100 }}
+        slotProps={{
+          legend: {
+            direction: 'column',
+            position: { vertical: 'middle', horizontal: 'right' },
+            padding: 1,
+          },
+        }}
+        series={[
+          {
+            data: [
+              {id: 0, color: '#385CD3', value: utrosakIsporucenoVT, label: 'Predato kao višak: ' + utrosakIsporucenoVT + ' kWh (' + parseInt(100 - direktnoPotrosenoProcenata) + '%)'},
+              {id: 1, color: '#829AE7', value: direktnoPotroseno, label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + parseInt(direktnoPotrosenoProcenata) + '%)'},
+            ],
+            valueFormatter: () => '',
+          },
+        ]}
+        height={150}
+      />
+      <p>Ukupno proizvedena el. energija {proizvedenaElEnergija} kWh</p>
+    </div>
+
+    <div>
+      <PieChart
+        margin={{ left: 100 }}
+        slotProps={{
+          legend: {
+            direction: 'column',
+            position: { vertical: 'middle', horizontal: 'right' },
+            padding: 1,
+          },
+        }}
+        series={[
+          {
+            data: [
+              {id: 0, color: '#385CD3', value: ustedaUProcentima, label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'},
+              {id: 1, color: '#829AE7', value: 100 - ustedaUProcentima, label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'},
+            ],
+            valueFormatter: () => '',
+          },
+        ]}
+        height={150}
+      />
+    </div>
+
+    <div className="flex" style={{justifyContent: 'space-between'}}>
+      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px'}}>
+        <div className="flex">
+          <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
+          <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
+        </div>
+        <p>Emisija CO2</p>
+      </div>
+
+      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px'}}>
+        <div className="flex">
+          <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
+          <p>{kolicinaUglja} kg/kWh</p>
+        </div>
+        <p>Količina uglja</p>
+      </div>
+    </div>
 
   </>)
 }
