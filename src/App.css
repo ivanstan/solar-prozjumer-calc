@@ -28,6 +28,7 @@ table {
 }
 
 .changed {
-  background-color: #cce5ff;
+  background-color: lightyellow;
   transition: background-color 0.5s ease;
+  color: #1a1a1a;
 }

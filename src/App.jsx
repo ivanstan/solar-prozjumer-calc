@@ -1136,9 +1136,6 @@ function App() {
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
         <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
       </tr>
-      <tr>
-        <td colSpan={9}>&nbsp;</td>
-      </tr>
       <tr className="primary">
         <td>4.</td>
         <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
@@ -1317,7 +1314,7 @@ function App() {
         <td></td>
         <Cell align="right">{taksaZaMedijskiServis}</Cell>
       </tr>
-      <tr style={tdStyle}>
+      <tr className="primary">
         <td colSpan={3} align="left">
           <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
         </td>
