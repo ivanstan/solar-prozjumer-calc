@@ -37,11 +37,26 @@ body {
 }
 
 table {
-    border: 1px solid #385CD3;
+    border-collapse: collapse;
+    margin-bottom: 0;
 }
 
 table tr {
-    border-bottom: 1px solid #385CD3;
+    /*border-bottom: 2px solid #ffffff;*/
+}
+
+table td {
+    border: 2px solid #ffffff;
+}
+
+.no-border {
+    border: none;
+}
+
+.frame {
+    border: 1px solid #385CD3;
+    padding: 1px;
+    margin: 1px;
 }
 
 .primary {
