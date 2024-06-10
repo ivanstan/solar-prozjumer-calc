@@ -823,24 +823,25 @@ function App() {
       <table>
         <tbody>
         <tr>
-          <th rowSpan="2">STANJE ZA OBRAČUN</th>
-          <th colSpan="2">Preuzeta el. energija</th>
+          <th>STANJE ZA OBRAČUN</th>
+          <th colSpan="2" className="primary">Preuzeta el. energija</th>
           <th colSpan="2">Isporučena el. energija</th>
-          <th colSpan="2">Višak el. en. iz preth. obr.</th>
+          <th colSpan="2" className="primary">Višak el. en. iz preth. obr.</th>
           <th colSpan="2">Utrošena el. energija</th>
-          <th colSpan="2">Višak el. en. Za sledeći obr.</th>
+          <th colSpan="2" className="primary">Višak el. en. Za sledeći obr.</th>
         </tr>
         <tr>
-          <th style={tdStyle}>VT</th>
-          <th>NT</th>
-          <th style={tdStyle}>VT</th>
-          <th>NT</th>
-          <th style={tdStyle}>VT</th>
-          <th>NT</th>
-          <th style={tdStyle}>VT</th>
-          <th>NT</th>
-          <th style={tdStyle}>VT</th>
-          <th>NT</th>
+          <th className="primary"></th>
+          <th className="primary">VT</th>
+          <th className="primary">NT</th>
+          <th className="primary">VT</th>
+          <th className="primary">NT</th>
+          <th className="primary">VT</th>
+          <th className="primary">NT</th>
+          <th className="primary">VT</th>
+          <th className="primary">NT</th>
+          <th className="primary">VT</th>
+          <th className="primary">NT</th>
         </tr>
         <tr>
           <td>Prethodno</td>
@@ -966,17 +967,17 @@ function App() {
     </div>
     <table>
       <tbody>
-      <tr>
+      <tr className="primary">
         <th colSpan={6}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
       </tr>
-      <tr>
+      <tr className="secondary">
         <td></td>
         <td colSpan={2}>TARIFA</td>
         <td>Utrošeno (kW/kWh)</td>
         <td>Cena po jedinici</td>
         <td>Iznos (dinara)</td>
       </tr>
-      <tr>
+      <tr className="primary">
         <td colSpan={6}>Troškovi koje nezavisne od potrošnje električne energije</td>
       </tr>
       <tr>
@@ -993,7 +994,7 @@ function App() {
         <td></td>
         <td align="right">{trosakGarantovanogSnabdevacaIznos}</td>
       </tr>
-      <tr>
+      <tr className="primary">
         <th colSpan={3}>Utrošena električna energija</th>
         <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
         <td></td>
@@ -1044,7 +1045,7 @@ function App() {
         <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
         <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
       </tr>
-      <tr>
+      <tr className="primary">
         <td rowSpan={2}>3.</td>
         <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
         <td rowSpan={2}></td>
@@ -1052,7 +1053,7 @@ function App() {
         <Cell rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
         <td colSpan={3}>Bez solarnih panela</td>
       </tr>
-      <tr>
+      <tr className="primary">
         <th>Utrošeno (kW/kWh)</th>
         <th>Cena po jedinici</th>
         <th>Iznos (dinara)</th>
@@ -1138,7 +1139,7 @@ function App() {
       <tr>
         <td colSpan={9}>&nbsp;</td>
       </tr>
-      <tr>
+      <tr className="primary">
         <td>4.</td>
         <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
         <td></td>

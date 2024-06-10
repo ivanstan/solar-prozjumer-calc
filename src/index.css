@@ -49,6 +49,10 @@ table tr {
     color: #ffffff;
 }
 
+.secondary {
+    background-color: #829AE7;
+}
+
 .flex {
     display: flex;
 }
