@@ -60,7 +60,7 @@ table td {
 .frame {
     border: 1px solid #385CD3;
     padding: 1px;
-    margin: 1px;
+    margin: 1px 1px 30px;
 }
 
 .primary {

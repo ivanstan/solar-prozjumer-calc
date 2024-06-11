@@ -690,64 +690,58 @@ function App() {
   }
 
   return (<>
-    <Typography>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM MERENJU</Typography>
+    <h1 style={{marginBottom: 50}}>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM
+      MERENJU</h1>
 
-    <div>
-      <span>za mesec</span>
+    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 50}}>
+      <div>
+        <span>Za mesec</span>
+        <FormControl sx={{marginX: 1}}>
+          <InputLabel id="input-month">Mesec</InputLabel>
+          <CustomSelect
+            labelId="input-month"
+            value={month}
+            label="Mesec"
+            onChange={(e) => {
+              setMonth(e.target.value)
+            }}
+          >
+            {months.map((month) => <MenuItem key={month} value={month}>{month}</MenuItem>)}
+          </CustomSelect>
+        </FormControl>
 
-      <FormControl>
-        <InputLabel id="input-month">Mesec</InputLabel>
-        <CustomSelect
-          labelId="input-month"
-          value={month}
-          label="Mesec"
-          onChange={(e) => {
-            setMonth(e.target.value)
-          }}
-        >
-          {months.map((month) => <MenuItem key={month} value={month}>{month}</MenuItem>)}
-        </CustomSelect>
-      </FormControl>
+        <FormControl>
+          <InputLabel id="input-year">Godina</InputLabel>
+          <CustomSelect
+            labelId="input-year"
+            value={year}
+            label="Godina"
+            onChange={(e) => {
+              setYear(e.target.value)
+            }}
+          >
+            {years.map((year) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
+          </CustomSelect>
+        </FormControl>
+      </div>
 
-      <FormControl>
-        <InputLabel id="input-year">Godina</InputLabel>
-        <CustomSelect
-          labelId="input-year"
-          value={year}
-          label="Godina"
-          onChange={(e) => {
-            setYear(e.target.value)
-          }}
-        >
-          {years.map((year) => <MenuItem key={year} value={year}>{year}</MenuItem>)}
-        </CustomSelect>
-      </FormControl>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
+          <span>Popust za elektronsku dostavu računa</span>
+          <Checkbox checked={elektronskaDostava} onChange={(e) => setElektronskaDostava(e.target.checked)}/>
+        </div>
+        <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
+          <span>Popust 5% za plaćanje prethodnog računa u roku dospeća</span>
+          <Checkbox checked={popustPlacanje} onChange={(e) => setPopustPlacanje(e.target.checked)}/>
+        </div>
+        <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
+          <span>Taksa za javni medijski servis</span>
+          <Checkbox checked={taksaMedijskiServis} onChange={(e) => setTaksaMedijskiServis(e.target.checked)}/>
+        </div>
+      </div>
     </div>
 
-    <div style={{display: 'flex', justifyContent: 'space-between'}}>
-      <table>
-        <tbody>
-        <tr>
-          <th>Popust za elektronsku dostavu računa</th>
-          <td>
-            <Checkbox checked={elektronskaDostava} onChange={(e) => setElektronskaDostava(e.target.checked)}/>
-          </td>
-        </tr>
-        <tr>
-          <th>Popust 5% za plaćanje prethodnog računa u roku dospeća</th>
-          <td>
-            <Checkbox checked={popustPlacanje} onChange={(e) => setPopustPlacanje(e.target.checked)}/>
-          </td>
-        </tr>
-        <tr>
-          <th>Taksa za javni medijski servis</th>
-          <td>
-            <Checkbox checked={taksaMedijskiServis} onChange={(e) => setTaksaMedijskiServis(e.target.checked)}/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+
     <div style={{display: 'flex', marginBottom: 10}} className="frame">
       <table style={{borderRight: 'none'}}>
         <thead>
@@ -1332,9 +1326,8 @@ function App() {
       </table>
     </div>
 
-    <div>
+    <div style={{marginBottom: 30}}>
       <PieChart
-        margin={{left: 100}}
         slotProps={{
           legend: {
             direction: 'column',
@@ -1363,12 +1356,11 @@ function App() {
         ]}
         height={150}
       />
-      <p>Ukupno proizvedena el. energija {proizvedenaElEnergija} kWh</p>
+      <p>Ukupno proizvedena el. energija <strong>{proizvedenaElEnergija}</strong> kWh</p>
     </div>
 
-    <div>
+    <div style={{marginBottom: 30}}>
       <PieChart
-        margin={{left: 100}}
         slotProps={{
           legend: {
             direction: 'column',
@@ -1399,8 +1391,8 @@ function App() {
       />
     </div>
 
-    <div className="flex" style={{justifyContent: 'space-between'}}>
-      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px'}}>
+    <div className="flex" style={{justifyContent: 'center'}}>
+      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
         <div className="flex">
           <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
           <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
@@ -1408,7 +1400,7 @@ function App() {
         <p>Emisija CO2</p>
       </div>
 
-      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px'}}>
+      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
         <div className="flex">
           <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
           <p>{kolicinaUglja} kg/kWh</p>
