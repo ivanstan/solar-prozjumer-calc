@@ -435,8 +435,6 @@ function App() {
     let _preuzetaElektricnaEnergija = _utrosakPreuzetoVT + _utrosakPreuzetoNT;
     setPreuzetaElektricnaEnergija(_preuzetaElektricnaEnergija)
 
-    console.log(_utrosakPreuzetoVT, _utrosakPreuzetoNT, proizvedenaElEnergija, _isporucenaElEnergija)
-
     let _preuzetaElektricnaEnergijaBezSolar = _preuzetaElektricnaEnergija + proizvedenaElEnergija - _isporucenaElEnergija;
     setPreuzetaElektricnaEnergijaBezSolar(_preuzetaElektricnaEnergijaBezSolar);
 
@@ -621,7 +619,7 @@ function App() {
 
     setPopustZaElektronskuDostavu(_popustElektronskaDostava);
 
-    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = _preuzetaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
+    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = utrosenaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
     setNaknadaZaPodsticajPovlascenihProizvodjacaIznos(_naknadaZaPodsticajPovlascenihProizvodjacaIznos.toFixed(2));
 
     let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos = _utrosenaElektricnaEnergija * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
