@@ -61,7 +61,7 @@ function App() {
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(1000);
   const [isporucenaElEnergija, setIsporucenaElEnergija] = useState(0);
-  const [brojDana, setBrojDana] = useState(2);
+  const [brojDana, setBrojDana] = useState(31);
 
   const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
   const [prethodnoPreuzetoNT, setPrethodnoPreuzetoNT] = useState(9492);
@@ -252,7 +252,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const _taksa = taksaMedijskiServis ? 299 : 0;
+    const _taksa = taksaMedijskiServis ? 349 : 0;
 
     setTaksaZaMedijskiServis(_taksa);
   }, [taksaMedijskiServis]);
@@ -280,9 +280,8 @@ function App() {
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
     let _utrosakIsporucenoNT = novoIsporucenoNT - prethodnoIsporucenoNT;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
-    let _isporucenaElEnergija = _utrosakIsporucenoVT + _utrosakIsporucenoNT;
+    let _isporucenaElEnergija = 0;
     setIsporucenaElEnergija(_isporucenaElEnergija)
-
     let _utrosakUtrosenoVT = 0
     if (_utrosakPreuzetoVT < (_utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
       _utrosakUtrosenoVT = 0
@@ -390,7 +389,7 @@ function App() {
       setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
     } else {
       if (_utrosenaZelenaTarifaNTUtroseno < _donjaGranicaCrvenaTarifa) {
-        _utrosenaPlavaTarifaNTUtroseno = _donjaGranicaCrvenaTarifa - _utrosenaZelenaTarifaNTUtroseno
+        _utrosenaPlavaTarifaNTUtroseno = _utrosenaElektricnaEnergija - _utrosenaZelenaTarifaNTUtroseno
         setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
       } else {
         _utrosenaPlavaTarifaNTUtroseno = Math.round((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
@@ -435,6 +434,8 @@ function App() {
 
     let _preuzetaElektricnaEnergija = _utrosakPreuzetoVT + _utrosakPreuzetoNT;
     setPreuzetaElektricnaEnergija(_preuzetaElektricnaEnergija)
+
+    console.log(_utrosakPreuzetoVT, _utrosakPreuzetoNT, proizvedenaElEnergija, _isporucenaElEnergija)
 
     let _preuzetaElektricnaEnergijaBezSolar = _preuzetaElektricnaEnergija + proizvedenaElEnergija - _isporucenaElEnergija;
     setPreuzetaElektricnaEnergijaBezSolar(_preuzetaElektricnaEnergijaBezSolar);
@@ -956,7 +957,7 @@ function App() {
           <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>
           <Cell>{utrosakUtrosenoNT}</Cell>
           <Cell style={tdStyle}>{utrosakVisakSledeciVT}</Cell>
-          <Cell>{utrosakVisakSledeciNT}</Cell>
+          <Cell showZero={true}>{utrosakVisakSledeciNT}</Cell>
         </tr>
         </tbody>
       </table>
@@ -1192,7 +1193,7 @@ function App() {
         <tr style={tdStyle}>
           <td>7.</td>
           <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
-          <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
+          <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
           <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
           <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
           <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
@@ -1212,8 +1213,8 @@ function App() {
         <tr style={tdStyle}>
           <td>9.</td>
           <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
-          <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene1}</Cell>
-          <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtrosene2}</Cell>
+          <td align="right"></td>
+          <td align="right"></td>
           <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
           <td></td>
           <td></td>

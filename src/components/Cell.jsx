@@ -27,7 +27,9 @@ const Cell = (props) => {
 
   let value = children;
 
-  if (value == 0) {
+  const showZero = props.showZero === undefined ? false : props.showZero;
+
+  if (value == 0 && showZero === false) {
     value = '';
   } else {
     value = formatter.format(value);
