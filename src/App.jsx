@@ -716,7 +716,7 @@ function App() {
         method: 'POST',
         body: JSON.stringify({
           to: email,
-          body: 'Test from server'
+          body: reportEmail(body)
         }),
       });
       if (!response.ok) {
