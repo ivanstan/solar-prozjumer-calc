@@ -1432,7 +1432,8 @@ function App() {
       />
     </div>
 
-    <div className="flex email" style={{justifyContent: 'center'}}>
+    <div className="email">
+      <div className="flex" style={{justifyContent: 'center'}}>
       <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
         <div className="flex">
           <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
@@ -1448,6 +1449,7 @@ function App() {
         </div>
         <p>Količina uglja</p>
       </div>
+    </div>
     </div>
 
     <div className="frame" style={{padding: 20, marginTop: 20}}>
