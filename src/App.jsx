@@ -14,12 +14,21 @@ import {
 import Cell from "./components/Cell.jsx";
 import If from './components/If.jsx';
 import {PieChart} from "@mui/x-charts";
+import {reportEmail} from "./email.jsx";
 
 const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
 
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
 const years = Array.from({length: 6}, (v, i) => currentYear - i);
+
+const emailValid = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
 
 const CustomTextField = styled(TextField)(({theme}) => ({
   '& .MuiInputBase-input': {
@@ -57,6 +66,8 @@ function App() {
   const [elektronskaDostava, setElektronskaDostava] = useState(true);
   const [popustPlacanje, setPopustPlacanje] = useState(true);
   const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(true);
+  const [email, setEmail] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
 
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(1000);
@@ -688,6 +699,37 @@ function App() {
     setKolicinaUglja(_kolicinaUglja);
   }
 
+  const onEmailSend = async () => {
+    setEmailSent(true);
+
+    const elements = document.getElementsByClassName('email');
+    let body = '';
+    for(var i=0; i<elements.length; i++) {
+      body += elements[i].innerHTML
+    }
+
+    console.log(reportEmail(body))
+
+    const url = "https://solar.sumeiklima.org/sr/solar/email";
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          to: email,
+          body: 'Test from server'
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   return (<>
     <h1 style={{marginBottom: 50}}>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM
       MERENJU</h1>
@@ -741,7 +783,7 @@ function App() {
     </div>
 
 
-    <div style={{display: 'flex', marginBottom: 10}} className="frame">
+    <div style={{display: 'flex', marginBottom: 10}} className="frame email">
       <table style={{borderRight: 'none'}}>
         <thead>
         <tr>
@@ -961,7 +1003,7 @@ function App() {
       </table>
     </div>
 
-    <div className="frame">
+    <div className="frame email">
       <table>
         <tbody>
         <tr className="primary">
@@ -1325,7 +1367,7 @@ function App() {
       </table>
     </div>
 
-    <div style={{marginBottom: 30}}>
+    <div style={{marginBottom: 30}} className="email">
       <PieChart
         slotProps={{
           legend: {
@@ -1358,7 +1400,7 @@ function App() {
       <p>Ukupno proizvedena el. energija <strong>{proizvedenaElEnergija}</strong> kWh</p>
     </div>
 
-    <div style={{marginBottom: 30}}>
+    <div style={{marginBottom: 30}} className="email">
       <PieChart
         slotProps={{
           legend: {
@@ -1390,7 +1432,7 @@ function App() {
       />
     </div>
 
-    <div className="flex" style={{justifyContent: 'center'}}>
+    <div className="flex email" style={{justifyContent: 'center'}}>
       <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
         <div className="flex">
           <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
@@ -1406,6 +1448,18 @@ function App() {
         </div>
         <p>Količina uglja</p>
       </div>
+    </div>
+
+    <div className="frame" style={{padding: 20, marginTop: 20}}>
+      <div style={{display: 'flex'}}>
+        <p style={{marginRight: 20}}>Pošaljite ovaj izveštaj na svoju email adresu</p>
+        <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained" onClick={onEmailSend}>Pošalji</Button>
+      </div>
+
+      <If condition={emailSent}>
+        <p style={{color: '#20c997'}}>Izveštaj je uspešno poslat na vašu e-mail adresu.</p>
+      </If>
     </div>
 
   </>)
