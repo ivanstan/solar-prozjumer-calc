@@ -827,7 +827,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={proizvedenaElEnergija}
-              onChange={(e) => setProizvedenaElEnergija(e.target.value)}
+              onChange={(e) => setProizvedenaElEnergija(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -888,7 +888,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={prethodnoPreuzetoVT}
-              onChange={(e) => setPrethodnoPreuzetoVT(e.target.value)}
+              onChange={(e) => setPrethodnoPreuzetoVT(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -897,7 +897,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={prethodnoPreuzetoNT}
-              onChange={(e) => setPrethodnoPreuzetoNT(e.target.value)}
+              onChange={(e) => setPrethodnoPreuzetoNT(parseFloat(e.target.value))}
             />
           </td>
           <td style={tdStyle}>
@@ -906,7 +906,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={prethodnoIsporucenoVT}
-              onChange={(e) => setPrethodnoIsporucenoVT(e.target.value)}
+              onChange={(e) => setPrethodnoIsporucenoVT(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -915,7 +915,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={prethodnoIsporucenoNT}
-              onChange={(e) => setPrethodnoIsporucenoNT(e.target.value)}
+              onChange={(e) => setPrethodnoIsporucenoNT(parseFloat(e.target.value))}
             />
           </td>
           <td style={tdStyle}></td>
@@ -933,7 +933,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={novoPreuzetoVT}
-              onChange={(e) => setNovoPreuzetoVT(e.target.value)}
+              onChange={(e) => setNovoPreuzetoVT(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -942,7 +942,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={novoPreuzetoNT}
-              onChange={(e) => setNovoPreuzetoNT(e.target.value)}
+              onChange={(e) => setNovoPreuzetoNT(parseFloat(e.target.value))}
             />
           </td>
           <td style={tdStyle}>
@@ -951,7 +951,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={novoIsporucenoVT}
-              onChange={(e) => setNovoIsporucenoVT(e.target.value)}
+              onChange={(e) => setNovoIsporucenoVT(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -960,7 +960,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={novoIsporucenoNT}
-              onChange={(e) => setNovoIsporucenoNT(e.target.value)}
+              onChange={(e) => setNovoIsporucenoNT(parseFloat(e.target.value))}
             />
           </td>
           <td style={tdStyle}></td>
@@ -982,7 +982,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={utrosakVisakPrethodnoVT}
-              onChange={(e) => setUtrosakVisakPrethodnoVT(e.target.value)}
+              onChange={(e) => setUtrosakVisakPrethodnoVT(parseFloat(e.target.value))}
             />
           </td>
           <td>
@@ -991,7 +991,7 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={utrosakVisakPrethodnoNT}
-              onChange={(e) => setUtrosakVisakPrethodnoNT(e.target.value)}
+              onChange={(e) => setUtrosakVisakPrethodnoNT(parseFloat(e.target.value))}
             />
           </td>
           <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>
