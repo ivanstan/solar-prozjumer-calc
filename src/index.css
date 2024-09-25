@@ -75,3 +75,11 @@ table td {
 .flex {
     display: flex;
 }
+
+.content-end {
+    justify-content: end;
+}
+
+.content-between {
+    justify-content: space-between;
+}

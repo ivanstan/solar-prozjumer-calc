@@ -7,7 +7,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  styled,
+  styled, Switch,
   TextField,
   Typography
 } from "@mui/material";
@@ -66,6 +66,7 @@ function App() {
   const [elektronskaDostava, setElektronskaDostava] = useState(true);
   const [popustPlacanje, setPopustPlacanje] = useState(true);
   const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(true);
+  const [umanjenjeZaUgrozene, setUmanjenjeZaUgrozene] = useState(true);
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
@@ -704,7 +705,7 @@ function App() {
 
     const elements = document.getElementsByClassName('email');
     let body = '';
-    for(var i=0; i<elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
       body += elements[i].innerHTML
     }
 
@@ -766,22 +767,206 @@ function App() {
         </FormControl>
       </div>
 
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+
+    </div>
+
+
+    <div className="flex" style={{marginBottom: 20}}>
+
+      <div style={{width: '32%'}}>
+        <div className="flex content-between" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Obračunska snaga</p>
+          <CustomSelect
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={obracunskaSnaga}
+            onChange={(e) => setObracunskaSnaga(e.target.value)}
+          >
+            <MenuItem value={6.90}>6.90</MenuItem>
+            <MenuItem value={11.04}>11.04</MenuItem>
+            <MenuItem value={13.80}>13.80</MenuItem>
+            <MenuItem value={17.25}>17.25</MenuItem>
+            <MenuItem value={22.07}>22.07</MenuItem>
+            <MenuItem value={24.15}>24.15</MenuItem>
+            <MenuItem value={27.60}>27.60</MenuItem>
+            <MenuItem value={34.50}>34.50</MenuItem>
+            <MenuItem value={43.47}>43.47</MenuItem>
+          </CustomSelect>
+          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>Kw</span>
+        </div>
+        <div className="flex content-between" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Broj dana obračunskog perioda</p>
+          <CustomTextField
+            type="number"
+            inputProps={{max: 31, min: 1}}
+            variant="outlined"
+            value={brojDana}
+            onChange={(e) => {
+              if (e.target.value === '' || (e.target.value >= 1 && e.target.value <= 31)) {
+                setBrojDana(e.target.value)
+              }
+            }}
+          />
+          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}></span>
+        </div>
+        <div className="flex content-between" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Proizvedena električna energija</p>
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={proizvedenaElEnergija}
+            onChange={(e) => setProizvedenaElEnergija(parseFloat(e.target.value))}
+          />
+          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>Kwh</span>
+        </div>
+      </div>
+
+      <div style={{width: '32%', flexGrow: 1, margin: '0 20px'}}>
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Prethodno preuzeta el. energija</p>
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={prethodnoPreuzetoVT}
+            onChange={(e) => setPrethodnoPreuzetoVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            style={{marginLeft: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={prethodnoPreuzetoNT}
+            onChange={(e) => setPrethodnoPreuzetoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Novo preuzeta el. energija</p>
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={novoPreuzetoVT}
+            onChange={(e) => setNovoPreuzetoVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            style={{marginLeft: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={novoPreuzetoNT}
+            onChange={(e) => setNovoPreuzetoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Prethodno isporučena el. energija</p>
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={prethodnoIsporucenoVT}
+            onChange={(e) => setPrethodnoIsporucenoVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            style={{marginLeft: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={prethodnoIsporucenoNT}
+            onChange={(e) => setPrethodnoIsporucenoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Novo isporučena el. energija</p>
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={novoIsporucenoVT}
+            onChange={(e) => setNovoIsporucenoVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            style={{marginLeft: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={novoIsporucenoNT}
+            onChange={(e) => setNovoIsporucenoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="flex content-between" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Višak iz prethodnog perioda</p>
+
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakVisakPrethodnoVT}
+            onChange={(e) => setUtrosakVisakPrethodnoVT(parseFloat(e.target.value))}
+          />
+
+          <CustomTextField
+            style={{marginLeft: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakVisakPrethodnoNT}
+            onChange={(e) => setUtrosakVisakPrethodnoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+      </div>
+
+      <div style={{display: 'flex', flexDirection: 'column', width: '32%'}}>
         <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
           <span>Popust za elektronsku dostavu računa</span>
-          <Checkbox checked={elektronskaDostava} onChange={(e) => setElektronskaDostava(e.target.checked)}/>
+          <Switch checked={elektronskaDostava} onChange={(e) => setElektronskaDostava(e.target.checked)}/>
         </div>
         <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
           <span>Popust 5% za plaćanje prethodnog računa u roku dospeća</span>
-          <Checkbox checked={popustPlacanje} onChange={(e) => setPopustPlacanje(e.target.checked)}/>
+          <Switch checked={popustPlacanje} onChange={(e) => setPopustPlacanje(e.target.checked)}/>
+        </div>
+        <div className="flex content-end">
+          <If condition={popustPlacanje}>
+            <CustomTextField
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={popustZaPlacanjePrethodnogRacuna}
+              onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(parseFloat(e.target.value))}
+            />
+          </If>
         </div>
         <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
           <span>Taksa za javni medijski servis</span>
-          <Checkbox checked={taksaMedijskiServis} onChange={(e) => setTaksaMedijskiServis(e.target.checked)}/>
+          <Switch checked={taksaMedijskiServis} onChange={(e) => setTaksaMedijskiServis(e.target.checked)}/>
+        </div>
+
+        <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
+          <span>Umanjenje za energetski ugrožene kupce</span>
+          <Switch checked={umanjenjeZaUgrozene} onChange={(e) => setUmanjenjeZaUgrozene(e.target.checked)}/>
+        </div>
+        <div className="flex content-end">
+          <If condition={umanjenjeZaUgrozene}>
+            <CustomTextField
+              style={{maxWidth: 100}}
+              type="number"
+              // inputProps={{ step: "0.01" }}
+              variant="outlined"
+              value={umanjenjeUgrozeniSaSolar}
+              onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
+            />
+          </If>
         </div>
       </div>
-    </div>
 
+    </div>
 
     <div style={{display: 'flex', marginBottom: 10}} className="frame email">
       <table style={{borderRight: 'none'}}>
@@ -797,23 +982,7 @@ function App() {
         <tr>
           <th>Obračunska snaga:</th>
           <td>
-            <CustomSelect
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={obracunskaSnaga}
-              onChange={(e) => setObracunskaSnaga(e.target.value)}
-            >
-              <MenuItem value={6.90}>6.90</MenuItem>
-              <MenuItem value={11.04}>11.04</MenuItem>
-              <MenuItem value={13.80}>13.80</MenuItem>
-              <MenuItem value={17.25}>17.25</MenuItem>
-              <MenuItem value={22.07}>22.07</MenuItem>
-              <MenuItem value={24.15}>24.15</MenuItem>
-              <MenuItem value={27.60}>27.60</MenuItem>
-              <MenuItem value={34.50}>34.50</MenuItem>
-              <MenuItem value={43.47}>43.47</MenuItem>
-            </CustomSelect>
+            {obracunskaSnaga}
           </td>
           <td>
             kW
@@ -822,13 +991,7 @@ function App() {
         <tr>
           <th>Proizvedena el. energija:</th>
           <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={proizvedenaElEnergija}
-              onChange={(e) => setProizvedenaElEnergija(parseFloat(e.target.value))}
-            />
+            {proizvedenaElEnergija}
           </td>
           <td>
             kWh
@@ -842,17 +1005,7 @@ function App() {
         <tr>
           <th>Broj dana:</th>
           <td>
-            <CustomTextField
-              type="number"
-              inputProps={{max: 31, min: 1}}
-              variant="outlined"
-              value={brojDana}
-              onChange={(e) => {
-                if (e.target.value === '' || (e.target.value >= 1 && e.target.value <= 31)) {
-                  setBrojDana(e.target.value)
-                }
-              }}
-            />
+            {brojDana}
           </td>
         </tr>
         </tbody>
@@ -882,42 +1035,18 @@ function App() {
         </tr>
         <tr>
           <td>Prethodno</td>
-          <td style={tdStyle}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={prethodnoPreuzetoVT}
-              onChange={(e) => setPrethodnoPreuzetoVT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={prethodnoPreuzetoNT}
-              onChange={(e) => setPrethodnoPreuzetoNT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td style={tdStyle}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={prethodnoIsporucenoVT}
-              onChange={(e) => setPrethodnoIsporucenoVT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={prethodnoIsporucenoNT}
-              onChange={(e) => setPrethodnoIsporucenoNT(parseFloat(e.target.value))}
-            />
-          </td>
+          <Cell style={tdStyle}>
+            {prethodnoPreuzetoVT}
+          </Cell>
+          <Cell>
+            {prethodnoPreuzetoNT}
+          </Cell>
+          <Cell style={tdStyle}>
+            {prethodnoIsporucenoVT}
+          </Cell>
+          <Cell>
+            {prethodnoIsporucenoNT}
+          </Cell>
           <td style={tdStyle}></td>
           <td></td>
           <td style={tdStyle}></td>
@@ -927,42 +1056,18 @@ function App() {
         </tr>
         <tr>
           <td>Novo</td>
-          <td style={tdStyle}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={novoPreuzetoVT}
-              onChange={(e) => setNovoPreuzetoVT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={novoPreuzetoNT}
-              onChange={(e) => setNovoPreuzetoNT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td style={tdStyle}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={novoIsporucenoVT}
-              onChange={(e) => setNovoIsporucenoVT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={novoIsporucenoNT}
-              onChange={(e) => setNovoIsporucenoNT(parseFloat(e.target.value))}
-            />
-          </td>
+          <Cell style={tdStyle}>
+            {novoPreuzetoVT}
+          </Cell>
+          <Cell>
+            {novoPreuzetoNT}
+          </Cell>
+          <Cell style={tdStyle}>
+            {novoIsporucenoVT}
+          </Cell>
+          <Cell>
+            {novoIsporucenoNT}
+          </Cell>
           <td style={tdStyle}></td>
           <td></td>
           <td style={tdStyle}></td>
@@ -976,24 +1081,12 @@ function App() {
           <Cell>{utrosakPreuzetoNT}</Cell>
           <Cell style={tdStyle}>{utrosakIsporucenoVT}</Cell>
           <Cell>{utrosakIsporucenoNT}</Cell>
-          <td style={tdStyle}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={utrosakVisakPrethodnoVT}
-              onChange={(e) => setUtrosakVisakPrethodnoVT(parseFloat(e.target.value))}
-            />
-          </td>
-          <td>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={utrosakVisakPrethodnoNT}
-              onChange={(e) => setUtrosakVisakPrethodnoNT(parseFloat(e.target.value))}
-            />
-          </td>
+          <Cell style={tdStyle}>
+            {utrosakVisakPrethodnoVT}
+          </Cell>
+          <Cell>
+            {utrosakVisakPrethodnoNT}
+          </Cell>
           <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>
           <Cell>{utrosakUtrosenoNT}</Cell>
           <Cell style={tdStyle}>{utrosakVisakSledeciVT}</Cell>
@@ -1190,15 +1283,6 @@ function App() {
           <td></td>
           <td></td>
           <td align="right">
-            <If condition={popustPlacanje}>
-              <CustomTextField
-                type="number"
-                // inputProps={{ step: "0.01" }}
-                variant="outlined"
-                value={popustZaPlacanjePrethodnogRacuna}
-                onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(parseFloat(e.target.value))}
-              />
-            </If>
             <If condition={!popustPlacanje}>
               {popustZaPlacanjePrethodnogRacuna}
             </If>
@@ -1206,15 +1290,15 @@ function App() {
           <td></td>
           <td></td>
           <td align="right">
-            <If condition={popustPlacanje}>
-              <CustomTextField
-                type="number"
-                // inputProps={{ step: "0.01" }}
-                variant="outlined"
-                value={popustZaPlacanjePrethodnogRacunaBezPanela}
-                onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}
-              />
-            </If>
+            {/*<If condition={popustPlacanje}>*/}
+            {/*  <CustomTextField*/}
+            {/*    type="number"*/}
+            {/*    // inputProps={{ step: "0.01" }}*/}
+            {/*    variant="outlined"*/}
+            {/*    value={popustZaPlacanjePrethodnogRacunaBezPanela}*/}
+            {/*    onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}*/}
+            {/*  />*/}
+            {/*</If>*/}
             <If condition={!popustPlacanje}>
               {popustZaPlacanjePrethodnogRacunaBezPanela}
             </If>
@@ -1306,26 +1390,12 @@ function App() {
           <td></td>
           <td></td>
           <td>
-            <CustomTextField
-              style={{maxWidth: 100}}
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={umanjenjeUgrozeniSaSolar}
-              onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
-            />
+            {umanjenjeUgrozeniSaSolar}
           </td>
           <td></td>
           <td></td>
           <td>
-            <CustomTextField
-              style={{maxWidth: 100}}
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
-              value={umanjenjeUgrozeniBezSolra}
-              onChange={(e) => setUmanjenjeUgrozeniBezSolra(parseFloat(e.target.value))}
-            />
+            {umanjenjeUgrozeniSaSolar}
           </td>
         </tr>
         <tr style={tdStyle}>
@@ -1434,29 +1504,31 @@ function App() {
 
     <div className="email">
       <div className="flex" style={{justifyContent: 'center'}}>
-      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-        <div className="flex">
-          <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
-          <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
+        <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
+          <div className="flex">
+            <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
+            <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
+          </div>
+          <p>Emisija CO2</p>
         </div>
-        <p>Emisija CO2</p>
-      </div>
 
-      <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-        <div className="flex">
-          <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
-          <p>{kolicinaUglja} kg/kWh</p>
+        <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
+          <div className="flex">
+            <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
+            <p>{kolicinaUglja} kg/kWh</p>
+          </div>
+          <p>Količina uglja</p>
         </div>
-        <p>Količina uglja</p>
       </div>
-    </div>
     </div>
 
     <div className="frame" style={{padding: 20, marginTop: 20}}>
       <div style={{display: 'flex'}}>
         <p style={{marginRight: 20}}>Pošaljite ovaj izveštaj na svoju email adresu</p>
-        <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-        <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained" onClick={onEmailSend}>Pošalji</Button>
+        <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email}
+                   onChange={(e) => setEmail(e.target.value)}/>
+        <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained"
+                onClick={onEmailSend}>Pošalji</Button>
       </div>
 
       <If condition={emailSent}>
