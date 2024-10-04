@@ -61,12 +61,13 @@ function App() {
   const cenaPoJedinici = 54.258;
   const trosakGarantovanogSnabdevacaIznos = 160.67;
 
+  const [calculated, setCalculated] = useState(false);
   const [month, setMonth] = useState(months[currentMonth])
   const [year, setYear] = useState(currentYear);
   const [elektronskaDostava, setElektronskaDostava] = useState(true);
   const [popustPlacanje, setPopustPlacanje] = useState(true);
   const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(true);
-  const [umanjenjeZaUgrozene, setUmanjenjeZaUgrozene] = useState(true);
+  const [umanjenjeZaUgrozene, setUmanjenjeZaUgrozene] = useState(false);
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
@@ -85,16 +86,16 @@ function App() {
   const [novoIsporucenoVT, setNovoIsporucenoVT] = useState(10853);
   const [novoIsporucenoNT, setNovoIsporucenoNT] = useState(59);
 
-  const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(0);
-  const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(0);
-  const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(0);
-  const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState(0);
-  const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState(784);
+  const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(308);
+  const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(123);
+  const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(839);
+  const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState(5);
+  const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState(1216);
   const [utrosakVisakPrethodnoNT, setUtrosakVisakPrethodnoNT] = useState(0);
 
   const [utrosakUtrosenoVT, setUtrosakUtrosenoVT] = useState(0);
-  const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState(0);
-  const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(0);
+  const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState(118);
+  const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(1747);
   const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState(0);
 
   const [umanjenjeUgrozeniSaSolar, setUmanjenjeUgrozeniSaSolar] = useState(0);
@@ -257,6 +258,16 @@ function App() {
     taksaZaMedijskiServis,
     popustZaPlacanjePrethodnogRacuna,
     popustZaPlacanjePrethodnogRacunaBezPanela,
+    utrosakPreuzetoVT,
+    utrosakPreuzetoNT,
+    utrosakIsporucenoVT,
+    utrosakIsporucenoNT,
+    utrosakVisakPrethodnoVT,
+    utrosakVisakPrethodnoNT,
+    utrosakUtrosenoVT,
+    utrosakUtrosenoNT,
+    utrosakVisakSledeciVT,
+    utrosakVisakSledeciNT,
   ]);
 
   useEffect(() => {
@@ -284,51 +295,51 @@ function App() {
   }, [popustPlacanje]);
 
   const calculate = () => {
-    let _utrosakPreuzetoVT = novoPreuzetoVT - prethodnoPreuzetoVT;
+    let _utrosakPreuzetoVT = utrosakPreuzetoVT;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
-    let _utrosakPreuzetoNT = novoPreuzetoNT - prethodnoPreuzetoNT;
+    let _utrosakPreuzetoNT = utrosakPreuzetoNT;
     setUtrosakPreuzetoNT(_utrosakPreuzetoNT);
-    let _utrosakIsporucenoVT = novoIsporucenoVT - prethodnoIsporucenoVT;
+    let _utrosakIsporucenoVT = utrosakIsporucenoVT;
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
-    let _utrosakIsporucenoNT = novoIsporucenoNT - prethodnoIsporucenoNT;
+    let _utrosakIsporucenoNT = utrosakIsporucenoNT;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
-    let _isporucenaElEnergija = 0;
+    let _isporucenaElEnergija = utrosakIsporucenoNT + utrosakIsporucenoVT;
     setIsporucenaElEnergija(_isporucenaElEnergija)
-    let _utrosakUtrosenoVT = 0
+    let _utrosakUtrosenoVT = utrosakUtrosenoVT
     if (_utrosakPreuzetoVT < (_utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
       _utrosakUtrosenoVT = 0
-      setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
+      // setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
     } else {
       _utrosakUtrosenoVT = _utrosakPreuzetoVT - _utrosakIsporucenoVT - utrosakVisakPrethodnoVT;
-      setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
+      // setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
     }
 
-    let _utrosakUtrosenoNT = 0
+    let _utrosakUtrosenoNT = utrosakUtrosenoNT
     if (_utrosakPreuzetoNT < (_utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
       _utrosakUtrosenoNT = 0
-      setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+      // setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     } else {
       _utrosakUtrosenoNT = _utrosakPreuzetoNT - _utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
-      setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+      // setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
     }
 
-    let _utrosakVisakSledeciVT = 0;
+    let _utrosakVisakSledeciVT = utrosakVisakSledeciVT;
     if (_utrosakPreuzetoVT < _utrosakIsporucenoVT + utrosakVisakPrethodnoVT) {
       _utrosakVisakSledeciVT = _utrosakIsporucenoVT + utrosakVisakPrethodnoVT - _utrosakPreuzetoVT
     } else {
       _utrosakVisakSledeciVT = 0;
     }
 
-    setUtrosakVisakSledeciVT(_utrosakVisakSledeciVT);
+    // setUtrosakVisakSledeciVT(_utrosakVisakSledeciVT);
 
-    let _utrosakVisakSledeciNT = 0;
+    let _utrosakVisakSledeciNT = utrosakVisakSledeciNT;
     if (_utrosakPreuzetoNT < _utrosakIsporucenoNT + utrosakVisakPrethodnoNT) {
       _utrosakVisakSledeciNT = _utrosakIsporucenoNT + utrosakVisakPrethodnoNT - _utrosakPreuzetoNT
     } else {
       _utrosakVisakSledeciNT = 0;
     }
 
-    setUtrosakVisakSledeciNT(_utrosakVisakSledeciNT);
+    // setUtrosakVisakSledeciNT(_utrosakVisakSledeciNT);
 
     let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici);
     setObracunskaSnagaIznos(_obracunskaSnagaIznos.toFixed(2))
@@ -347,16 +358,15 @@ function App() {
     let _utrosenaZelenaTarifaVTUtroseno = 0;
     if (_utrosakUtrosenoVT === 0) {
       _utrosenaZelenaTarifaVTUtroseno = 0
-      setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno);
     } else {
       if (_donjaGranicaPlavaTarifa < _utrosenaElektricnaEnergija) {
         _utrosenaZelenaTarifaVTUtroseno = Math.round(_utrosakUtrosenoVT * _donjaGranicaPlavaTarifa / _utrosenaElektricnaEnergija);
-        setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
       } else {
         _utrosenaZelenaTarifaVTUtroseno = _utrosakUtrosenoVT;
-        setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
       }
     }
+
+    setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
 
     let _utrosenaZelenaTarifaNTUtroseno = 0;
     if (_utrosakUtrosenoNT === 0) {
@@ -648,7 +658,7 @@ function App() {
     let _osnovicaZaObracunAkcize = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _popustElektronskaDostava + _ukupnoZaElEnergijuUObracunskomPeriodu + popustZaPlacanjePrethodnogRacuna + _naknadaZaPodsticajPovlascenihProizvodjacaIznos + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
     setOsnovicaZaObracunAkcize(_osnovicaZaObracunAkcize.toFixed(2));
 
-    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos + popustZaPlacanjePrethodnogRacunaBezPanela + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela;
+    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos + popustZaPlacanjePrethodnogRacuna + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela;
     setOsnovicaZaObracunAkcizeBezPanela(_osnovicaZaObracunAkcizeBezPanela.toFixed(2));
 
     let _iznosAkcize = _osnovicaZaObracunAkcize * 0.075;
@@ -698,6 +708,11 @@ function App() {
 
     let _kolicinaUglja = proizvedenaElEnergija * 0.8;
     setKolicinaUglja(_kolicinaUglja);
+  }
+
+  const onCalculateClick = () => {
+    calculate();
+    setCalculated(true);
   }
 
   const onEmailSend = async () => {
@@ -825,94 +840,54 @@ function App() {
 
       <div style={{width: '32%', flexGrow: 1, margin: '0 20px'}}>
         <div className="flex" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Prethodno preuzeta el. energija</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Preuzeta el. energija</p>
           <CustomTextField
+            style={{marginRight: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={prethodnoPreuzetoVT}
-            onChange={(e) => setPrethodnoPreuzetoVT(parseFloat(e.target.value))}
+            value={utrosakPreuzetoVT}
+            onChange={(e) => setUtrosakPreuzetoVT(parseFloat(e.target.value))}
           />
           <CustomTextField
-            style={{marginLeft: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={prethodnoPreuzetoNT}
-            onChange={(e) => setPrethodnoPreuzetoNT(parseFloat(e.target.value))}
-          />
-        </div>
-
-        <div className="flex" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Novo preuzeta el. energija</p>
-          <CustomTextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoPreuzetoVT}
-            onChange={(e) => setNovoPreuzetoVT(parseFloat(e.target.value))}
-          />
-          <CustomTextField
-            style={{marginLeft: 10}}
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoPreuzetoNT}
-            onChange={(e) => setNovoPreuzetoNT(parseFloat(e.target.value))}
+            value={utrosakPreuzetoNT}
+            onChange={(e) => setUtrosakPreuzetoNT(parseFloat(e.target.value))}
           />
         </div>
 
         <div className="flex" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Prethodno isporučena el. energija</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Isporučena el. energija</p>
           <CustomTextField
+            style={{marginRight: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={prethodnoIsporucenoVT}
-            onChange={(e) => setPrethodnoIsporucenoVT(parseFloat(e.target.value))}
+            value={utrosakIsporucenoVT}
+            onChange={(e) => setUtrosakIsporucenoVT(parseFloat(e.target.value))}
           />
           <CustomTextField
-            style={{marginLeft: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
-            value={prethodnoIsporucenoNT}
-            onChange={(e) => setPrethodnoIsporucenoNT(parseFloat(e.target.value))}
+            value={utrosakIsporucenoNT}
+            onChange={(e) => setUtrosakIsporucenoNT(parseFloat(e.target.value))}
           />
         </div>
 
         <div className="flex" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Novo isporučena el. energija</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Višak el. en. iz preth. obr.</p>
           <CustomTextField
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoIsporucenoVT}
-            onChange={(e) => setNovoIsporucenoVT(parseFloat(e.target.value))}
-          />
-          <CustomTextField
-            style={{marginLeft: 10}}
-            type="number"
-            // inputProps={{ step: "0.01" }}
-            variant="outlined"
-            value={novoIsporucenoNT}
-            onChange={(e) => setNovoIsporucenoNT(parseFloat(e.target.value))}
-          />
-        </div>
-
-        <div className="flex content-between" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Višak iz prethodnog perioda</p>
-
-          <CustomTextField
+            style={{marginRight: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
             value={utrosakVisakPrethodnoVT}
             onChange={(e) => setUtrosakVisakPrethodnoVT(parseFloat(e.target.value))}
           />
-
           <CustomTextField
-            style={{marginLeft: 10}}
             type="number"
             // inputProps={{ step: "0.01" }}
             variant="outlined"
@@ -921,6 +896,43 @@ function App() {
           />
         </div>
 
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Utrošena el. energija</p>
+          <CustomTextField
+            style={{marginRight: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakUtrosenoVT}
+            onChange={(e) => setUtrosakUtrosenoVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakUtrosenoNT}
+            onChange={(e) => setUtrosakUtrosenoNT(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="flex" style={{alignItems: 'baseline'}}>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>Višak el. en. Za sledeći obr.</p>
+          <CustomTextField
+            style={{marginRight: 10}}
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakVisakSledeciVT}
+            onChange={(e) => setUtrosakVisakSledeciVT(parseFloat(e.target.value))}
+          />
+          <CustomTextField
+            type="number"
+            // inputProps={{ step: "0.01" }}
+            variant="outlined"
+            value={utrosakVisakSledeciNT}
+            onChange={(e) => setUtrosakVisakSledeciNT(parseFloat(e.target.value))}
+          />
+        </div>
       </div>
 
       <div style={{display: 'flex', flexDirection: 'column', width: '32%'}}>
@@ -957,7 +969,7 @@ function App() {
             <CustomTextField
               style={{maxWidth: 100}}
               type="number"
-              // inputProps={{ step: "0.01" }}
+              // inputProps={{ max: "0.01" }}
               variant="outlined"
               value={umanjenjeUgrozeniSaSolar}
               onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
@@ -968,574 +980,581 @@ function App() {
 
     </div>
 
-    <div style={{display: 'flex', marginBottom: 10}} className="frame email">
-      <table style={{borderRight: 'none'}}>
-        <thead>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th>Obračunska snaga:</th>
-          <td>
-            {obracunskaSnaga}
-          </td>
-          <td>
-            kW
-          </td>
-        </tr>
-        <tr>
-          <th>Proizvedena el. energija:</th>
-          <td>
-            {proizvedenaElEnergija}
-          </td>
-          <td>
-            kWh
-          </td>
-        </tr>
-        <tr>
-          <th>Isporučena el. energija:</th>
-          <td>{isporucenaElEnergija}</td>
-          <td>kWh</td>
-        </tr>
-        <tr>
-          <th>Broj dana:</th>
-          <td>
-            {brojDana}
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <table>
-        <tbody>
-        <tr>
-          <th>STANJE ZA OBRAČUN</th>
-          <th colSpan="2" className="primary">Preuzeta el. energija</th>
-          <th colSpan="2">Isporučena el. energija</th>
-          <th colSpan="2" className="primary">Višak el. en. iz preth. obr.</th>
-          <th colSpan="2">Utrošena el. energija</th>
-          <th colSpan="2" className="primary">Višak el. en. Za sledeći obr.</th>
-        </tr>
-        <tr>
-          <th className="primary"></th>
-          <th className="primary">VT</th>
-          <th className="primary">NT</th>
-          <th className="primary">VT</th>
-          <th className="primary">NT</th>
-          <th className="primary">VT</th>
-          <th className="primary">NT</th>
-          <th className="primary">VT</th>
-          <th className="primary">NT</th>
-          <th className="primary">VT</th>
-          <th className="primary">NT</th>
-        </tr>
-        <tr>
-          <td>Prethodno</td>
-          <Cell style={tdStyle}>
-            {prethodnoPreuzetoVT}
-          </Cell>
-          <Cell>
-            {prethodnoPreuzetoNT}
-          </Cell>
-          <Cell style={tdStyle}>
-            {prethodnoIsporucenoVT}
-          </Cell>
-          <Cell>
-            {prethodnoIsporucenoNT}
-          </Cell>
-          <td style={tdStyle}></td>
-          <td></td>
-          <td style={tdStyle}></td>
-          <td></td>
-          <td style={tdStyle}></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Novo</td>
-          <Cell style={tdStyle}>
-            {novoPreuzetoVT}
-          </Cell>
-          <Cell>
-            {novoPreuzetoNT}
-          </Cell>
-          <Cell style={tdStyle}>
-            {novoIsporucenoVT}
-          </Cell>
-          <Cell>
-            {novoIsporucenoNT}
-          </Cell>
-          <td style={tdStyle}></td>
-          <td></td>
-          <td style={tdStyle}></td>
-          <td></td>
-          <td style={tdStyle}></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Utrošak</td>
-          <Cell style={tdStyle}>{utrosakPreuzetoVT}</Cell>
-          <Cell>{utrosakPreuzetoNT}</Cell>
-          <Cell style={tdStyle}>{utrosakIsporucenoVT}</Cell>
-          <Cell>{utrosakIsporucenoNT}</Cell>
-          <Cell style={tdStyle}>
-            {utrosakVisakPrethodnoVT}
-          </Cell>
-          <Cell>
-            {utrosakVisakPrethodnoNT}
-          </Cell>
-          <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>
-          <Cell>{utrosakUtrosenoNT}</Cell>
-          <Cell style={tdStyle}>{utrosakVisakSledeciVT}</Cell>
-          <Cell showZero={true}>{utrosakVisakSledeciNT}</Cell>
-        </tr>
-        </tbody>
-      </table>
+    {/*<div style={{display: 'flex', marginBottom: 10}} className="frame email">*/}
+    {/*  <table style={{borderRight: 'none'}}>*/}
+    {/*    <thead>*/}
+    {/*    <tr>*/}
+    {/*      <td>&nbsp;</td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <td>&nbsp;</td>*/}
+    {/*    </tr>*/}
+    {/*    </thead>*/}
+    {/*    <tbody>*/}
+    {/*    <tr>*/}
+    {/*      <th>Obračunska snaga:</th>*/}
+    {/*      <td>*/}
+    {/*        {obracunskaSnaga}*/}
+    {/*      </td>*/}
+    {/*      <td>*/}
+    {/*        kW*/}
+    {/*      </td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <th>Proizvedena el. energija:</th>*/}
+    {/*      <td>*/}
+    {/*        {proizvedenaElEnergija}*/}
+    {/*      </td>*/}
+    {/*      <td>*/}
+    {/*        kWh*/}
+    {/*      </td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <th>Isporučena el. energija:</th>*/}
+    {/*      <td>{isporucenaElEnergija}</td>*/}
+    {/*      <td>kWh</td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <th>Broj dana:</th>*/}
+    {/*      <td>*/}
+    {/*        {brojDana}*/}
+    {/*      </td>*/}
+    {/*    </tr>*/}
+    {/*    </tbody>*/}
+    {/*  </table>*/}
+    {/*  <table>*/}
+    {/*    <tbody>*/}
+    {/*    <tr>*/}
+    {/*      <th>STANJE ZA OBRAČUN</th>*/}
+    {/*      <th colSpan="2" className="primary">Preuzeta el. energija</th>*/}
+    {/*      <th colSpan="2">Isporučena el. energija</th>*/}
+    {/*      <th colSpan="2" className="primary">Višak el. en. iz preth. obr.</th>*/}
+    {/*      <th colSpan="2">Utrošena el. energija</th>*/}
+    {/*      <th colSpan="2" className="primary">Višak el. en. Za sledeći obr.</th>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <th className="primary"></th>*/}
+    {/*      <th className="primary">VT</th>*/}
+    {/*      <th className="primary">NT</th>*/}
+    {/*      <th className="primary">VT</th>*/}
+    {/*      <th className="primary">NT</th>*/}
+    {/*      <th className="primary">VT</th>*/}
+    {/*      <th className="primary">NT</th>*/}
+    {/*      <th className="primary">VT</th>*/}
+    {/*      <th className="primary">NT</th>*/}
+    {/*      <th className="primary">VT</th>*/}
+    {/*      <th className="primary">NT</th>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <td>Prethodno</td>*/}
+    {/*      <Cell style={tdStyle}>*/}
+    {/*        {prethodnoPreuzetoVT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell>*/}
+    {/*        {prethodnoPreuzetoNT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell style={tdStyle}>*/}
+    {/*        {prethodnoIsporucenoVT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell>*/}
+    {/*        {prethodnoIsporucenoNT}*/}
+    {/*      </Cell>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <td>Novo</td>*/}
+    {/*      <Cell style={tdStyle}>*/}
+    {/*        {novoPreuzetoVT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell>*/}
+    {/*        {novoPreuzetoNT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell style={tdStyle}>*/}
+    {/*        {novoIsporucenoVT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell>*/}
+    {/*        {novoIsporucenoNT}*/}
+    {/*      </Cell>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*      <td style={tdStyle}></td>*/}
+    {/*      <td></td>*/}
+    {/*    </tr>*/}
+    {/*    <tr>*/}
+    {/*      <td>Utrošak</td>*/}
+    {/*      <Cell style={tdStyle}>{utrosakPreuzetoVT}</Cell>*/}
+    {/*      <Cell>{utrosakPreuzetoNT}</Cell>*/}
+    {/*      <Cell style={tdStyle}>{utrosakIsporucenoVT}</Cell>*/}
+    {/*      <Cell>{utrosakIsporucenoNT}</Cell>*/}
+    {/*      <Cell style={tdStyle}>*/}
+    {/*        {utrosakVisakPrethodnoVT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell>*/}
+    {/*        {utrosakVisakPrethodnoNT}*/}
+    {/*      </Cell>*/}
+    {/*      <Cell style={tdStyle}>{utrosakUtrosenoVT}</Cell>*/}
+    {/*      <Cell>{utrosakUtrosenoNT}</Cell>*/}
+    {/*      <Cell style={tdStyle}>{utrosakVisakSledeciVT}</Cell>*/}
+    {/*      <Cell showZero={true}>{utrosakVisakSledeciNT}</Cell>*/}
+    {/*    </tr>*/}
+    {/*    </tbody>*/}
+    {/*  </table>*/}
+    {/*</div>*/}
+
+    <div>
+      <Button onClick={onCalculateClick} style={{margin: 20}} variant="contained">Izračunaj</Button>
     </div>
 
-    <div className="frame email">
-      <table>
-        <tbody>
-        <tr className="primary">
-          <th colSpan={6}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
-        </tr>
-        <tr className="secondary">
-          <td colSpan={3}>TARIFA</td>
-          <td>Utrošeno (kW/kWh)</td>
-          <td>Cena po jedinici</td>
-          <td>Iznos (dinara)</td>
-        </tr>
-        <tr className="primary">
-          <td colSpan={6}>Troškovi koje nezavisne od potrošnje električne energije</td>
-        </tr>
-        <tr>
-          <td>1.</td>
-          <td colSpan={2} align="left">Obračunska snaga (kW)</td>
-          <Cell align="right">{obracunskaSnaga}</Cell>
-          <td align="right">{cenaPoJedinici}</td>
-          <Cell align="right">{obracunskaSnagaIznos}</Cell>
-        </tr>
-        <tr>
-          <td>2.</td>
-          <td colSpan={2} align="left">Trošak garantovanog snabdevača</td>
-          <td></td>
-          <td></td>
-          <td align="right">{trosakGarantovanogSnabdevacaIznos}</td>
-        </tr>
-        <tr className="primary">
-          <th colSpan={3}>Utrošena električna energija</th>
-          <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr className="green">
-          <td rowSpan={2} colSpan={2}>Zelena zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTUtroseno)}</Cell>
-          <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTIznos)}</Cell>
-        </tr>
-        <tr className="green">
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTUtroseno)}</Cell>
-          <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTIznos)}</Cell>
-        </tr>
-        <tr>
-          <td colSpan={6}>&nbsp;</td>
-        </tr>
-        <tr className="blue">
-          <td rowSpan={2} colSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTUtroseno)}</Cell>
-          <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTIznos)}</Cell>
-        </tr>
-        <tr className="blue">
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTUtroseno)}</Cell>
-          <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTIznos)}</Cell>
-        </tr>
-        <tr>
-          <td colSpan={6}>&nbsp;</td>
-        </tr>
-        <tr className="red">
-          <td rowSpan={2} colSpan={2}>Crvena zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTUtroseno)}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTIznos)}</Cell>
-        </tr>
-        <tr className="red">
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTUtroseno)}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
-        </tr>
-        <tr className="primary">
-          <td rowSpan={2}>3.</td>
-          <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
-          <td rowSpan={2}></td>
-          <td rowSpan={2}></td>
-          <Cell rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
-          <td colSpan={3}>Bez solarnih panela</td>
-        </tr>
-        <tr className="primary">
-          <th>Utrošeno (kW/kWh)</th>
-          <th>Cena po jedinici</th>
-          <th>Iznos (dinara)</th>
-        </tr>
-        <tr>
-          <th colSpan={3}>Preuzeta električna energija</th>
-          <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr className="green">
-          <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
-          <td rowSpan={2} style={{borderLeft: 'none'}}>Zelena zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{periodZelenaVTUtroseno}</Cell>
-          <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodZelenaVTIznos}</Cell>
-          <Cell align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
-        </tr>
-        <tr className="green">
-          <td className="no-border"/>
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{periodZelenaNTUtroseno}</Cell>
-          <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodZelenaNTIznos}</Cell>
-          <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td colSpan={9}>&nbsp;</td>
-        </tr>
-        <tr className="blue">
-          <td className="no-border"></td>
-          <td rowSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{periodPlavaVTUtroseno}</Cell>
-          <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodPlavaVTIznos}</Cell>
-          <Cell align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
-        </tr>
-        <tr className="blue">
-          <td className="no-border"></td>
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{periodPlavaNTUtroseno}</Cell>
-          <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodPlavaNTIznos}</Cell>
-          <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td colSpan={9}>&nbsp;</td>
-        </tr>
-        <tr className="red">
-          <td className="no-border"></td>
-          <td rowSpan={2} style={{borderLeft: 'none'}}>Crvena zona</td>
-          <td>Viša tarifa (VT)</td>
-          <Cell align="right">{periodCrvenaVTUtroseno}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodCrvenaVTIznos}</Cell>
-          <Cell align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-          <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
-        </tr>
-        <tr className="red">
-          <td className="no-border"></td>
-          <td>Niža tarifa (NT)</td>
-          <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodCrvenaNTIznos}</Cell>
-          <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
-          <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-          <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
-        </tr>
-        <tr className="primary">
-          <td>4.</td>
-          <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
-          <td></td>
-          <td></td>
-          <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
-        </tr>
-        <tr style={tdStyle}>
-          <td>5.</td>
-          <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
-          <td></td>
-          <td></td>
-          <td align="right">
-            <If condition={!popustPlacanje}>
-              {popustZaPlacanjePrethodnogRacuna}
-            </If>
-          </td>
-          <td></td>
-          <td></td>
-          <td align="right">
-            {/*<If condition={popustPlacanje}>*/}
-            {/*  <CustomTextField*/}
-            {/*    type="number"*/}
-            {/*    // inputProps={{ step: "0.01" }}*/}
-            {/*    variant="outlined"*/}
-            {/*    value={popustZaPlacanjePrethodnogRacunaBezPanela}*/}
-            {/*    onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}*/}
-            {/*  />*/}
-            {/*</If>*/}
-            <If condition={!popustPlacanje}>
-              {popustZaPlacanjePrethodnogRacunaBezPanela}
-            </If>
-          </td>
-        </tr>
-        <tr>
-          <td>6.</td>
-          <td colSpan={2} align="left">Popust za elektronsku dostavu računa</td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{popustZaElektronskuDostavu}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{popustZaElektronskuDostavu}</Cell>
-        </tr>
-        <tr style={tdStyle}>
-          <td>7.</td>
-          <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
-          <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
-          <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
-          <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
-          <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-          <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
-          <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td>8.</td>
-          <td colSpan={2} align="left">Naknada za unapređenje energetske efikasnosti</td>
-          <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
-          <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
-          <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos}</Cell>
-          <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-          <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
-          <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
-        </tr>
-        <tr style={tdStyle}>
-          <td>9.</td>
-          <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
-          <td align="right"></td>
-          <td align="right"></td>
-          <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>10.</td>
-          <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{osnovicaZaObracunAkcize}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
-        </tr>
-        <tr style={tdStyle}>
-          <td>11.</td>
-          <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{iznosAkcize}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{iznosAkcizeBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td>12.</td>
-          <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{osnovicaZaPdv}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
-        </tr>
-        <tr style={tdStyle}>
-          <td>13.</td>
-          <td colSpan={2} align="left">Iznos PDV (20%)</td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{iznosPdv}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{iznosPdvBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td>14.</td>
-          <td colSpan={2} align="left">Umanjenje za energetski ugrožene kupce</td>
-          <td></td>
-          <td></td>
-          <td>
-            {umanjenjeUgrozeniSaSolar}
-          </td>
-          <td></td>
-          <td></td>
-          <td>
-            {umanjenjeUgrozeniSaSolar}
-          </td>
-        </tr>
-        <tr style={tdStyle}>
-          <td>15.</td>
-          <td colSpan={2} align="left">
-            <strong>ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (1+2+3+5+6+7+8+9+11+13+14)
-          </td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{zaduzenjeZaObracunskiPeriod}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
-        </tr>
-        <tr>
-          <td>16.</td>
-          <td colSpan={2} align="left">
-            Taksa za javni medijski servis (ne ulazi u osnovicu za PDV po čl. 17,st.4,t.2ЗPDV)
-          </td>
-          <td></td>
-          <td></td>
-          <Cell align="right">{taksaZaMedijskiServis}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right">{taksaZaMedijskiServis}</Cell>
-        </tr>
-        <tr className="primary">
-          <td colSpan={3} align="left">
-            <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
-          </td>
-          <td></td>
-          <td></td>
-          <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenje}</Cell>
-          <td></td>
-          <td></td>
-          <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenjeBezPanela}</Cell>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    <If condition={calculated}>
 
-    <div style={{marginBottom: 30}} className="email">
-      <PieChart
-        slotProps={{
-          legend: {
-            direction: 'column',
-            position: {vertical: 'middle', horizontal: 'right'},
-            padding: 1,
-          },
-        }}
-        series={[
-          {
-            data: [
-              {
-                id: 0,
-                color: '#385CD3',
-                value: utrosakIsporucenoVT,
-                label: 'Predato kao višak: ' + utrosakIsporucenoVT + ' kWh (' + parseInt(100 - direktnoPotrosenoProcenata) + '%)'
-              },
-              {
-                id: 1,
-                color: '#829AE7',
-                value: direktnoPotroseno,
-                label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + parseInt(direktnoPotrosenoProcenata) + '%)'
-              },
-            ],
-            valueFormatter: () => '',
-          },
-        ]}
-        height={150}
-      />
-      <p>Ukupno proizvedena el. energija <strong>{proizvedenaElEnergija}</strong> kWh</p>
-    </div>
-
-    <div style={{marginBottom: 30}} className="email">
-      <PieChart
-        slotProps={{
-          legend: {
-            direction: 'column',
-            position: {vertical: 'middle', horizontal: 'right'},
-            padding: 1,
-          },
-        }}
-        series={[
-          {
-            data: [
-              {
-                id: 0,
-                color: '#385CD3',
-                value: ustedaUProcentima,
-                label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'
-              },
-              {
-                id: 1,
-                color: '#829AE7',
-                value: 100 - ustedaUProcentima,
-                label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'
-              },
-            ],
-            valueFormatter: () => '',
-          },
-        ]}
-        height={150}
-      />
-    </div>
-
-    <div className="email">
-      <div className="flex" style={{justifyContent: 'center'}}>
-        <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-          <div className="flex">
-            <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
-            <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
-          </div>
-          <p>Emisija CO2</p>
-        </div>
-
-        <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-          <div className="flex">
-            <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
-            <p>{kolicinaUglja} kg/kWh</p>
-          </div>
-          <p>Količina uglja</p>
-        </div>
-      </div>
-    </div>
-
-    <div className="frame" style={{padding: 20, marginTop: 20}}>
-      <div style={{display: 'flex'}}>
-        <p style={{marginRight: 20}}>Pošaljite ovaj izveštaj na svoju email adresu</p>
-        <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email}
-                   onChange={(e) => setEmail(e.target.value)}/>
-        <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained"
-                onClick={onEmailSend}>Pošalji</Button>
+      <div className="frame email">
+        <table>
+          <tbody>
+          <tr className="primary">
+            <th colSpan={6}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
+          </tr>
+          <tr className="secondary">
+            <td colSpan={3}>TARIFA</td>
+            <td>Utrošeno (kW/kWh)</td>
+            <td>Cena po jedinici</td>
+            <td>Iznos (dinara)</td>
+          </tr>
+          <tr className="primary">
+            <td colSpan={6}>Troškovi koje nezavisne od potrošnje električne energije</td>
+          </tr>
+          <tr>
+            <td>1.</td>
+            <td colSpan={2} align="left">Obračunska snaga (kW)</td>
+            <Cell align="right">{obracunskaSnaga}</Cell>
+            <td align="right">{cenaPoJedinici}</td>
+            <Cell align="right">{obracunskaSnagaIznos}</Cell>
+          </tr>
+          <tr>
+            <td>2.</td>
+            <td colSpan={2} align="left">Trošak garantovanog snabdevača</td>
+            <td></td>
+            <td></td>
+            <td align="right">{trosakGarantovanogSnabdevacaIznos}</td>
+          </tr>
+          <tr className="primary">
+            <th colSpan={3}>Utrošena električna energija</th>
+            <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr className="green">
+            <td rowSpan={2} colSpan={2}>Zelena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTUtroseno)}</Cell>
+            <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaZelenaTarifaVTIznos)}</Cell>
+          </tr>
+          <tr className="green">
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTUtroseno)}</Cell>
+            <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaZelenaTarifaNTIznos)}</Cell>
+          </tr>
+          <tr>
+            <td colSpan={6}>&nbsp;</td>
+          </tr>
+          <tr className="blue">
+            <td rowSpan={2} colSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTUtroseno)}</Cell>
+            <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaPlavaTarifaVTIznos)}</Cell>
+          </tr>
+          <tr className="blue">
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTUtroseno)}</Cell>
+            <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaPlavaTarifaNTIznos)}</Cell>
+          </tr>
+          <tr>
+            <td colSpan={6}>&nbsp;</td>
+          </tr>
+          <tr className="red">
+            <td rowSpan={2} colSpan={2}>Crvena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTUtroseno)}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaCrvenaTarifaVTIznos)}</Cell>
+          </tr>
+          <tr className="red">
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTUtroseno)}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
+          </tr>
+          <tr className="primary">
+            <td rowSpan={2}>3.</td>
+            <th rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
+            <td rowSpan={2}></td>
+            <td rowSpan={2}></td>
+            <Cell rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
+            <td colSpan={3}>Bez solarnih panela</td>
+          </tr>
+          <tr className="primary">
+            <th>Utrošeno (kW/kWh)</th>
+            <th>Cena po jedinici</th>
+            <th>Iznos (dinara)</th>
+          </tr>
+          <tr>
+            <th colSpan={3}>Preuzeta električna energija</th>
+            <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr className="green">
+            <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Zelena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodZelenaVTUtroseno}</Cell>
+            <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaVTIznos}</Cell>
+            <Cell align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="green">
+            <td className="no-border"/>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodZelenaNTUtroseno}</Cell>
+            <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaNTIznos}</Cell>
+            <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td colSpan={9}>&nbsp;</td>
+          </tr>
+          <tr className="blue">
+            <td className="no-border"></td>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodPlavaVTUtroseno}</Cell>
+            <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaVTIznos}</Cell>
+            <Cell align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="blue">
+            <td className="no-border"></td>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodPlavaNTUtroseno}</Cell>
+            <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaNTIznos}</Cell>
+            <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td colSpan={9}>&nbsp;</td>
+          </tr>
+          <tr className="red">
+            <td className="no-border"></td>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Crvena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodCrvenaVTUtroseno}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaVTIznos}</Cell>
+            <Cell align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="red">
+            <td className="no-border"></td>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaNTIznos}</Cell>
+            <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="primary">
+            <td>4.</td>
+            <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
+            <td></td>
+            <td></td>
+            <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle}>
+            <td>5.</td>
+            <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              <If condition={popustPlacanje}>
+                -{popustZaPlacanjePrethodnogRacuna}
+              </If>
+            </td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              {/*<If condition={popustPlacanje}>*/}
+              {/*  <CustomTextField*/}
+              {/*    type="number"*/}
+              {/*    // inputProps={{ step: "0.01" }}*/}
+              {/*    variant="outlined"*/}
+              {/*    value={popustZaPlacanjePrethodnogRacunaBezPanela}*/}
+              {/*    onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}*/}
+              {/*  />*/}
+              {/*</If>*/}
+              <If condition={popustPlacanje}>
+                -{popustZaPlacanjePrethodnogRacuna}
+              </If>
+            </td>
+          </tr>
+          <tr>
+            <td>6.</td>
+            <td colSpan={2} align="left">Popust za elektronsku dostavu računa</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{popustZaElektronskuDostavu}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{popustZaElektronskuDostavu}</Cell>
+          </tr>
+          <tr style={tdStyle}>
+            <td>7.</td>
+            <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
+            <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
+            <td align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
+            <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
+            <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td>8.</td>
+            <td colSpan={2} align="left">Naknada za unapređenje energetske efikasnosti</td>
+            <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
+            <td align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
+            <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos}</Cell>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</Cell>
+            <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle}>
+            <td>9.</td>
+            <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
+            <td align="right"></td>
+            <td align="right"></td>
+            <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>10.</td>
+            <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaObracunAkcize}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle}>
+            <td>11.</td>
+            <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosAkcize}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosAkcizeBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td>12.</td>
+            <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaPdv}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle}>
+            <td>13.</td>
+            <td colSpan={2} align="left">Iznos PDV (20%)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosPdv}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosPdvBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td>14.</td>
+            <td colSpan={2} align="left">Umanjenje za energetski ugrožene kupce</td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              -{umanjenjeUgrozeniSaSolar}
+            </td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              -{umanjenjeUgrozeniSaSolar}
+            </td>
+          </tr>
+          <tr style={tdStyle}>
+            <td>15.</td>
+            <td colSpan={2} align="left">
+              <strong>ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (1+2+3+5+6+7+8+9+11+13+14)
+            </td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{zaduzenjeZaObracunskiPeriod}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
+          </tr>
+          <tr>
+            <td>16.</td>
+            <td colSpan={2} align="left">
+              Taksa za javni medijski servis (ne ulazi u osnovicu za PDV po čl. 17,st.4,t.2ЗPDV)
+            </td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{taksaZaMedijskiServis}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right">{taksaZaMedijskiServis}</Cell>
+          </tr>
+          <tr className="primary">
+            <td colSpan={3} align="left">
+              <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
+            </td>
+            <td></td>
+            <td></td>
+            <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenje}</Cell>
+            <td></td>
+            <td></td>
+            <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenjeBezPanela}</Cell>
+          </tr>
+          </tbody>
+        </table>
       </div>
 
-      <If condition={emailSent}>
-        <p style={{color: '#20c997'}}>Izveštaj je uspešno poslat na vašu e-mail adresu.</p>
-      </If>
-    </div>
+      <div style={{marginBottom: 30}} className="email">
+        <PieChart
+          slotProps={{
+            legend: {
+              direction: 'column',
+              position: {vertical: 'middle', horizontal: 'right'},
+              padding: 1,
+            },
+          }}
+          series={[
+            {
+              data: [
+                {
+                  id: 0,
+                  color: '#385CD3',
+                  value: utrosakIsporucenoVT,
+                  label: 'Predato kao višak: ' + utrosakIsporucenoVT + ' kWh (' + parseInt(100 - direktnoPotrosenoProcenata) + '%)'
+                },
+                {
+                  id: 1,
+                  color: '#829AE7',
+                  value: direktnoPotroseno,
+                  label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + parseInt(direktnoPotrosenoProcenata) + '%)'
+                },
+              ],
+              valueFormatter: () => '',
+            },
+          ]}
+          height={150}
+        />
+        <p>Ukupno proizvedena el. energija <strong>{proizvedenaElEnergija}</strong> kWh</p>
+      </div>
 
+      <div style={{marginBottom: 30}} className="email">
+        <PieChart
+          slotProps={{
+            legend: {
+              direction: 'column',
+              position: {vertical: 'middle', horizontal: 'right'},
+              padding: 1,
+            },
+          }}
+          series={[
+            {
+              data: [
+                {
+                  id: 0,
+                  color: '#385CD3',
+                  value: ustedaUProcentima,
+                  label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'
+                },
+                {
+                  id: 1,
+                  color: '#829AE7',
+                  value: 100 - ustedaUProcentima,
+                  label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'
+                },
+              ],
+              valueFormatter: () => '',
+            },
+          ]}
+          height={150}
+        />
+      </div>
+
+      <div className="email">
+        <div className="flex" style={{justifyContent: 'center'}}>
+          <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
+            <div className="flex">
+              <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
+              <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
+            </div>
+            <p>Emisija CO2</p>
+          </div>
+
+          <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
+            <div className="flex">
+              <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
+              <p>{kolicinaUglja} kg/kWh</p>
+            </div>
+            <p>Količina uglja</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="frame" style={{padding: 20, marginTop: 20}}>
+        <div style={{display: 'flex'}}>
+          <p style={{marginRight: 20}}>Pošaljite ovaj izveštaj na svoju email adresu</p>
+          <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email}
+                     onChange={(e) => setEmail(e.target.value)}/>
+          <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained"
+                  onClick={onEmailSend}>Pošalji</Button>
+        </div>
+
+        <If condition={emailSent}>
+          <p style={{color: '#20c997'}}>Izveštaj je uspešno poslat na vašu e-mail adresu.</p>
+        </If>
+      </div>
+
+    </If>
   </>)
 }
 

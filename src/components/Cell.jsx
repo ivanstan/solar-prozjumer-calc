@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const formatter = new Intl.NumberFormat('sr-RS', {
   style: 'decimal', // or 'currency', 'percent'
-  minimumFractionDigits: 0,
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2
 });
 
