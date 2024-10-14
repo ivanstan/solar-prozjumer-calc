@@ -28,7 +28,7 @@ body {
     }
 
     a:hover {
-        color: #747bff;
+        color: #e61d1d;
     }
 
     button {
@@ -47,6 +47,7 @@ table tr {
 
 table td {
     border: 2px solid #ffffff;
+    padding: 5px;
 }
 
 .no-border {
@@ -54,22 +55,22 @@ table td {
 }
 
 .border-bottom {
-    border-bottom: 1px solid #385CD3;
+    border-bottom: 1px solid #e61d1d;
 }
 
 .frame {
-    border: 1px solid #385CD3;
+    /*border: 1px solid #e61d1d;*/
     padding: 1px;
     margin: 1px 1px 30px;
 }
 
 .primary {
-    background-color: #385CD3;
+    background-color: #e61d1d;
     color: #ffffff;
 }
 
 .secondary {
-    background-color: #829AE7;
+    background-color: #fadcda;
 }
 
 .flex {
@@ -82,4 +83,25 @@ table td {
 
 .content-between {
     justify-content: space-between;
+}
+
+.red-box {
+    background-color: #e61d1d;
+    color: #ffffff;
+    border-radius: 30px;
+    padding: 30px;
+}
+
+.MuiInputBase-root {
+    border-radius: 30px !important;
+}
+
+.coal-box {
+    min-width: 250px;
+    border-radius: 30px;
+    padding: 25px;
+}
+
+.bold {
+    font-weight: bold;
 }

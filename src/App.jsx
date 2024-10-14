@@ -2,19 +2,20 @@ import React, {useEffect, useState} from 'react'
 import './App.css'
 import {
   Button,
-  Checkbox,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   styled, Switch,
-  TextField,
-  Typography
+  TextField, Tooltip,
 } from "@mui/material";
+import {tooltipClasses} from '@mui/material/Tooltip';
 import Cell from "./components/Cell.jsx";
 import If from './components/If.jsx';
 import {PieChart} from "@mui/x-charts";
 import {reportEmail} from "./email.jsx";
+import NegativeNumberInput from "./components/NegativeNumberInput.jsx";
+import InfoIcon from '@mui/icons-material/Info';
 
 const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
 
@@ -34,6 +35,8 @@ const CustomTextField = styled(TextField)(({theme}) => ({
   '& .MuiInputBase-input': {
     padding: '5px',
     maxWidth: 70,
+    background: '#fff',
+    borderRadius: 30,
   },
 }));
 
@@ -41,11 +44,37 @@ const CustomSelect = styled(Select)(({theme}) => ({
   '& .MuiInputBase-input': {
     padding: '5px',
     maxWidth: 70,
+    background: '#fff',
+    borderRadius: 30,
+  },
+}));
+
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}}/>
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    minWidth: 630,
+    padding: 20,
+    textAlign: 'center',
+  },
+}));
+
+const HtmlTooltip2 = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}}/>
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    minWidth: 830,
+    padding: 20,
+    textAlign: 'center',
   },
 }));
 
 const tdStyle = {
-  backgroundColor: "#829AE7",
+  backgroundColor: "#fcf2f2",
+}
+
+const tdStyleOdd = {
+  backgroundColor: "#fadcda",
 }
 
 const renderNumber = (value) => {
@@ -226,6 +255,7 @@ function App() {
   const [ustedaUDinarima, setUstedaUDinarima] = useState(0);
   const [ustedaUProcentima, setUstedaUProcentima] = useState(0);
 
+  const [predatoKaoVisak, setPredatoKaoVisak] = useState(0);
   const [direktnoPotroseno, setDirektnoPotroseno] = useState(0);
   const [direktnoPotrosenoProcenata, setDirektnoPotrosenoProcenata] = useState(0);
 
@@ -697,8 +727,11 @@ function App() {
     let _ustedaUProcentima = 100 - (_ukupnoZaduzenje / _ukupnoZaduzenjeBezPanela * 100);
     setUstedaUProcentima(_ustedaUProcentima.toFixed(2));
 
-    let _direktnoPotroseno = proizvedenaElEnergija - _utrosakIsporucenoVT;
+    let _direktnoPotroseno = proizvedenaElEnergija - _isporucenaElEnergija;
     setDirektnoPotroseno(_direktnoPotroseno);
+
+    let _predatoKaoVisak = _isporucenaElEnergija;
+    setPredatoKaoVisak(_predatoKaoVisak);
 
     let _procenatDirektnePotrosnje = _direktnoPotroseno / proizvedenaElEnergija * 100;
     setDirektnoPotrosenoProcenata(_procenatDirektnePotrosnje.toFixed(2));
@@ -751,14 +784,12 @@ function App() {
       MERENJU</h1>
 
     <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 50}}>
-      <div>
+      <div style={{minWidth: '32%', background: '#e61d1d', borderRadius: 30, padding: '30px 0', color: '#fff'}}>
         <span>Za mesec</span>
         <FormControl sx={{marginX: 1}}>
-          <InputLabel id="input-month">Mesec</InputLabel>
           <CustomSelect
             labelId="input-month"
             value={month}
-            label="Mesec"
             onChange={(e) => {
               setMonth(e.target.value)
             }}
@@ -766,13 +797,10 @@ function App() {
             {months.map((month) => <MenuItem key={month} value={month}>{month}</MenuItem>)}
           </CustomSelect>
         </FormControl>
-
         <FormControl>
-          <InputLabel id="input-year">Godina</InputLabel>
           <CustomSelect
             labelId="input-year"
             value={year}
-            label="Godina"
             onChange={(e) => {
               setYear(e.target.value)
             }}
@@ -781,16 +809,28 @@ function App() {
           </CustomSelect>
         </FormControl>
       </div>
-
-
+      <div style={{width: '32%', padding: 30}}></div>
+      <div style={{width: '32%', padding: 30}}></div>
     </div>
 
-
     <div className="flex" style={{marginBottom: 20}}>
-
-      <div style={{width: '32%'}}>
+      <div style={{width: '32%'}} className="red-box">
         <div className="flex content-between" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Obračunska snaga</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>
+            Obračunska snaga
+            <HtmlTooltip
+              title={
+                <React.Fragment>
+                  Uneti vrednost koja se nalazi na drugoj strani računa, kao stavka 1 u okviru kalkulacije računa.
+                  <img src={'obracunska-snaga.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
+                </React.Fragment>
+              }
+            >
+              <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
+                <InfoIcon/>
+              </span>
+            </HtmlTooltip>
+          </p>
           <CustomSelect
             type="number"
             // inputProps={{ step: "0.01" }}
@@ -808,10 +848,24 @@ function App() {
             <MenuItem value={34.50}>34.50</MenuItem>
             <MenuItem value={43.47}>43.47</MenuItem>
           </CustomSelect>
-          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>Kw</span>
+          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>kW</span>
         </div>
         <div className="flex content-between" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Broj dana obračunskog perioda</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>
+            Broj dana obračunskog perioda
+            <HtmlTooltip
+              title={
+                <React.Fragment>
+                  Uneti vrednost koja se nalazi na prvoj strani računa, u gornjem levom uglu.
+                  <img src={'broj-dana.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
+                </React.Fragment>
+              }
+            >
+              <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
+                <InfoIcon/>
+              </span>
+            </HtmlTooltip>
+          </p>
           <CustomTextField
             type="number"
             inputProps={{max: 31, min: 1}}
@@ -826,7 +880,16 @@ function App() {
           <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}></span>
         </div>
         <div className="flex content-between" style={{alignItems: 'baseline'}}>
-          <p style={{flexGrow: 1, textAlign: 'left'}}>Proizvedena električna energija</p>
+          <p style={{flexGrow: 1, textAlign: 'left'}}>
+            Proizvedena električna energija
+            <Tooltip
+              title="Uneti ukupnu proizvodnju solarne elektrane za željeni mesec sa invertera ili iz aplikacije. Obratite pažnju da unesete proizvodnju sa identičnim datumima kao što je period obračuna na računu."
+            >
+              <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
+                <InfoIcon/>
+              </span>
+            </Tooltip>
+          </p>
           <CustomTextField
             type="number"
             // inputProps={{ step: "0.01" }}
@@ -834,11 +897,31 @@ function App() {
             value={proizvedenaElEnergija}
             onChange={(e) => setProizvedenaElEnergija(parseFloat(e.target.value))}
           />
-          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>Kwh</span>
+          <span style={{marginLeft: 5, width: 30, textAlign: 'left'}}>kWh</span>
         </div>
       </div>
 
-      <div style={{width: '32%', flexGrow: 1, margin: '0 20px'}}>
+      <div style={{width: '32%', flexGrow: 1, margin: '0 20px'}} className="red-box">
+        <div className="flex">
+          <p style={{textAlign: 'left', flexGrow: 1}}>
+            Stanje za obračun
+            <HtmlTooltip2
+              title={
+                <React.Fragment>
+                  Uneti količine električne energije iz tabele koja se nalazi na vrhu druge strane računa. Unose se
+                  ISKLJUČIVO vrednosti iz reda UTROŠAK.
+                  <img src={'stanje-za-obračun.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
+                </React.Fragment>
+              }
+            >
+              <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
+                <InfoIcon/>
+              </span>
+            </HtmlTooltip2>
+          </p>
+          <p className="bold" style={{width: 90}}>NT</p>
+          <p className="bold" style={{width: 90}}>VT</p>
+        </div>
         <div className="flex" style={{alignItems: 'baseline'}}>
           <p style={{flexGrow: 1, textAlign: 'left'}}>Preuzeta el. energija</p>
           <CustomTextField
@@ -935,23 +1018,34 @@ function App() {
         </div>
       </div>
 
-      <div style={{display: 'flex', flexDirection: 'column', width: '32%'}}>
+      <div style={{display: 'flex', flexDirection: 'column', width: '32%'}} className="red-box">
         <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
           <span>Popust za elektronsku dostavu računa</span>
           <Switch checked={elektronskaDostava} onChange={(e) => setElektronskaDostava(e.target.checked)}/>
         </div>
         <div className="flex" style={{alignItems: 'center', justifyContent: 'end'}}>
-          <span>Popust 5% za plaćanje prethodnog računa u roku dospeća</span>
+          <span>
+            Popust 5% za plaćanje prethodnog računa u roku dospeća
+            <HtmlTooltip
+              title={
+                <React.Fragment>
+                  Uneti vrednost koja se nalazi na drugoj strani računa, kao stavka 5 u okviru kalkulacije računa.
+                  <img src={'popust-5-posto.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
+                </React.Fragment>
+              }
+            >
+              <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
+                <InfoIcon/>
+              </span>
+            </HtmlTooltip>
+          </span>
           <Switch checked={popustPlacanje} onChange={(e) => setPopustPlacanje(e.target.checked)}/>
         </div>
         <div className="flex content-end">
           <If condition={popustPlacanje}>
-            <CustomTextField
-              type="number"
-              // inputProps={{ step: "0.01" }}
-              variant="outlined"
+            <NegativeNumberInput
               value={popustZaPlacanjePrethodnogRacuna}
-              onChange={(e) => setPopustZaPlacanjePrethodnogRacuna(parseFloat(e.target.value))}
+              onChange={value => setPopustZaPlacanjePrethodnogRacuna(value)}
             />
           </If>
         </div>
@@ -966,13 +1060,9 @@ function App() {
         </div>
         <div className="flex content-end">
           <If condition={umanjenjeZaUgrozene}>
-            <CustomTextField
-              style={{maxWidth: 100}}
-              type="number"
-              // inputProps={{ max: "0.01" }}
-              variant="outlined"
+            <NegativeNumberInput
               value={umanjenjeUgrozeniSaSolar}
-              onChange={(e) => setUmanjenjeUgrozeniSaSolar(parseFloat(e.target.value))}
+              onChange={value => setUmanjenjeUgrozeniSaSolar(value)}
             />
           </If>
         </div>
@@ -1109,7 +1199,8 @@ function App() {
     {/*</div>*/}
 
     <div>
-      <Button onClick={onCalculateClick} style={{margin: 20}} variant="contained">Izračunaj</Button>
+      <Button onClick={onCalculateClick} style={{margin: 20}} variant="contained"
+              sx={{borderRadius: 30, padding: 2}}>Izračunaj</Button>
     </div>
 
     <If condition={calculated}>
@@ -1117,17 +1208,17 @@ function App() {
       <div className="frame email">
         <table>
           <tbody>
-          <tr className="primary">
-            <th colSpan={6}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
+          <tr>
+            <th colSpan={6} className="primary" style={{borderRadius: '30px 30px 0 0', height: 40}}>OBRAČUN ZA ELEKTRIČNU ENERGIJU</th>
           </tr>
-          <tr className="secondary">
-            <td colSpan={3}>TARIFA</td>
-            <td>Utrošeno (kW/kWh)</td>
-            <td>Cena po jedinici</td>
-            <td>Iznos (dinara)</td>
+          <tr>
+            <td colSpan={3}></td>
+            <td className="bold">Utrošeno (kW/kWh)</td>
+            <td className="bold">Cena po jedinici</td>
+            <td className="bold">Iznos (dinara)</td>
           </tr>
-          <tr className="primary">
-            <td colSpan={6}>Troškovi koje nezavisne od potrošnje električne energije</td>
+          <tr className="secondary bold">
+            <td colSpan={6} style={{textAlign: 'left'}}>Troškovi koje nezavise od potrošnje električne energije</td>
           </tr>
           <tr>
             <td>1.</td>
@@ -1143,8 +1234,8 @@ function App() {
             <td></td>
             <td align="right">{trosakGarantovanogSnabdevacaIznos}</td>
           </tr>
-          <tr className="primary">
-            <th colSpan={3}>Utrošena električna energija</th>
+          <tr className="secondary">
+            <th colSpan={3} style={{textAlign: 'left'}}>Utrošena električna energija</th>
             <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
             <td></td>
             <td></td>
@@ -1207,7 +1298,7 @@ function App() {
             <th>Cena po jedinici</th>
             <th>Iznos (dinara)</th>
           </tr>
-          <tr>
+          <tr className="secondary">
             <th colSpan={3}>Preuzeta električna energija</th>
             <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
             <td></td>
@@ -1322,7 +1413,7 @@ function App() {
               </If>
             </td>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>6.</td>
             <td colSpan={2} align="left">Popust za elektronsku dostavu računa</td>
             <td></td>
@@ -1342,7 +1433,7 @@ function App() {
             <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</Cell>
             <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>8.</td>
             <td colSpan={2} align="left">Naknada za unapređenje energetske efikasnosti</td>
             <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
@@ -1362,7 +1453,7 @@ function App() {
             <td></td>
             <td></td>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>10.</td>
             <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
             <td></td>
@@ -1382,7 +1473,7 @@ function App() {
             <td></td>
             <Cell align="right">{iznosAkcizeBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>12.</td>
             <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
             <td></td>
@@ -1402,7 +1493,7 @@ function App() {
             <td></td>
             <Cell align="right">{iznosPdvBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>14.</td>
             <td colSpan={2} align="left">Umanjenje za energetski ugrožene kupce</td>
             <td></td>
@@ -1428,7 +1519,7 @@ function App() {
             <td></td>
             <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr className="secondary">
             <td>16.</td>
             <td colSpan={2} align="left">
               Taksa za javni medijski servis (ne ulazi u osnovicu za PDV po čl. 17,st.4,t.2ЗPDV)
@@ -1440,16 +1531,16 @@ function App() {
             <td></td>
             <Cell align="right">{taksaZaMedijskiServis}</Cell>
           </tr>
-          <tr className="primary">
-            <td colSpan={3} align="left">
+          <tr style={{height: 40}}>
+            <td colSpan={3} align="left" className="primary" style={{borderRadius: '0 0 0 30px', paddingLeft: 20}}>
               <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
             </td>
-            <td></td>
-            <td></td>
-            <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenje}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right" style={{fontWeight: 'bold'}}>{ukupnoZaduzenjeBezPanela}</Cell>
+            <td className="primary"></td>
+            <td className="primary"></td>
+            <Cell align="right" style={{fontWeight: 'bold', backgroundColor: '#e61d1d', color: '#ffffff'}}>{ukupnoZaduzenje}</Cell>
+            <td className="primary"></td>
+            <td className="primary"></td>
+            <Cell align="right" style={{fontWeight: 'bold', backgroundColor: '#e61d1d', color: '#ffffff', borderRadius: '0 0 30px 0', paddingRight: 20}}>{ukupnoZaduzenjeBezPanela}</Cell>
           </tr>
           </tbody>
         </table>
@@ -1469,13 +1560,13 @@ function App() {
               data: [
                 {
                   id: 0,
-                  color: '#385CD3',
+                  color: '#e61d1d',
                   value: utrosakIsporucenoVT,
-                  label: 'Predato kao višak: ' + utrosakIsporucenoVT + ' kWh (' + parseInt(100 - direktnoPotrosenoProcenata) + '%)'
+                  label: 'Predato kao višak: ' + predatoKaoVisak + ' kWh (' + parseInt(100 - direktnoPotrosenoProcenata) + '%)'
                 },
                 {
                   id: 1,
-                  color: '#829AE7',
+                  color: '#fadcda',
                   value: direktnoPotroseno,
                   label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + parseInt(direktnoPotrosenoProcenata) + '%)'
                 },
@@ -1502,13 +1593,13 @@ function App() {
               data: [
                 {
                   id: 0,
-                  color: '#385CD3',
+                  color: '#e61d1d',
                   value: ustedaUProcentima,
                   label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'
                 },
                 {
                   id: 1,
-                  color: '#829AE7',
+                  color: '#fadcda',
                   value: 100 - ustedaUProcentima,
                   label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'
                 },
@@ -1522,18 +1613,20 @@ function App() {
 
       <div className="email">
         <div className="flex" style={{justifyContent: 'center'}}>
-          <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-            <div className="flex">
+          <div className="flex primary coal-box"
+               style={{flexDirection: 'column', padding: '20px 20px', margin: '0 15px'}}>
+            <div className="flex" style={{justifyContent: 'center'}}>
               <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
               <p>{emisijaCO2} kg CO<sub>2</sub>/KWh</p>
             </div>
             <p>Emisija CO2</p>
           </div>
 
-          <div className="flex primary" style={{flexDirection: 'column', padding: '10px 20px', margin: '0 15px'}}>
-            <div className="flex">
-              <img src={'coal.svg'} alt="Coal" width={70} style={{marginRight: 10}}/>
-              <p>{kolicinaUglja} kg/kWh</p>
+          <div className="flex primary coal-box"
+               style={{flexDirection: 'column', padding: '20px 20px', margin: '0 15px'}}>
+            <div className="flex" style={{justifyContent: 'center', marginBottom: 10}}>
+              <img src={'coal.svg'} alt="Coal" width={60} style={{marginRight: 10}}/>
+              <p>{Math.round(kolicinaUglja)} kg/kWh</p>
             </div>
             <p>Količina uglja</p>
           </div>
@@ -1545,7 +1638,7 @@ function App() {
           <p style={{marginRight: 20}}>Pošaljite ovaj izveštaj na svoju email adresu</p>
           <TextField style={{flexGrow: 1}} variant="outlined" type="email" value={email}
                      onChange={(e) => setEmail(e.target.value)}/>
-          <Button disabled={!emailValid(email)} style={{marginLeft: 10, background: "#385CD3"}} variant="contained"
+          <Button disabled={!emailValid(email)} style={{marginLeft: 10}} variant="contained"
                   onClick={onEmailSend}>Pošalji</Button>
         </div>
 
