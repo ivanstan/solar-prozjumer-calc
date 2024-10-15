@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const formatter = new Intl.NumberFormat('sr-RS', {
+const formatter = new Intl.NumberFormat(navigator.language, {
   style: 'decimal', // or 'currency', 'percent'
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
