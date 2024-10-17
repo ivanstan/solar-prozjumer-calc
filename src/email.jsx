@@ -47,25 +47,22 @@ export function reportEmail(body) {
         }
         
         .blue {
-          color: #004085;
-          background-color: #cce5ff;
-          border-color: #b8daff;
+          background-color: #fcf2f2;
+          border-color: #fcf2f2;
         }
         
         .red {
-          color: #721c24;
-          background-color: #f8d7da;
-          border-color: #f5c6cb;
+          background-color: #fcf2f2;
+          border-color: #fcf2f2;
         }
         
         .green {
-          color: #155724;
-          background-color: #d4edda;
-          border-color: #c3e6cb;
+          background-color: #fcf2f2;
+          border-color: #fcf2f2;
         }
         
         .primary {
-            background-color: #385cd3;
+            background-color: #e61d1d;
             color: #fff;
         }
     </style>

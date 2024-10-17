@@ -91,11 +91,9 @@ table td {
 }
 
 .red-box {
-    background-color: #e61d1d;
-    color: #ffffff;
+    border: 5px solid #e61d1d;
     border-radius: 30px;
     padding: 30px;
-    min-height: 400px;
 }
 
 .MuiInputBase-root {
@@ -111,3 +109,4 @@ table td {
 .bold {
     font-weight: bold;
 }
+
