@@ -38,14 +38,14 @@ const CustomSelect = styled(Select)(({theme}) => ({
 const HtmlTooltip = styled(({className, ...props}) => (
   <Tooltip {...props} classes={{popper: className}}/>))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    minWidth: 630, padding: 20, textAlign: 'center',
+    minWidth: 670, padding: 20, textAlign: 'center',
   },
 }));
 
 const HtmlTooltip2 = styled(({className, ...props}) => (
   <Tooltip {...props} classes={{popper: className}}/>))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    minWidth: 830, padding: 20, textAlign: 'center',
+    minWidth: 870, padding: 20, textAlign: 'center',
   },
 }));
 
@@ -1584,6 +1584,7 @@ function App() {
             }}
             margin={{ top: 0, bottom: 80, left: 0, right: 0 }}
             series={[{
+              innerRadius: 40,
               data: [
                 {
                   id: 0,
@@ -1622,6 +1623,7 @@ function App() {
             }}
             margin={{ top: 0, bottom: 80, left: 0, right: 0 }}
             series={[{
+              innerRadius: 40,
               data: [{
                 id: 0,
                 color: '#e61d1d',
@@ -1640,7 +1642,7 @@ function App() {
       </div>
       <div className="email">
         <div className="flex" style={{justifyContent: 'center'}}>
-          <div className="flex primary coal-box"
+          <div className="flex coal-box"
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>
@@ -1654,7 +1656,7 @@ function App() {
             <p style={{fontWeight: "bold", fontSize: 24}}>{emisijaCO2} kg/CO<sub>2</sub>e</p>
           </div>
 
-          <div className="flex primary coal-box"
+          <div className="flex coal-box"
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>

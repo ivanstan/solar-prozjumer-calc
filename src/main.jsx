@@ -10,32 +10,32 @@ const theme = createTheme({
       main: '#e61d1d'
     }
   },
-  components: {
-    MuiSwitch: {
-      styleOverrides: {
-        switchBase: {
-          // Controls default (unchecked) color for the thumb
-          color: "#fff"
-        },
-        colorPrimary: {
-          "&.Mui-checked": {
-            // Controls checked color for the thumb
-            color: "#fcf2f2"
-          }
-        },
-        track: {
-          // Controls default (unchecked) color for the track
-          opacity: 0.2,
-          backgroundColor: "#fff",
-          ".Mui-checked.Mui-checked + &": {
-            // Controls checked color for the track
-            opacity: 0.7,
-            backgroundColor: "#fff"
-          }
-        }
-      }
-    }
-  }
+  // components: {
+  //   MuiSwitch: {
+  //     styleOverrides: {
+  //       switchBase: {
+  //         // Controls default (unchecked) color for the thumb
+  //         color: "#fff"
+  //       },
+  //       colorPrimary: {
+  //         "&.Mui-checked": {
+  //           // Controls checked color for the thumb
+  //           color: "#fcf2f2"
+  //         }
+  //       },
+  //       track: {
+  //         // Controls default (unchecked) color for the track
+  //         opacity: 0.2,
+  //         backgroundColor: "#fff",
+  //         ".Mui-checked.Mui-checked + &": {
+  //           // Controls checked color for the track
+  //           opacity: 0.7,
+  //           backgroundColor: "#fff"
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 });
 
 
