@@ -65,6 +65,10 @@ export function reportEmail(body) {
             background-color: #e61d1d;
             color: #fff;
         }
+        
+        .secondary {
+            background-color: #fadcda;
+        }
     </style>
 </head>
 <body>
