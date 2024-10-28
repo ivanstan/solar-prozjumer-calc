@@ -1300,7 +1300,7 @@ function App() {
             <td style={{backgroundColor: '#fcf2f2'}} align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
             <Cell style={{backgroundColor: '#fcf2f2'}} align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
             <td colSpan={3} align="center" style={{
-              fontWeight: "bold", backgroundColor: '#e61d1d', color: '#ffffff', borderRadius: '30px 30px 0 0'
+              fontWeight: "bold", backgroundColor: '#3e3e3e', color: '#ffffff', borderRadius: '30px 30px 0 0'
             }}>Bez solarnih panela
             </td>
           </tr>
@@ -1313,9 +1313,9 @@ function App() {
             <td style={{backgroundColor: '#e61d1d', color: '#ffffff'}} rowSpan={2}></td>
             <Cell style={{backgroundColor: '#e61d1d', color: '#ffffff'}}
                   rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
-            <td style={{backgroundColor: '#e61d1d', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
-            <td style={{backgroundColor: '#e61d1d', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
-            <td style={{backgroundColor: '#e61d1d', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
           </tr>
           <tr className="primary"></tr>
           <tr className="secondary">
@@ -1402,9 +1402,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
+            <td style={{background: '#3e3e3e'}}></td>
+            <td style={{background: '#3e3e3e'}}></td>
+            <Cell style={{background: '#3e3e3e'}} align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>5.</td>
@@ -1560,11 +1560,11 @@ function App() {
             <Cell align="right" style={{
               fontWeight: 'bold', backgroundColor: '#e61d1d', color: '#ffffff', borderRadius: '0 0 30px 0'
             }}>{ukupnoZaduzenje}</Cell>
-            <td style={{borderRadius: '0 0 0 30px', backgroundColor: '#e61d1d'}}></td>
-            <td className="primary"></td>
+            <td style={{borderRadius: '0 0 0 30px', backgroundColor: '#3e3e3e'}}></td>
+            <td className="primary" style={{background: '#3e3e3e'}}></td>
             <Cell align="right" style={{
               fontWeight: 'bold',
-              backgroundColor: '#e61d1d',
+              backgroundColor: '#3e3e3e',
               color: '#ffffff',
               borderRadius: '0 0 30px 0',
               paddingRight: 20
