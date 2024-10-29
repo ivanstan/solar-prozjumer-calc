@@ -73,9 +73,9 @@ function App() {
   const [calculated, setCalculated] = useState(false);
   const [month, setMonth] = useState(months[currentMonth])
   const [year, setYear] = useState(currentYear);
-  const [elektronskaDostava, setElektronskaDostava] = useState(true);
-  const [popustPlacanje, setPopustPlacanje] = useState(true);
-  const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(true);
+  const [elektronskaDostava, setElektronskaDostava] = useState(false);
+  const [popustPlacanje, setPopustPlacanje] = useState(false);
+  const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(false);
   const [umanjenjeZaUgrozene, setUmanjenjeZaUgrozene] = useState(false);
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
@@ -83,7 +83,8 @@ function App() {
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(0);
   const [isporucenaElEnergija, setIsporucenaElEnergija] = useState(0);
-  const [brojDana, setBrojDana] = useState(31);
+  const [brojDana, setBrojDana] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
   const [prethodnoPreuzetoNT, setPrethodnoPreuzetoNT] = useState(9492);
@@ -252,7 +253,7 @@ function App() {
   const [emisijaCO2, setEmisijaCO2] = useState(0);
   const [kolicinaUglja, setKolicinaUglja] = useState(0);
 
-  const [newsletterChecked, setNewsletterChecked] = useState(true);
+  const [newsletterChecked, setNewsletterChecked] = useState(false);
 
   useEffect(() => {
     // calculate();
@@ -739,9 +740,25 @@ function App() {
     fixCharts();
   }
 
+  const isValid = () => {
+
+    if (brojDana === '') {
+      setErrorMessage('Broj dana obračunskog perioda je obavezno polje.')
+
+      return false;
+    }
+
+    return true
+  }
+
   const onCalculateClick = () => {
-    calculate();
-    setCalculated(true);
+    setErrorMessage('')
+
+    if (isValid()) {
+      calculate();
+      setCalculated(true);
+    }
+
   }
 
   const onEmailSend = async () => {
@@ -778,7 +795,7 @@ function App() {
   }
 
   const calculateDisabled = () => {
-    let values = [utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, utrosakUtrosenoVT, utrosakUtrosenoNT, utrosakVisakSledeciVT, utrosakVisakSledeciNT, proizvedenaElEnergija, brojDana, umanjenjeUgrozeniSaSolar, popustZaPlacanjePrethodnogRacuna,]
+    let values = [utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, utrosakUtrosenoVT, utrosakUtrosenoNT, utrosakVisakSledeciVT, utrosakVisakSledeciNT, proizvedenaElEnergija, brojDana, umanjenjeUgrozeniSaSolar, popustZaPlacanjePrethodnogRacuna, brojDana]
 
     const hasNaN = values.some(value => Number.isNaN(value));
 
@@ -1210,6 +1227,7 @@ function App() {
     {/*</div>*/}
 
     <div>
+      <p style={{color: '#e61d1d', fontWeight: "bold"}}>{errorMessage}</p>
       <Button onClick={onCalculateClick} style={{margin: 20}} variant="contained"
               sx={{borderRadius: 30, padding: 2, minWidth: 340}} disabled={calculateDisabled()}>Izračunaj
         uštedu</Button>
