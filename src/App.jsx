@@ -11,11 +11,11 @@ import {reportEmail} from "./email.jsx";
 import NegativeNumberInput from "./components/NegativeNumberInput.jsx";
 import InfoIcon from '@mui/icons-material/Info';
 
-const months = ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
-
+const emptyItem = " - ";
+const months = [emptyItem, "Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth();
-const years = Array.from({length: 6}, (v, i) => currentYear - i);
+const years = [emptyItem, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
 const emailValid = (email) => {
   return String(email)
@@ -71,8 +71,8 @@ function App() {
   const trosakGarantovanogSnabdevacaIznos = 160.67;
 
   const [calculated, setCalculated] = useState(false);
-  const [month, setMonth] = useState(months[currentMonth])
-  const [year, setYear] = useState(currentYear);
+  const [month, setMonth] = useState(emptyItem)
+  const [year, setYear] = useState(emptyItem);
   const [elektronskaDostava, setElektronskaDostava] = useState(false);
   const [popustPlacanje, setPopustPlacanje] = useState(false);
   const [taksaMedijskiServis, setTaksaMedijskiServis] = useState(false);
@@ -80,7 +80,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
-  const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
+  const [obracunskaSnaga, setObracunskaSnaga] = useState(emptyItem);
   const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState('');
   const [isporucenaElEnergija, setIsporucenaElEnergija] = useState(0);
   const [brojDana, setBrojDana] = useState('');
@@ -107,16 +107,16 @@ function App() {
   // const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(1747);
   // const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState(0);
 
-  const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(0);
-  const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(0);
-  const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(0);
-  const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState(0);
-  const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState(0);
-  const [utrosakVisakPrethodnoNT, setUtrosakVisakPrethodnoNT] = useState(0);
-  const [utrosakUtrosenoVT, setUtrosakUtrosenoVT] = useState(0);
-  const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState(0);
-  const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(0);
-  const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState(0);
+  const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState('');
+  const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState('');
+  const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState('');
+  const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState('');
+  const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState('');
+  const [utrosakVisakPrethodnoNT, setUtrosakVisakPrethodnoNT] = useState('');
+  const [utrosakUtrosenoVT, setUtrosakUtrosenoVT] = useState('');
+  const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState('');
+  const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState('');
+  const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState('');
 
   const [umanjenjeUgrozeniSaSolar, setUmanjenjeUgrozeniSaSolar] = useState(0);
   const [umanjenjeUgrozeniBezSolra, setUmanjenjeUgrozeniBezSolra] = useState(0);
@@ -290,7 +290,7 @@ function App() {
   };
 
   useEffect(() => {
-    calculate();
+    // calculate();
 
     const handleResize = () => fixCharts(); // Call again on window resize
 
@@ -754,6 +754,84 @@ function App() {
       return false;
     }
 
+    if (obracunskaSnaga === emptyItem) {
+      setErrorMessage('Obračunska snaga je obavezno polje.')
+
+      return false;
+    }
+
+    if (month === emptyItem) {
+      setErrorMessage('Mesec je obavezno polje.')
+
+      return false;
+    }
+
+    if (year === emptyItem) {
+      setErrorMessage('Godina je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakPreuzetoVT === '') {
+      setErrorMessage('Preuzeta električna energija VT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakPreuzetoNT === '') {
+      setErrorMessage('Preuzeta električna energija NT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakIsporucenoVT === '') {
+      setErrorMessage('Isporučena električna energija VT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakIsporucenoNT === '') {
+      setErrorMessage('Isporučena električna energija NT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakVisakPrethodnoVT === '') {
+      setErrorMessage('Višak električne energije iz prethodnih obr. VT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakVisakPrethodnoNT === '') {
+      setErrorMessage('Višak električne energije iz prethodnih obr. NT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakUtrosenoVT === '') {
+      setErrorMessage('Utrošena električne energija VT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakUtrosenoNT === '') {
+      setErrorMessage('Utrošena električne energija NT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakVisakSledeciVT === '') {
+      setErrorMessage('Višak električne energije za sledeći obračun VT je obavezno polje.')
+
+      return false;
+    }
+
+    if (utrosakVisakSledeciNT === '') {
+      setErrorMessage('Višak električne energije za sledeći obračun NT je obavezno polje.')
+
+      return false;
+    }
+
     return true
   }
 
@@ -819,6 +897,7 @@ function App() {
           <FormControl sx={{marginX: 1}}>
             <CustomSelect
               labelId="input-month"
+              sx={{minWidth: 70}}
               value={month}
               onChange={(e) => {
                 setMonth(e.target.value)
@@ -830,6 +909,7 @@ function App() {
           <FormControl>
             <CustomSelect
               labelId="input-year"
+              sx={{minWidth: 70}}
               value={year}
               onChange={(e) => {
                 setYear(e.target.value)
@@ -851,7 +931,7 @@ function App() {
               <HtmlTooltip
                 enterTouchDelay={0}
                 title={<React.Fragment>
-                  Uneti vrednost koja se nalazi na drugoj strani računa, kao stavka 1 u okviru kalkulacije računa.
+                  Unesite vrednost koja se nalazi na drugoj strani računa, kao stavka 1 u okviru kalkulacije računa.
                   <img src={'obracunska-snaga.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
                 </React.Fragment>}
               >
@@ -865,8 +945,10 @@ function App() {
               // inputProps={{ step: "0.01" }}
               variant="outlined"
               value={obracunskaSnaga}
+              sx={{minWidth: 70}}
               onChange={(e) => setObracunskaSnaga(e.target.value)}
             >
+              <MenuItem value={emptyItem}>{emptyItem}</MenuItem>
               <MenuItem value={6.90}>6.90</MenuItem>
               <MenuItem value={11.04}>11.04</MenuItem>
               <MenuItem value={13.80}>13.80</MenuItem>
@@ -885,7 +967,7 @@ function App() {
               <HtmlTooltip
                 enterTouchDelay={0}
                 title={<React.Fragment>
-                  Uneti vrednost koja se nalazi na prvoj strani računa, u gornjem levom uglu.
+                  Unesite vrednost koja se nalazi na prvoj strani računa, u gornjem levom uglu.
                   <img src={'broj-dana.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
                 </React.Fragment>}
               >
@@ -912,7 +994,7 @@ function App() {
               Proizvedena električna energija
               <Tooltip
                 enterTouchDelay={0}
-                title="Uneti ukupnu proizvodnju solarne elektrane za željeni mesec sa invertera ili iz aplikacije. Obratite pažnju da unesete proizvodnju sa identičnim datumima kao što je period obračuna na računu."
+                title="Unesite ukupnu proizvodnju solarne elektrane za željeni mesec sa invertera ili iz aplikacije. Obratite pažnju da unesete proizvodnju sa identičnim datumima kao što je period obračuna na računu."
               >
               <span style={{display: 'inline-block', verticalAlign: "middle", marginLeft: 5}}>
                 <InfoIcon/>
@@ -938,7 +1020,7 @@ function App() {
               <HtmlTooltip2
                 enterTouchDelay={0}
                 title={<React.Fragment>
-                  Uneti količine električne energije iz tabele koja se nalazi na vrhu druge strane računa. Unose se
+                  Unesite količine električne energije iz tabele koja se nalazi na vrhu druge strane računa. Unose se
                   ISKLJUČIVO vrednosti iz reda UTROŠAK.
                   <img src={'stanje-za-obračun.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
                 </React.Fragment>}
@@ -1064,7 +1146,7 @@ function App() {
             <HtmlTooltip
               enterTouchDelay={0}
               title={<React.Fragment>
-                Uneti vrednost koja se nalazi na drugoj strani računa, kao stavka 5 u okviru kalkulacije računa.
+                Unesite vrednost koja se nalazi na drugoj strani računa, kao stavka 5 u okviru kalkulacije računa.
                 <img src={'popust-5-posto.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
               </React.Fragment>}
             >
@@ -1240,6 +1322,100 @@ function App() {
     </div>
 
     <If condition={calculated}>
+
+      <div style={{display: 'flex', marginTop: 30}} className="charts">
+        <div style={{marginBottom: 30, width: '50%'}} className="email">
+          <PieChart
+            slotProps={{
+              legend: {
+                hidden: true,
+              },
+            }}
+            margin={{top: 0, bottom: 10, left: 0, right: 0}}
+            series={[{
+              innerRadius: 40,
+              data: [
+                {
+                  id: 0,
+                  color: 'transparent',
+                  value: 0,
+                  label: 'Ukupna proizvedena el. energija ' + proizvedenaElEnergija + ' kWh'
+                },
+                {
+                  id: 1,
+                  color: '#e61d1d',
+                  value: utrosakIsporucenoVT,
+                  label: 'Predato kao višak: ' + predatoKaoVisak + ' kWh (' + formatter.format(100 - direktnoPotrosenoProcenata) + '%)'
+                }, {
+                  id: 2,
+                  color: '#fadcda',
+                  value: direktnoPotroseno,
+                  label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + formatter.format(direktnoPotrosenoProcenata) + '%)'
+                },
+              ], valueFormatter: () => '',
+            },]}
+            height={150}
+          />
+
+          <div style={{textAlign: 'left', marginLeft: '25%'}}>
+            <p style={{margin: 0}}>
+              Ukupna proizvedena el. energija <strong>{proizvedenaElEnergija} kWh</strong>
+            </p>
+            <p style={{margin: 0}}>
+              <span
+                style={{display: 'inline-block', width: 15, height: 15, background: '#e61d1d', marginRight: 5}}></span>
+              Predato kao višak: <strong>{predatoKaoVisak} kWh
+              ({formatter.format(100 - direktnoPotrosenoProcenata)}%)</strong>
+            </p>
+            <p style={{margin: 0}}>
+              <span
+                style={{display: 'inline-block', width: 15, height: 15, background: '#fadcda', marginRight: 5}}></span>
+              Direktno potrošeno: <strong>{direktnoPotroseno} kWh
+              ({formatter.format(direktnoPotrosenoProcenata)}%)</strong>
+            </p>
+          </div>
+
+        </div>
+
+        <div style={{
+          marginBottom: 30,
+          width: '50%',
+          textAlign: 'left',
+          display: 'flex', flexDirection: 'column', justifyContent: 'end'
+        }} className="email">
+          {/*<PieChart*/}
+          {/*  slotProps={{*/}
+          {/*    legend: {*/}
+          {/*      direction: 'column', // Vertical legend*/}
+          {/*      position: {vertical: 'bottom', horizontal: 'middle'}, // Legend on the right side*/}
+          {/*      padding: 0.5, // Compact padding*/}
+          {/*      itemGap: 4, // Minimized space between legend items*/}
+          {/*      textStyle: {fontSize: 12}, // Smaller text for compactness*/}
+          {/*    },*/}
+          {/*  }}*/}
+          {/*  margin={{ top: 0, bottom: 80, left: 0, right: 0 }}*/}
+          {/*  series={[{*/}
+          {/*    innerRadius: 40,*/}
+          {/*    data: [{*/}
+          {/*      id: 0,*/}
+          {/*      color: '#e61d1d',*/}
+          {/*      value: ustedaUProcentima,*/}
+          {/*      label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'*/}
+          {/*    }, {*/}
+          {/*      id: 1,*/}
+          {/*      color: '#fadcda',*/}
+          {/*      value: 100 - ustedaUProcentima,*/}
+          {/*      label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'*/}
+          {/*    },], valueFormatter: () => '',*/}
+          {/*  },]}*/}
+          {/*  height={230}*/}
+          {/*/>*/}
+          <p style={{margin: 0}}>Iznos bez solarnih panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
+          <p style={{margin: 0}}>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong></p>
+          <p style={{margin: 0}}>Ušteda sa solarnim panelima <strong>{formatter.format(ustedaUDinarima)} RSD
+            ({parseInt(ustedaUProcentima)}%)</strong></p>
+        </div>
+      </div>
 
       <div className="frame email">
         <table>
@@ -1598,96 +1774,6 @@ function App() {
         </table>
       </div>
 
-      <div style={{display: 'flex'}} className="charts">
-        <div style={{marginBottom: 30, width: '50%'}} className="email">
-          <PieChart
-            slotProps={{
-              legend: {
-                hidden: true,
-              },
-            }}
-            margin={{ top: 0, bottom: 10, left: 0, right: 0 }}
-            series={[{
-              innerRadius: 40,
-              data: [
-                {
-                  id: 0,
-                  color: 'transparent',
-                  value: 0,
-                  label: 'Ukupna proizvedena el. energija ' + proizvedenaElEnergija + ' kWh'
-                },
-                {
-                  id: 1,
-                  color: '#e61d1d',
-                  value: utrosakIsporucenoVT,
-                  label: 'Predato kao višak: ' + predatoKaoVisak + ' kWh (' + formatter.format(100 - direktnoPotrosenoProcenata) + '%)'
-                }, {
-                  id: 2,
-                  color: '#fadcda',
-                  value: direktnoPotroseno,
-                  label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + formatter.format(direktnoPotrosenoProcenata) + '%)'
-                },
-              ], valueFormatter: () => '',
-            },]}
-            height={150}
-          />
-
-          <div style={{textAlign: 'left', marginLeft: '25%'}}>
-            <p style={{margin: 0}}>
-              <span
-                style={{display: 'inline-block', width: 15, height: 15, background: 'transparent', marginRight: 5}}></span>
-              Ukupna proizvedena el. energija <strong>{proizvedenaElEnergija} kWh</strong>
-            </p>
-            <p style={{margin: 0}}>
-              <span style={{display: 'inline-block', width: 15, height: 15, background: '#e61d1d', marginRight: 5}}></span>
-              Predato kao višak: <strong>{predatoKaoVisak} kWh ({formatter.format(100 - direktnoPotrosenoProcenata)}%)</strong>
-            </p>
-            <p style={{margin: 0}}>
-              <span style={{display: 'inline-block', width: 15, height: 15, background: '#fadcda', marginRight: 5}}></span>
-              Direktno potrošeno: <strong>{direktnoPotroseno} kWh
-              ({formatter.format(direktnoPotrosenoProcenata)}%)</strong>
-            </p>
-          </div>
-
-        </div>
-
-        <div style={{
-          marginBottom: 30,
-          width: '50%',
-          textAlign: 'left',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center'}} className="email">
-          {/*<PieChart*/}
-          {/*  slotProps={{*/}
-          {/*    legend: {*/}
-          {/*      direction: 'column', // Vertical legend*/}
-          {/*      position: {vertical: 'bottom', horizontal: 'middle'}, // Legend on the right side*/}
-          {/*      padding: 0.5, // Compact padding*/}
-          {/*      itemGap: 4, // Minimized space between legend items*/}
-          {/*      textStyle: {fontSize: 12}, // Smaller text for compactness*/}
-          {/*    },*/}
-          {/*  }}*/}
-          {/*  margin={{ top: 0, bottom: 80, left: 0, right: 0 }}*/}
-          {/*  series={[{*/}
-          {/*    innerRadius: 40,*/}
-          {/*    data: [{*/}
-          {/*      id: 0,*/}
-          {/*      color: '#e61d1d',*/}
-          {/*      value: ustedaUProcentima,*/}
-          {/*      label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'*/}
-          {/*    }, {*/}
-          {/*      id: 1,*/}
-          {/*      color: '#fadcda',*/}
-          {/*      value: 100 - ustedaUProcentima,*/}
-          {/*      label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'*/}
-          {/*    },], valueFormatter: () => '',*/}
-          {/*  },]}*/}
-          {/*  height={230}*/}
-          {/*/>*/}
-          <p>Iznos bez solarnih panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
-          <p>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong></p>
-          <p>Ušteda sa solarnim panelima <strong>{formatter.format(ustedaUDinarima)} RSD ({parseInt(ustedaUProcentima)}%)</strong></p>
-        </div>
-      </div>
       <div className="email">
         <div className="flex" style={{justifyContent: 'center'}}>
           <div className="flex coal-box"
@@ -1730,7 +1816,8 @@ function App() {
         </div>
 
         <div>
-          Želim da se prijavim na newsletter<Switch checked={newsletterChecked} onChange={(e) => setNewsletterChecked(e.target.checked)}/>
+          Želim da se prijavim na newsletter<Switch checked={newsletterChecked}
+                                                    onChange={(e) => setNewsletterChecked(e.target.checked)}/>
         </div>
 
         <If condition={emailSent}>
