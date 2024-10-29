@@ -81,7 +81,7 @@ function App() {
   const [emailSent, setEmailSent] = useState(false);
 
   const [obracunskaSnaga, setObracunskaSnaga] = useState(11.04);
-  const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState(0);
+  const [proizvedenaElEnergija, setProizvedenaElEnergija] = useState('');
   const [isporucenaElEnergija, setIsporucenaElEnergija] = useState(0);
   const [brojDana, setBrojDana] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -744,6 +744,12 @@ function App() {
 
     if (brojDana === '') {
       setErrorMessage('Broj dana obračunskog perioda je obavezno polje.')
+
+      return false;
+    }
+
+    if (proizvedenaElEnergija === '') {
+      setErrorMessage('Proizvedena električna energija je obavezno polje.')
 
       return false;
     }
