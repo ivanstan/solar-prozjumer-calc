@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import './App.css'
-import {
-  Button, FormControl, MenuItem, Select, styled, Switch, TextField, Tooltip,
-} from "@mui/material";
+import {Button, FormControl, MenuItem, Select, styled, Switch, TextField, Tooltip,} from "@mui/material";
 import {tooltipClasses} from '@mui/material/Tooltip';
 import Cell, {formatter} from "./components/Cell.jsx";
 import If from './components/If.jsx';
@@ -13,8 +11,6 @@ import InfoIcon from '@mui/icons-material/Info';
 
 const emptyItem = " - ";
 const months = [emptyItem, "Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
-const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth();
 const years = [emptyItem, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
 const emailValid = (email) => {
@@ -86,16 +82,16 @@ function App() {
   const [brojDana, setBrojDana] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
-  const [prethodnoPreuzetoNT, setPrethodnoPreuzetoNT] = useState(9492);
-  const [prethodnoIsporucenoVT, setPrethodnoIsporucenoVT] = useState(10522);
-  const [prethodnoIsporucenoNT, setPrethodnoIsporucenoNT] = useState(56);
-
-  const [novoPreuzetoVT, setNovoPreuzetoVT] = useState(11570);
-  const [novoPreuzetoNT, setNovoPreuzetoNT] = useState(9918);
-  const [novoIsporucenoVT, setNovoIsporucenoVT] = useState(10853);
-  const [novoIsporucenoNT, setNovoIsporucenoNT] = useState(59);
-
+  // const [prethodnoPreuzetoVT, setPrethodnoPreuzetoVT] = useState(10554);
+  // const [prethodnoPreuzetoNT, setPrethodnoPreuzetoNT] = useState(9492);
+  // const [prethodnoIsporucenoVT, setPrethodnoIsporucenoVT] = useState(10522);
+  // const [prethodnoIsporucenoNT, setPrethodnoIsporucenoNT] = useState(56);
+  //
+  // const [novoPreuzetoVT, setNovoPreuzetoVT] = useState(11570);
+  // const [novoPreuzetoNT, setNovoPreuzetoNT] = useState(9918);
+  // const [novoIsporucenoVT, setNovoIsporucenoVT] = useState(10853);
+  // const [novoIsporucenoNT, setNovoIsporucenoNT] = useState(59);
+  //
   // const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(308);
   // const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(123);
   // const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(839);
@@ -255,10 +251,6 @@ function App() {
 
   const [newsletterChecked, setNewsletterChecked] = useState(false);
 
-  useEffect(() => {
-    // calculate();
-  }, [month, year, elektronskaDostava, popustPlacanje, taksaMedijskiServis, obracunskaSnaga, proizvedenaElEnergija, brojDana, prethodnoPreuzetoVT, prethodnoPreuzetoNT, prethodnoIsporucenoVT, prethodnoIsporucenoNT, novoPreuzetoVT, novoPreuzetoNT, novoIsporucenoVT, novoIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, umanjenjeUgrozeniSaSolar, umanjenjeUgrozeniBezSolra, taksaZaMedijskiServis, popustZaPlacanjePrethodnogRacuna, popustZaPlacanjePrethodnogRacunaBezPanela, utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, utrosakUtrosenoVT, utrosakUtrosenoNT, utrosakVisakSledeciVT, utrosakVisakSledeciNT,]);
-
   const fixCharts = () => {
     // const svgs = document.querySelectorAll('.charts svg');
     //
@@ -288,16 +280,6 @@ function App() {
     //   }
     // });
   };
-
-  useEffect(() => {
-    // calculate();
-
-    const handleResize = () => fixCharts(); // Call again on window resize
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const _taksa = taksaMedijskiServis ? 349 : 0;
@@ -666,7 +648,7 @@ function App() {
 
     setPopustZaElektronskuDostavu(_popustElektronskaDostava);
 
-    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = utrosenaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
+    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = _utrosenaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
     setNaknadaZaPodsticajPovlascenihProizvodjacaIznos(_naknadaZaPodsticajPovlascenihProizvodjacaIznos.toFixed(2));
 
     let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos = _utrosenaElektricnaEnergija * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
@@ -881,14 +863,25 @@ function App() {
   const calculateDisabled = () => {
     let values = [utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, utrosakUtrosenoVT, utrosakUtrosenoNT, utrosakVisakSledeciVT, utrosakVisakSledeciNT, proizvedenaElEnergija, brojDana, umanjenjeUgrozeniSaSolar, popustZaPlacanjePrethodnogRacuna, brojDana]
 
-    const hasNaN = values.some(value => Number.isNaN(value));
-
-    return hasNaN;
+    return values.some(value => Number.isNaN(value));
   }
 
   return (<>
-    <h1 style={{marginBottom: 50}}>KALKULATOR UŠTEDE SOLARNE ELEKTANE ZA KUPCE-PROZIVOĐAČE KOJI SU NA DVOTARIFNOM
-      MERENJU</h1>
+    <h1 style={{marginBottom: 40}}>Kalkulator uštede za prozjumerska domaćinstva sa solarnim elektranama na dvotarifnom
+      merenju</h1>
+
+    <div style={{marginBottom: 40}}>
+      <p>Kalkulator uštede je namenjen <b>“KUPCIMA-
+        PROIZVOĐAČIMA”</b>&nbsp;iz kategorije&nbsp;<b>“DOMAĆINSTVA”</b>,<br/>
+        kako bi mogli da izračunaju uštedu u trošku za električnu energiju na mesečnom nivou.
+      </p>
+      <p>Kalkulator je informativnog karaktera i postoji mogućnost da će u pojedinim
+        slučajevima<br/>
+        imati minimalna odstupanja koja ne utiču značajno na proračun uštede.</p>
+
+      <p style={{color: '#e61d1d'}}>Zahvaljujemo se Milošu Đukanoviću koji nam je pružio izuzetnu pomoć u izradi web
+        verzije kalkulatora.</p>
+    </div>
 
     <div className="row gy-5" style={{marginBottom: 20, fontSize: 14}}>
       <div className="col-md-4">
@@ -1410,8 +1403,10 @@ function App() {
           {/*  },]}*/}
           {/*  height={230}*/}
           {/*/>*/}
-          <p style={{margin: 0}}>Iznos bez solarnih panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
-          <p style={{margin: 0}}>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong></p>
+          <p style={{margin: 0}}>Iznos bez solarnih
+            panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
+          <p style={{margin: 0}}>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong>
+          </p>
           <p style={{margin: 0}}>Ušteda sa solarnim panelima <strong>{formatter.format(ustedaUDinarima)} RSD
             ({parseInt(ustedaUProcentima)}%)</strong></p>
         </div>
@@ -1780,7 +1775,7 @@ function App() {
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>
-            <img src={'co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
+            <img src={'https://prozjumer.ivanstanojevic.me/co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
             <p>
               Sopstvenom proizvodnjom<br/>
               električne energije ste smanjili<br/>
@@ -1794,7 +1789,8 @@ function App() {
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>
-            <img src={'coal.svg'} alt="Coal" width={60} style={{margin: '7px 10px'}}/>
+            <img src={'https://prozjumer.ivanstanojevic.me/coal.svg'} alt="Coal" width={60}
+                 style={{margin: '7px 10px'}}/>
             <p>
               Sopstvenom proizvodnjom<br/>
               električne energije smanjili ste<br/>
