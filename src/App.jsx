@@ -724,14 +724,15 @@ function App() {
 
   const isValid = () => {
 
-    if (brojDana === '') {
-      setErrorMessage('Broj dana obračunskog perioda je obavezno polje.')
+
+    if (month === emptyItem) {
+      setErrorMessage('Mesec je obavezno polje.')
 
       return false;
     }
 
-    if (proizvedenaElEnergija === '') {
-      setErrorMessage('Proizvedena električna energija je obavezno polje.')
+    if (year === emptyItem) {
+      setErrorMessage('Godina je obavezno polje.')
 
       return false;
     }
@@ -742,14 +743,14 @@ function App() {
       return false;
     }
 
-    if (month === emptyItem) {
-      setErrorMessage('Mesec je obavezno polje.')
+    if (brojDana === '') {
+      setErrorMessage('Broj dana obračunskog perioda je obavezno polje.')
 
       return false;
     }
 
-    if (year === emptyItem) {
-      setErrorMessage('Godina je obavezno polje.')
+    if (proizvedenaElEnergija === '') {
+      setErrorMessage('Proizvedena električna energija je obavezno polje.')
 
       return false;
     }
@@ -836,8 +837,6 @@ function App() {
       body += elements[i].innerHTML
     }
 
-    console.log(reportEmail(body))
-
     const url = "https://solar.sumeiklima.org/sr/solar/email";
     try {
       const response = await fetch(url, {
@@ -847,6 +846,7 @@ function App() {
           to: email,
           body: reportEmail(body),
           newsletter: newsletterChecked,
+          subject: `Izveštaj o ostvarenoj uštedi Vaše solarne elektrane – ${month.charAt(0).toUpperCase() + month.slice(1)} ${year}. – prozjumer.rs`,
         }),
       });
       if (!response.ok) {
@@ -1494,7 +1494,7 @@ function App() {
                   align="right">{renderNumber(utrosenaCrvenaTarifaNTUtroseno)}</Cell>
             <td style={{backgroundColor: '#fcf2f2'}} align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
             <Cell style={{backgroundColor: '#fcf2f2'}} align="right">{renderNumber(utrosenaCrvenaTarifaNTIznos)}</Cell>
-            <td colSpan={3} align="center" style={{
+            <td colSpan={3} align="center" className="cell-mobile-hidden" style={{
               fontWeight: "bold", backgroundColor: '#3e3e3e', color: '#ffffff', borderRadius: '30px 30px 0 0'
             }}>Bez solarnih panela
             </td>
@@ -1508,9 +1508,9 @@ function App() {
             <td style={{backgroundColor: '#e61d1d', color: '#ffffff'}} rowSpan={2}></td>
             <Cell style={{backgroundColor: '#e61d1d', color: '#ffffff'}}
                   rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
-            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
-            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
-            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
+            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
+            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
+            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
           </tr>
           <tr className="primary"></tr>
           <tr className="secondary">
@@ -1518,9 +1518,9 @@ function App() {
             <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
             <td></td>
             <td></td>
-            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-            <td></td>
-            <td></td>
+            <Cell className="cell-mobile-hidden" align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
           </tr>
           <tr className="green">
             <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
@@ -1529,9 +1529,9 @@ function App() {
             <Cell align="right">{periodZelenaVTUtroseno}</Cell>
             <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodZelenaVTIznos}</Cell>
-            <Cell align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
-            <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodZelenaVTIznosBezPanela}</Cell>
           </tr>
           <tr className="green">
             <td className="no-border"/>
@@ -1539,9 +1539,9 @@ function App() {
             <Cell align="right">{periodZelenaNTUtroseno}</Cell>
             <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodZelenaNTIznos}</Cell>
-            <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
-            <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodZelenaNTIznosBezPanela}</Cell>
           </tr>
           <tr>
             <td colSpan={9}>&nbsp;</td>
@@ -1553,9 +1553,9 @@ function App() {
             <Cell align="right">{periodPlavaVTUtroseno}</Cell>
             <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodPlavaVTIznos}</Cell>
-            <Cell align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
-            <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodPlavaVTIznosBezPanela}</Cell>
           </tr>
           <tr className="blue">
             <td className="no-border"></td>
@@ -1563,9 +1563,9 @@ function App() {
             <Cell align="right">{periodPlavaNTUtroseno}</Cell>
             <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodPlavaNTIznos}</Cell>
-            <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
-            <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodPlavaNTIznosBezPanela}</Cell>
           </tr>
           <tr>
             <td colSpan={9}>&nbsp;</td>
@@ -1577,9 +1577,9 @@ function App() {
             <Cell align="right">{periodCrvenaVTUtroseno}</Cell>
             <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodCrvenaVTIznos}</Cell>
-            <Cell align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
-            <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodCrvenaVTIznosBezPanela}</Cell>
           </tr>
           <tr className="red">
             <td className="no-border"></td>
@@ -1587,9 +1587,9 @@ function App() {
             <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
             <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodCrvenaNTIznos}</Cell>
-            <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
-            <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
-            <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
+            <td className="cell-mobile-hidden" align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+            <Cell className="cell-mobile-hidden" align="right">{periodCrvenaNTIznosBezPanela}</Cell>
           </tr>
           <tr className="primary">
             <td>4.</td>
@@ -1597,9 +1597,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
-            <td style={{background: '#3e3e3e'}}></td>
-            <td style={{background: '#3e3e3e'}}></td>
-            <Cell style={{background: '#3e3e3e'}} align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
+            <td className="cell-mobile-hidden" style={{background: '#3e3e3e'}}></td>
+            <td className="cell-mobile-hidden" style={{background: '#3e3e3e'}}></td>
+            <Cell className="cell-mobile-hidden" style={{background: '#3e3e3e'}} align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>5.</td>
@@ -1611,9 +1611,9 @@ function App() {
                 -{popustZaPlacanjePrethodnogRacuna}
               </If>
             </td>
-            <td></td>
-            <td></td>
-            <td align="right">
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden" align="right">
               {/*<If condition={popustPlacanje}>*/}
               {/*  <CustomTextField*/}
               {/*    type="number"*/}
@@ -1634,9 +1634,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{popustZaElektronskuDostavu}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{popustZaElektronskuDostavu}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{popustZaElektronskuDostavu}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>7.</td>
@@ -1644,9 +1644,9 @@ function App() {
             <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
             <td align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
             <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
-            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-            <td align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
-            <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td className="cell-mobile-hidden" align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
+            <Cell className="cell-mobile-hidden" align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
           </tr>
           <tr className="secondary">
             <td>8.</td>
@@ -1654,9 +1654,9 @@ function App() {
             <Cell align="right">{utrosenaElektricnaEnergija}</Cell>
             <td align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
             <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos}</Cell>
-            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
-            <td align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
-            <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td className="cell-mobile-hidden" align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
+            <Cell className="cell-mobile-hidden" align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>9.</td>
@@ -1664,9 +1664,9 @@ function App() {
             <td align="right"></td>
             <td align="right"></td>
             <Cell align="right">{naknadaZaObracunRazlikuPreuzeteUtroseneIznos}</Cell>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
           </tr>
           <tr className="secondary">
             <td>10.</td>
@@ -1674,9 +1674,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{osnovicaZaObracunAkcize}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>11.</td>
@@ -1684,9 +1684,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{iznosAkcize}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{iznosAkcizeBezPanela}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{iznosAkcizeBezPanela}</Cell>
           </tr>
           <tr className="secondary">
             <td>12.</td>
@@ -1694,9 +1694,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{osnovicaZaPdv}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{osnovicaZaPdvBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>13.</td>
@@ -1704,9 +1704,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{iznosPdv}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{iznosPdvBezPanela}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{iznosPdvBezPanela}</Cell>
           </tr>
           <tr className="secondary">
             <td>14.</td>
@@ -1716,9 +1716,9 @@ function App() {
             <td align="right">
               -{umanjenjeUgrozeniSaSolar}
             </td>
-            <td></td>
-            <td></td>
-            <td align="right">
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden" align="right">
               -{umanjenjeUgrozeniSaSolar}
             </td>
           </tr>
@@ -1730,9 +1730,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{zaduzenjeZaObracunskiPeriod}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
           </tr>
           <tr className="secondary">
             <td>16.</td>
@@ -1742,9 +1742,9 @@ function App() {
             <td></td>
             <td></td>
             <Cell align="right">{taksaZaMedijskiServis}</Cell>
-            <td></td>
-            <td></td>
-            <Cell align="right">{taksaZaMedijskiServis}</Cell>
+            <td className="cell-mobile-hidden"></td>
+            <td className="cell-mobile-hidden"></td>
+            <Cell className="cell-mobile-hidden" align="right">{taksaZaMedijskiServis}</Cell>
           </tr>
           <tr style={{height: 50}}>
             <td colSpan={3} align="left" className="primary" style={{borderRadius: '0 0 0 30px', paddingLeft: 20}}>
@@ -1755,7 +1755,206 @@ function App() {
             <Cell align="right" style={{
               fontWeight: 'bold', backgroundColor: '#e61d1d', color: '#ffffff', borderRadius: '0 0 30px 0'
             }}>{ukupnoZaduzenje}</Cell>
-            <td style={{borderRadius: '0 0 0 30px', backgroundColor: '#3e3e3e'}}></td>
+            <td className="cell-mobile-hidden" style={{borderRadius: '0 0 0 30px', backgroundColor: '#3e3e3e'}}></td>
+            <td className="primary cell-mobile-hidden" style={{background: '#3e3e3e'}}></td>
+            <Cell className="cell-mobile-hidden" align="right" style={{
+              fontWeight: 'bold',
+              backgroundColor: '#3e3e3e',
+              color: '#ffffff',
+              borderRadius: '0 0 30px 0',
+              paddingRight: 20
+            }}>{ukupnoZaduzenjeBezPanela}</Cell>
+          </tr>
+
+          <tr className="row-non-mobile">
+            <td colSpan={6} align="center" style={{
+              fontWeight: "bold", backgroundColor: '#3e3e3e', color: '#ffffff', borderRadius: '30px 30px 0 0'
+            }}>Bez solarnih panela
+            </td>
+          </tr>
+
+          <tr className="row-non-mobile">
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff'}} rowSpan={2}>3.</td>
+            <th style={{backgroundColor: '#3e3e3e', color: '#ffffff'}} rowSpan={2} colSpan={2}>UKUPNO ZA UTROŠENU
+              ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU
+            </th>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
+            <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
+          </tr>
+          <tr className="primary row-non-mobile"></tr>
+          <tr className="secondary row-non-mobile">
+            <th colSpan={3}>Preuzeta električna energija</th>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr className="green row-non-mobile">
+            <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Zelena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodZelenaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="green row-non-mobile">
+            <td className="no-border"/>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="row-non-mobile">
+            <td colSpan={9}>&nbsp;</td>
+          </tr>
+          <tr className="blue row-non-mobile">
+            <td className="no-border"></td>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodPlavaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="blue row-non-mobile">
+            <td className="no-border"></td>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="row-non-mobile">
+            <td colSpan={9}>&nbsp;</td>
+          </tr>
+          <tr className="red row-non-mobile">
+            <td className="no-border"></td>
+            <td rowSpan={2} style={{borderLeft: 'none'}}>Crvena zona</td>
+            <td>Viša tarifa (VT)</td>
+            <Cell align="right">{periodCrvenaVTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="red row-non-mobile">
+            <td className="no-border"></td>
+            <td>Niža tarifa (NT)</td>
+            <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
+            <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
+            <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
+          </tr>
+          <tr className="dark row-non-mobile">
+            <td>4.</td>
+            <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
+            <td style={{background: '#3e3e3e'}}></td>
+            <td style={{background: '#3e3e3e'}}></td>
+            <Cell style={{background: '#3e3e3e'}} align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>5.</td>
+            <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              {/*<If condition={popustPlacanje}>*/}
+              {/*  <CustomTextField*/}
+              {/*    type="number"*/}
+              {/*    // inputProps={{ step: "0.01" }}*/}
+              {/*    variant="outlined"*/}
+              {/*    value={popustZaPlacanjePrethodnogRacunaBezPanela}*/}
+              {/*    onChange={(e) => setPopustZaPlacanjePrethodnogRacunaBezPanela(parseFloat(e.target.value))}*/}
+              {/*  />*/}
+              {/*</If>*/}
+              <If condition={popustPlacanje}>
+                -{popustZaPlacanjePrethodnogRacuna}
+              </If>
+            </td>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>6.</td>
+            <td colSpan={2} align="left">Popust za elektronsku dostavu računa</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{popustZaElektronskuDostavu}</Cell>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>7.</td>
+            <td colSpan={2} align="left">Naknada za podsticaj povlašćenih proizvođača el. en.</td>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
+            <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>8.</td>
+            <td colSpan={2} align="left">Naknada za unapređenje energetske efikasnosti</td>
+            <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
+            <td align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
+            <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>9.</td>
+            <td colSpan={2} align="left">Naknada za obr. prist. DS za razliku preuzete i utrošene el. en.</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>10.</td>
+            <td colSpan={2} align="left">Osnovica za obračun akcize (1+2+3+5+6+7+8+9)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaObracunAkcizeBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>11.</td>
+            <td colSpan={2} align="left">Iznos akcize (stopa 7,5%)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosAkcizeBezPanela}</Cell>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>12.</td>
+            <td colSpan={2} align="left">Osnovica za PDV (9+10)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{osnovicaZaPdvBezPanela}</Cell>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>13.</td>
+            <td colSpan={2} align="left">Iznos PDV (20%)</td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{iznosPdvBezPanela}</Cell>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>14.</td>
+            <td colSpan={2} align="left">Umanjenje za energetski ugrožene kupce</td>
+            <td></td>
+            <td></td>
+            <td align="right">
+              -{umanjenjeUgrozeniSaSolar}
+            </td>
+          </tr>
+          <tr style={tdStyle} className="row-non-mobile">
+            <td>15.</td>
+            <td colSpan={2} align="left">
+              <strong>ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (1+2+3+5+6+7+8+9+11+13+14)
+            </td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{zaduzenjeZaObracunskiPeriodBezPanela}</Cell>
+          </tr>
+          <tr className="secondary row-non-mobile">
+            <td>16.</td>
+            <td colSpan={2} align="left">
+              Taksa za javni medijski servis (ne ulazi u osnovicu za PDV po čl. 17,st.4,t.2ЗPDV)
+            </td>
+            <td></td>
+            <td></td>
+            <Cell align="right">{taksaZaMedijskiServis}</Cell>
+          </tr>
+          <tr style={{height: 50}} className="row-non-mobile">
+            <td colSpan={3} align="left" className="dark" style={{borderRadius: '0 0 0 30px', paddingLeft: 20}}>
+              <strong>UKUPNO ZADUŽENJE ZA OBRAČUNSKI PERIOD</strong> (15+16)
+            </td>
+            <td style={{backgroundColor: '#3e3e3e'}}></td>
             <td className="primary" style={{background: '#3e3e3e'}}></td>
             <Cell align="right" style={{
               fontWeight: 'bold',
@@ -1775,21 +1974,21 @@ function App() {
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>
-            <img src={'https://prozjumer.ivanstanojevic.me/co2.svg'} alt="CO2" width={70} style={{marginRight: 10}}/>
+            <img src={'https://prozjumer.ivanstanojevic.me/co2.png'} alt="CO2" width={70} style={{marginRight: 10}}/>
             <p>
               Sopstvenom proizvodnjom<br/>
               električne energije ste smanjili<br/>
               emisiju ugljen-disoksida za<br/>
               proizvodnju struje za oko:
             </p>
-            <p style={{fontWeight: "bold", fontSize: 24}}>{emisijaCO2} kg/CO<sub>2</sub>e</p>
+            <p style={{fontWeight: "bold", fontSize: 24}}>{Math.round(emisijaCO2)} kg/CO<sub>2</sub>e</p>
           </div>
 
           <div className="flex coal-box"
                style={{
                  flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
                }}>
-            <img src={'https://prozjumer.ivanstanojevic.me/coal.svg'} alt="Coal" width={60}
+            <img src={'https://prozjumer.ivanstanojevic.me/coal.png'} alt="Coal" width={60}
                  style={{margin: '7px 10px'}}/>
             <p>
               Sopstvenom proizvodnjom<br/>
