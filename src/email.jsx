@@ -69,6 +69,29 @@ export function reportEmail(body) {
         .secondary {
             background-color: #fadcda;
         }
+        
+        /* Hides elements for non-mobile devices */
+        .row-non-mobile {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .row-non-mobile {
+                display: table-row; /* Adjust if needed, e.g., inline, flex, grid */
+            }
+        }
+        
+        /* Displays elements for non-mobile (desktop) devices */
+        .cell-mobile-hidden {
+            display: table-cell; /* Adjust if needed, e.g., block, flex, inline */
+        }
+        
+        @media (max-width: 768px) {
+            .cell-mobile-hidden {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>

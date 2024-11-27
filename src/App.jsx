@@ -839,22 +839,23 @@ function App() {
 
     const url = "https://solar.sumeiklima.org/sr/solar/email";
     try {
+      const payload = JSON.stringify({
+        to: email,
+        body: reportEmail(body),
+        newsletter: newsletterChecked,
+        subject: `Izveštaj o ostvarenoj uštedi Vaše solarne elektrane – ${month.charAt(0).toUpperCase() + month.slice(1)} ${year}. – prozjumer.rs`,
+      });
+
       const response = await fetch(url, {
         method: 'POST', headers: {
           'Content-Type': 'application/json',
-        }, body: JSON.stringify({
-          to: email,
-          body: reportEmail(body),
-          newsletter: newsletterChecked,
-          subject: `Izveštaj o ostvarenoj uštedi Vaše solarne elektrane – ${month.charAt(0).toUpperCase() + month.slice(1)} ${year}. – prozjumer.rs`,
-        }),
+        }, body: payload,
       });
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
 
-      const json = await response.json();
-      console.log(json);
+      console.log(response.status);
     } catch (error) {
       console.error(error.message);
     }
