@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import './App.css'
 import {Button, FormControl, MenuItem, Select, styled, Switch, TextField, Tooltip,} from "@mui/material";
 import {tooltipClasses} from '@mui/material/Tooltip';
@@ -280,6 +280,36 @@ function App() {
     //   }
     // });
   };
+
+  const contentRef = useRef(null);
+
+  // Function to send height to the parent window
+  const sendHeight = () => {
+    if (contentRef.current) {
+      const height = contentRef.current.scrollHeight;
+      window.parent.postMessage({ type: 'resize', height }, window.location.origin);
+    }
+  };
+
+  useEffect(() => {
+    // Send initial height on component mount
+    sendHeight();
+
+    // Create a MutationObserver to detect DOM changes and resend height
+    const observer = new MutationObserver(sendHeight);
+    if (contentRef.current) {
+      observer.observe(contentRef.current, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+
+    // Cleanup observer on unmount
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const _taksa = taksaMedijskiServis ? 349 : 0;
@@ -867,7 +897,7 @@ function App() {
     return values.some(value => Number.isNaN(value));
   }
 
-  return (<>
+  return (<div ref={contentRef}>
     <h1 style={{marginBottom: 40}}>Kalkulator uštede za prozjumerska domaćinstva sa solarnim elektranama na dvotarifnom
       merenju</h1>
 
@@ -1317,8 +1347,8 @@ function App() {
 
     <If condition={calculated}>
 
-      <div style={{display: 'flex', marginTop: 30}} className="charts">
-        <div style={{marginBottom: 30, width: '50%'}} className="email">
+      <div style={{display: 'flex', marginTop: 30}} className="charts email">
+        <div style={{marginBottom: 30, width: '50%', display: 'inline-block'}}>
           <PieChart
             slotProps={{
               legend: {
@@ -1375,8 +1405,8 @@ function App() {
           marginBottom: 30,
           width: '50%',
           textAlign: 'left',
-          display: 'flex', flexDirection: 'column', justifyContent: 'end'
-        }} className="email">
+          display: 'inline-block',
+        }}>
           {/*<PieChart*/}
           {/*  slotProps={{*/}
           {/*    legend: {*/}
@@ -1404,6 +1434,8 @@ function App() {
           {/*  },]}*/}
           {/*  height={230}*/}
           {/*/>*/}
+          <div style={{height: 140}}></div>
+
           <p style={{margin: 0}}>Iznos bez solarnih
             panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
           <p style={{margin: 0}}>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong>
@@ -2022,7 +2054,7 @@ function App() {
       </div>
 
     </If>
-  </>)
+  </div>)
 }
 
 export default App
