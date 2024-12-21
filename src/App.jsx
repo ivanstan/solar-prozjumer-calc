@@ -21,7 +21,7 @@ const emailValid = (email) => {
 
 const CustomTextField = styled(TextField)(({theme}) => ({
   '& .MuiInputBase-input': {
-    padding: '5px', maxWidth: 70, background: '#fff', borderRadius: 30,
+    padding: '5px', maxWidth: 70, minWidth: 70, background: '#fff', borderRadius: 30,
   },
 }));
 
@@ -92,15 +92,16 @@ function App() {
   // const [novoIsporucenoVT, setNovoIsporucenoVT] = useState(10853);
   // const [novoIsporucenoNT, setNovoIsporucenoNT] = useState(59);
   //
-  // const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(308);
-  // const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(123);
-  // const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(839);
-  // const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState(5);
-  // const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState(1216);
+
+  // const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState(1016);
+  // const [utrosakPreuzetoNT, setUtrosakPreuzetoNT] = useState(426);
+  // const [utrosakIsporucenoVT, setUtrosakIsporucenoVT] = useState(331);
+  // const [utrosakIsporucenoNT, setUtrosakIsporucenoNT] = useState(3);
+  // const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState(784);
   // const [utrosakVisakPrethodnoNT, setUtrosakVisakPrethodnoNT] = useState(0);
   // const [utrosakUtrosenoVT, setUtrosakUtrosenoVT] = useState(0);
-  // const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState(118);
-  // const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(1747);
+  // const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState(423);
+  // const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState(99);
   // const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState(0);
 
   const [utrosakPreuzetoVT, setUtrosakPreuzetoVT] = useState('');
@@ -443,18 +444,17 @@ function App() {
     }
 
     let _utrosenaPlavaTarifaNTUtroseno = 0;
-    if (_utrosenaZelenaTarifaNTUtroseno > _utrosakUtrosenoNT) {
+    if (_utrosenaZelenaTarifaNTUtroseno >= _utrosakUtrosenoNT) {
       _utrosenaPlavaTarifaNTUtroseno = 0
-      setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
     } else {
-      if (_utrosenaZelenaTarifaNTUtroseno < _donjaGranicaCrvenaTarifa) {
+      if (_utrosenaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
         _utrosenaPlavaTarifaNTUtroseno = _utrosenaElektricnaEnergija - _utrosenaZelenaTarifaNTUtroseno
-        setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
       } else {
-        _utrosenaPlavaTarifaNTUtroseno = Math.round((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
-        setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
+        _utrosenaPlavaTarifaNTUtroseno = Math.round(((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa) / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
       }
     }
+
+    setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
 
     let _utrosenaPlavaTarifaVTIznos = _utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici
     setUtrosenaPlavaTarifaVTIznos(_utrosenaPlavaTarifaVTIznos.toFixed(2))
@@ -977,7 +977,7 @@ function App() {
               <MenuItem value={11.04}>11.04</MenuItem>
               <MenuItem value={13.80}>13.80</MenuItem>
               <MenuItem value={17.25}>17.25</MenuItem>
-              <MenuItem value={22.07}>22.07</MenuItem>
+              <MenuItem value={22.08}>22.08</MenuItem>
               <MenuItem value={24.15}>24.15</MenuItem>
               <MenuItem value={27.60}>27.60</MenuItem>
               <MenuItem value={34.50}>34.50</MenuItem>
@@ -1347,100 +1347,69 @@ function App() {
 
     <If condition={calculated}>
 
-      <div style={{display: 'flex', marginTop: 30}} className="charts email">
-        <div style={{marginBottom: 30, width: '50%', display: 'inline-block'}}>
-          <PieChart
-            slotProps={{
-              legend: {
-                hidden: true,
-              },
-            }}
-            margin={{top: 0, bottom: 10, left: 0, right: 0}}
-            series={[{
-              innerRadius: 40,
-              data: [
-                {
-                  id: 0,
-                  color: 'transparent',
-                  value: 0,
-                  label: 'Ukupna proizvedena el. energija ' + proizvedenaElEnergija + ' kWh'
-                },
-                {
-                  id: 1,
-                  color: '#e61d1d',
-                  value: utrosakIsporucenoVT,
-                  label: 'Predato kao višak: ' + predatoKaoVisak + ' kWh (' + formatter.format(100 - direktnoPotrosenoProcenata) + '%)'
-                }, {
-                  id: 2,
-                  color: '#fadcda',
-                  value: direktnoPotroseno,
-                  label: 'Direktno potrošeno: ' + direktnoPotroseno + ' kWh (' + formatter.format(direktnoPotrosenoProcenata) + '%)'
-                },
-              ], valueFormatter: () => '',
-            },]}
-            height={150}
-          />
+      <div className="row charts email mt-4 justify-content-center">
 
-          <div style={{textAlign: 'left', marginLeft: '25%'}}>
-            <p style={{margin: 0}}>
-              Ukupna proizvedena el. energija <strong>{proizvedenaElEnergija} kWh</strong>
-            </p>
-            <p style={{margin: 0}}>
-              <span
-                style={{display: 'inline-block', width: 15, height: 15, background: '#e61d1d', marginRight: 5}}></span>
-              Predato kao višak: <strong>{predatoKaoVisak} kWh
+        {/* Left Chart Section */}
+        <div className="col-12 col-md-4 mb-4">
+          <div className="d-flex justify-content-center">
+            <PieChart
+              slotProps={{
+                legend: {
+                  hidden: true,
+                },
+              }}
+              margin={{top: 0, bottom: 10, left: 0, right: 0}}
+              series={[{
+                innerRadius: 40,
+                data: [
+                  {
+                    id: 0,
+                    color: 'transparent',
+                    value: 0,
+                    label: `Ukupna proizvedena el. energija ${proizvedenaElEnergija} kWh`
+                  },
+                  {
+                    id: 1,
+                    color: '#e61d1d',
+                    value: utrosakIsporucenoVT,
+                    label: `Predato kao višak: ${predatoKaoVisak} kWh (${formatter.format(100 - direktnoPotrosenoProcenata)}%)`
+                  },
+                  {
+                    id: 2,
+                    color: '#fadcda',
+                    value: direktnoPotroseno,
+                    label: `Direktno potrošeno: ${direktnoPotroseno} kWh (${formatter.format(direktnoPotrosenoProcenata)}%)`
+                  },
+                ],
+                valueFormatter: () => '',
+              }]}
+              height={150}
+            />
+          </div>
+
+          <div className="mt-3">
+            <p className="mb-2">Ukupna proizvedena el. energija <strong>{formatter.format(proizvedenaElEnergija)} kWh</strong></p>
+            <p className="mb-2">
+              <span className="chart-legend" style={{background: '#e61d1d'}}></span>
+              Predato kao višak: <strong>{formatter.format(predatoKaoVisak)} kWh
               ({formatter.format(100 - direktnoPotrosenoProcenata)}%)</strong>
             </p>
-            <p style={{margin: 0}}>
-              <span
-                style={{display: 'inline-block', width: 15, height: 15, background: '#fadcda', marginRight: 5}}></span>
-              Direktno potrošeno: <strong>{direktnoPotroseno} kWh
+            <p className="mb-2">
+              <span className="chart-legend" style={{background: '#fadcda'}}></span>
+              Direktno potrošeno: <strong>{formatter.format(direktnoPotroseno)} kWh
               ({formatter.format(direktnoPotrosenoProcenata)}%)</strong>
             </p>
           </div>
-
         </div>
 
-        <div style={{
-          marginBottom: 30,
-          width: '50%',
-          textAlign: 'left',
-          display: 'inline-block',
-        }}>
-          {/*<PieChart*/}
-          {/*  slotProps={{*/}
-          {/*    legend: {*/}
-          {/*      direction: 'column', // Vertical legend*/}
-          {/*      position: {vertical: 'bottom', horizontal: 'middle'}, // Legend on the right side*/}
-          {/*      padding: 0.5, // Compact padding*/}
-          {/*      itemGap: 4, // Minimized space between legend items*/}
-          {/*      textStyle: {fontSize: 12}, // Smaller text for compactness*/}
-          {/*    },*/}
-          {/*  }}*/}
-          {/*  margin={{ top: 0, bottom: 80, left: 0, right: 0 }}*/}
-          {/*  series={[{*/}
-          {/*    innerRadius: 40,*/}
-          {/*    data: [{*/}
-          {/*      id: 0,*/}
-          {/*      color: '#e61d1d',*/}
-          {/*      value: ustedaUProcentima,*/}
-          {/*      label: 'Ušteda sa solarnim panelima ' + ustedaUDinarima + ' RSD (' + parseInt(ustedaUProcentima) + '%)'*/}
-          {/*    }, {*/}
-          {/*      id: 1,*/}
-          {/*      color: '#fadcda',*/}
-          {/*      value: 100 - ustedaUProcentima,*/}
-          {/*      label: 'Iznos bez solarnih panela: ' + (ukupnoZaduzenjeBezPanela) + ' RSD (100%)'*/}
-          {/*    },], valueFormatter: () => '',*/}
-          {/*  },]}*/}
-          {/*  height={230}*/}
-          {/*/>*/}
-          <div style={{height: 140}}></div>
+        {/* Right Chart Section */}
+        <div className="col-12 col-md-4 mb-4">
+          <div className="chart-placeholder desktop-height"></div>
 
-          <p style={{margin: 0}}>Iznos bez solarnih
+          <p className="mb-2">Iznos bez solarnih
             panela: <strong>{formatter.format(ukupnoZaduzenjeBezPanela)} RSD</strong></p>
-          <p style={{margin: 0}}>Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong>
-          </p>
-          <p style={{margin: 0}}>Ušteda sa solarnim panelima <strong>{formatter.format(ustedaUDinarima)} RSD
+          <p className="mb-2">Iznos sa solarnim panelima: <strong>{formatter.format(ukupnoZaduzenje)} RSD</strong></p>
+          <p className="mb-2">Ušteda sa solarnim panelima: <strong>{formatter.format(ustedaUDinarima)} RSD
             ({parseInt(ustedaUProcentima)}%)</strong></p>
         </div>
       </div>
@@ -1541,9 +1510,15 @@ function App() {
             <td style={{backgroundColor: '#e61d1d', color: '#ffffff'}} rowSpan={2}></td>
             <Cell style={{backgroundColor: '#e61d1d', color: '#ffffff'}}
                   rowSpan={2}>{ukupnoZaElEnergijuUObracunskomPeriodu}</Cell>
-            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)</td>
-            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici</td>
-            <td className="cell-mobile-hidden" style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
+            <td className="cell-mobile-hidden"
+                style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Utrošeno (kW/kWh)
+            </td>
+            <td className="cell-mobile-hidden"
+                style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Cena po jedinici
+            </td>
+            <td className="cell-mobile-hidden"
+                style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)
+            </td>
           </tr>
           <tr className="primary"></tr>
           <tr className="secondary">
@@ -1632,7 +1607,8 @@ function App() {
             <Cell align="right">{periodUkupnoPreuzetoIznos}</Cell>
             <td className="cell-mobile-hidden" style={{background: '#3e3e3e'}}></td>
             <td className="cell-mobile-hidden" style={{background: '#3e3e3e'}}></td>
-            <Cell className="cell-mobile-hidden" style={{background: '#3e3e3e'}} align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden" style={{background: '#3e3e3e'}}
+                  align="right">{periodUkupnoPreuztoIznosBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>5.</td>
@@ -1679,7 +1655,8 @@ function App() {
             <Cell align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznos}</Cell>
             <Cell className="cell-mobile-hidden" align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
             <td className="cell-mobile-hidden" align="right">{naknadaZaPodsticajPovlascenihProizvodjaca}</td>
-            <Cell className="cell-mobile-hidden" align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden"
+                  align="right">{naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela}</Cell>
           </tr>
           <tr className="secondary">
             <td>8.</td>
@@ -1689,7 +1666,8 @@ function App() {
             <Cell align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos}</Cell>
             <Cell className="cell-mobile-hidden" align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
             <td className="cell-mobile-hidden" align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnosti}</td>
-            <Cell className="cell-mobile-hidden" align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
+            <Cell className="cell-mobile-hidden"
+                  align="right">{naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela}</Cell>
           </tr>
           <tr style={tdStyle}>
             <td>9.</td>
@@ -2002,55 +1980,80 @@ function App() {
       </div>
 
       <div className="email">
-        <div className="flex" style={{justifyContent: 'center'}}>
-          <div className="flex coal-box"
-               style={{
-                 flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
-               }}>
-            <img src={'https://prozjumer.ivanstanojevic.me/co2.png'} alt="CO2" width={70} style={{marginRight: 10}}/>
+        <div className="d-flex flex-column flex-md-row justify-content-center">
+          <div className="d-flex flex-column coal-box p-4 col-12 mb-3 mb-md-0 ml-1 col-md-auto" style={{marginRight: 10}}>
+            <img
+              src="https://prozjumer.ivanstanojevic.me/co2.png"
+              alt="CO2"
+              width={70}
+              className="mb-3 m-auto"
+            />
             <p>
               Sopstvenom proizvodnjom<br/>
               električne energije ste smanjili<br/>
               emisiju ugljen-disoksida za<br/>
               proizvodnju struje za oko:
             </p>
-            <p style={{fontWeight: "bold", fontSize: 24}}>{Math.round(emisijaCO2)} kg/CO<sub>2</sub>e</p>
+            <p className="fw-bold fs-4">{Math.round(emisijaCO2)} kg/CO<sub>2</sub>e</p>
           </div>
 
-          <div className="flex coal-box"
-               style={{
-                 flexDirection: 'column', padding: '20px 20px', margin: '0 15px', alignItems: 'center', minWidth: 400
-               }}>
-            <img src={'https://prozjumer.ivanstanojevic.me/coal.png'} alt="Coal" width={60}
-                 style={{margin: '7px 10px'}}/>
+          <div className="d-flex flex-column coal-box p-4 col-12 col-md-auto">
+            <img
+              src="https://prozjumer.ivanstanojevic.me/coal.png"
+              alt="Coal"
+              width={60}
+              className="mb-3 m-auto"
+            />
             <p>
               Sopstvenom proizvodnjom<br/>
               električne energije smanjili ste<br/>
               količinu potrošenog uglja<br/>
               u termoelektranama za oko:
             </p>
-            <p style={{fontWeight: "bold", fontSize: 24}}>{Math.round(kolicinaUglja)} kg</p>
+            <p className="fw-bold fs-4">{Math.round(kolicinaUglja)} kg</p>
           </div>
         </div>
       </div>
 
-      <div className="frame" style={{padding: 20, marginTop: 20}}>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <span style={{marginRight: 20, alignSelf: 'center'}}>Pošaljite ovaj izveštaj na svoju email adresu</span>
-          <TextField style={{minWidth: 400}} variant="outlined" type="email" value={email}
-                     onChange={(e) => setEmail(e.target.value)}/>
-          <Button disabled={!emailValid(email)} style={{marginLeft: 10, borderRadius: 30}} variant="contained"
-                  onClick={onEmailSend}>Pošalji</Button>
+      <div className="frame p-4 mt-4">
+        <div className="d-flex flex-column flex-md-row justify-content-center align-items-center">
+        <span className="mb-3 mb-md-0 me-md-3">
+          Pošaljite ovaj izveštaj na svoju email adresu
+        </span>
+
+          <TextField
+            className="mb-3 mb-md-0"
+            style={{width: '100%', maxWidth: '400px'}}
+            variant="outlined"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <Button
+            disabled={!emailValid(email)}
+            className="ms-md-3 mt-3 mt-md-0"
+            style={{borderRadius: 30}}
+            variant="contained"
+            onClick={onEmailSend}
+          >
+            Pošalji
+          </Button>
         </div>
 
-        <div>
-          Želim da se prijavim na newsletter<Switch checked={newsletterChecked}
-                                                    onChange={(e) => setNewsletterChecked(e.target.checked)}/>
+        <div className="mt-3">
+          <span>Želim da se prijavim na newsletter</span>
+          <Switch
+            checked={newsletterChecked}
+            onChange={(e) => setNewsletterChecked(e.target.checked)}
+          />
         </div>
 
-        <If condition={emailSent}>
-          <p style={{color: '#e61d1d', fontWeight: "bold"}}>Izveštaj je uspešno poslat na vašu e-mail adresu.</p>
-        </If>
+        {emailSent && (
+          <p className="mt-3 fw-bold" style={{color: '#e61d1d'}}>
+            Izveštaj je uspešno poslat na vašu e-mail adresu.
+          </p>
+        )}
       </div>
 
     </If>
