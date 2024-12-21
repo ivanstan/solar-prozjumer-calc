@@ -448,12 +448,11 @@ function App() {
       _utrosenaPlavaTarifaNTUtroseno = 0
     } else {
       if (_utrosenaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _utrosenaPlavaTarifaNTUtroseno = _utrosenaElektricnaEnergija - _utrosenaZelenaTarifaNTUtroseno
+        _utrosenaPlavaTarifaNTUtroseno = _utrosakUtrosenoNT - _utrosenaZelenaTarifaNTUtroseno
       } else {
         _utrosenaPlavaTarifaNTUtroseno = Math.round(((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa) / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
       }
     }
-
     setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
 
     let _utrosenaPlavaTarifaVTIznos = _utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici
