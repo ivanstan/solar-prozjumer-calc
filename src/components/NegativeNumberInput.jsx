@@ -1,7 +1,7 @@
-import React from "react";
-import {styled, TextField} from "@mui/material";
+import React, { useState } from "react";
+import { styled, TextField } from "@mui/material";
 
-const CustomTextField = styled(TextField)(({theme}) => ({
+const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-input': {
     padding: '5px',
     maxWidth: 70,
@@ -10,27 +10,41 @@ const CustomTextField = styled(TextField)(({theme}) => ({
   },
 }));
 
-const NegativeNumberInput = ({value, onChange}) => {
+const NegativeNumberInput = ({ value, onChange }) => {
+  const [displayValue, setDisplayValue] = useState(
+    value.toString().replace('.', ',')
+  );
 
   const onInputChange = (e) => {
-    let inputValue = parseFloat(e.target.value);
+    let inputValue = e.target.value;
 
-    if (inputValue < 0) {
-      inputValue = inputValue * -1;
+    if (/[^0-9,]/.test(inputValue)) return;
+
+    setDisplayValue(inputValue);
+
+    inputValue = parseFloat(inputValue.replace(',', '.'));
+
+    if (!isNaN(inputValue)) {
+
+      if (inputValue < 0) {
+        inputValue = inputValue * -1;
+      }
+
+      onChange(inputValue); // Ensure positive value
     }
+  };
 
-    onChange(inputValue);
-  }
-
-  return <CustomTextField
-    type="number"
-    InputProps={{
-      inputProps: { min: 0 }
-    }}
-    variant="outlined"
-    value={value}
-    onChange={(e) => onInputChange(e)}
-  />
-}
+  return (
+    <CustomTextField
+      type="text"
+      variant="outlined"
+      value={displayValue}
+      onChange={onInputChange}
+      inputProps={{
+        inputMode: "decimal", // Ensures numeric keyboard on mobile
+      }}
+    />
+  );
+};
 
 export default NegativeNumberInput;
