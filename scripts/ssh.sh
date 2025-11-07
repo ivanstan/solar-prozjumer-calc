@@ -1,2 +1,1 @@
-. scripts/.env
-ssh "${USERNAME}@${HOSTNAME}" -p ${PORT}
+. scripts/.envssh "${USERNAME}@${HOSTNAME}" -p ${PORT}
