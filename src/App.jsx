@@ -63,7 +63,7 @@ const renderNumber = (value) => {
 }
 
 function App() {
-  const cenaPoJedinici = 54.258;
+  const cenaPoJedinici = 60.8947;
   const trosakGarantovanogSnabdevacaIznos = 160.67;
 
   const [calculated, setCalculated] = useState(false);
@@ -130,29 +130,29 @@ function App() {
 
     // Zelena
   const [utrosenaZelenaTarifaVTUtroseno, setUtrosenaZelenaTarifaVTUtroseno] = useState(0);
-  const utrosenaZelenaTarifaVTCenaPoJedinici = 9.1092;
+  const utrosenaZelenaTarifaVTCenaPoJedinici = 9.6136;
   const [utrosenaZelenaTarifaVTIznos, setUtrosenaZelenaTarifaVTIznos] = useState(0);
 
   const [utrosenaZelenaTarifaNTUtroseno, setUtrosenaZelenaTarifaNTUtroseno] = useState(0);
-  const utrosenaZelenaTarifaNTCenaPoJedinici = 2.2773;
+  const utrosenaZelenaTarifaNTCenaPoJedinici = 2.4034;
   const [utrosenaZelenaTarifaNTIznos, setUtrosenaZelenaTarifaNTIznos] = useState(0);
 
   // Plava
   const [utrosenaPlavaTarifaVTUtroseno, setUtrosenaPlavaTarifaVTUtroseno] = useState(0);
-  const utrosenaPlavaTarifaVTCenaPoJedinici = 13.6638;
+  const utrosenaPlavaTarifaVTCenaPoJedinici = 14.4203;
   const [utrosenaPlavaTarifaVTIznos, setUtrosenaPlavaTarifaVTIznos] = useState(0);
 
   const [utrosenaPlavaTarifaNTUtroseno, setUtrosenaPlavaTarifaNTUtroseno] = useState(0);
-  const utrosenaPlavaTarifaNTCenaPoJedinici = 3.4160;
+  const utrosenaPlavaTarifaNTCenaPoJedinici = 3.6051;
   const [utrosenaPlavaTarifaNTIznos, setUtrosenaPlavaTarifaNTIznos] = useState(0);
 
   // Crvena
   const [utrosenaCrvenaTarifaVTUtroseno, setUtrosenaCrvenaTarifaVTUtroseno] = useState(0);
-  const utrosenaCrvenaTarifaVTCenaPoJedinici = 27.3276;
+  const utrosenaCrvenaTarifaVTCenaPoJedinici = 28.8407;
   const [utrosenaCrvenaTarifaVTIznos, setUtrosenaCrvenaTarifaVTIznos] = useState(0);
 
   const [utrosenaCrvenaTarifaNTUtroseno, setUtrosenaCrvenaTarifaNTUtroseno] = useState(0);
-  const utrosenaCrvenaTarifaNTCenaPoJedinici = 6.8319;
+  const utrosenaCrvenaTarifaNTCenaPoJedinici = 7.2102;
   const [utrosenaCrvenaTarifaNTIznos, setUtrosenaCrvenaTarifaNTIznos] = useState(0);
 
   const [ukupnoZaElEnergijuUObracunskomPeriodu, setUkupnoZaElEnergijuUObracunskomPeriodu] = useState(0);
@@ -387,7 +387,7 @@ function App() {
 
     let _donjaGranicaPlavaTarifa = Math.round(brojDana * 11.667);
     setDonjaGranicaPlavaTarifa(_donjaGranicaPlavaTarifa);
-    let _donjaGranicaCrvenaTarifa = Math.round(brojDana * 53.333);
+    let _donjaGranicaCrvenaTarifa = Math.round(brojDana * 40);
     setDonjaGranicaCrvenaTarifa(_donjaGranicaCrvenaTarifa);
 
     /**
