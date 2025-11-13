@@ -213,8 +213,8 @@ function App() {
 
   const naknadaZaPodsticajPovlascenihProizvodjaca = 0.801;
   const naknadaZaUnapredjenjeEnergetskeEfikasnosti = 0.015;
-  const naknadaZaObracunRazlikuPreuzeteUtrosene1 = 3.879;
-  const naknadaZaObracunRazlikuPreuzeteUtrosene2 = 0.970;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene1 = 4.5784;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene2 = 1.1446;
 
   const [naknadaZaPodsticajPovlascenihProizvodjacaIznos, setNaknadaZaPodsticajPovlascenihProizvodjacaIznos] = useState(0);
   const [naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela, setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela] = useState(0);
@@ -1165,7 +1165,7 @@ function App() {
           </div>
           <div className="flex" style={{alignItems: 'center', justifyContent: 'space-between'}}>
           <span>
-            Popust 5% za plaćanje prethodnog računa u roku dospeća
+            Popust za plaćanje prethodnog računa u roku dospeća
             <HtmlTooltip
               enterTouchDelay={0}
               title={<React.Fragment>
@@ -1520,7 +1520,7 @@ function App() {
             </td>
           </tr>
           <tr className="primary"></tr>
-          <tr className="secondary">
+          <tr className="secondary" style={{display: 'none'}}>
             <th colSpan={3}>Preuzeta električna energija</th>
             <Cell align="right">{preuzetaElektricnaEnergija}</Cell>
             <td></td>
@@ -1529,7 +1529,7 @@ function App() {
             <td className="cell-mobile-hidden"></td>
             <td className="cell-mobile-hidden"></td>
           </tr>
-          <tr className="green">
+          <tr className="green" style={{display: 'none'}}>
             <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Zelena zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1540,7 +1540,7 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodZelenaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="green">
+          <tr className="green" style={{display: 'none'}}>
             <td className="no-border"/>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodZelenaNTUtroseno}</Cell>
@@ -1550,10 +1550,10 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodZelenaNTIznosBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr style={{display: 'none'}}>
             <td colSpan={9}>&nbsp;</td>
           </tr>
-          <tr className="blue">
+          <tr className="blue" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1564,7 +1564,7 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodPlavaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="blue">
+          <tr className="blue" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodPlavaNTUtroseno}</Cell>
@@ -1574,10 +1574,10 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodPlavaNTIznosBezPanela}</Cell>
           </tr>
-          <tr>
+          <tr style={{display: 'none'}}>
             <td colSpan={9}>&nbsp;</td>
           </tr>
-          <tr className="red">
+          <tr className="red" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Crvena zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1588,7 +1588,7 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodCrvenaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="red">
+          <tr className="red" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodCrvenaNTUtroseno}</Cell>
@@ -1598,7 +1598,7 @@ function App() {
             <td className="cell-mobile-hidden" align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
             <Cell className="cell-mobile-hidden" align="right">{periodCrvenaNTIznosBezPanela}</Cell>
           </tr>
-          <tr className="primary">
+          <tr className="primary" style={{display: 'none'}}>
             <td>4.</td>
             <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
             <td></td>
@@ -1611,7 +1611,7 @@ function App() {
           </tr>
           <tr style={tdStyle}>
             <td>5.</td>
-            <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
+            <td colSpan={2} align="left">Popust za plaćanje prethodnog računa u roku dospeća</td>
             <td></td>
             <td></td>
             <td align="right">
@@ -1793,13 +1793,13 @@ function App() {
             <td style={{backgroundColor: '#3e3e3e', color: '#ffffff', fontWeight: 'bold'}}>Iznos (dinara)</td>
           </tr>
           <tr className="primary row-non-mobile"></tr>
-          <tr className="secondary row-non-mobile">
+          <tr className="secondary row-non-mobile" style={{display: 'none'}}>
             <th colSpan={3}>Preuzeta električna energija</th>
             <Cell align="right">{preuzetaElektricnaEnergijaBezSolar}</Cell>
             <td></td>
             <td></td>
           </tr>
-          <tr className="green row-non-mobile">
+          <tr className="green row-non-mobile" style={{display: 'none'}}>
             <td className="no-border" style={{borderTop: '1px solid #fff'}}/>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Zelena zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1807,17 +1807,17 @@ function App() {
             <td align="right">{utrosenaZelenaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodZelenaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="green row-non-mobile">
+          <tr className="green row-non-mobile" style={{display: 'none'}}>
             <td className="no-border"/>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodZelenaNTUtrosenoBezPanela}</Cell>
             <td align="right">{utrosenaZelenaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodZelenaNTIznosBezPanela}</Cell>
           </tr>
-          <tr className="row-non-mobile">
+          <tr className="row-non-mobile" style={{display: 'none'}}>
             <td colSpan={9}>&nbsp;</td>
           </tr>
-          <tr className="blue row-non-mobile">
+          <tr className="blue row-non-mobile" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Plava zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1825,17 +1825,17 @@ function App() {
             <td align="right">{utrosenaPlavaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodPlavaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="blue row-non-mobile">
+          <tr className="blue row-non-mobile" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodPlavaNTUtrosenoBezPanela}</Cell>
             <td align="right">{utrosenaPlavaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodPlavaNTIznosBezPanela}</Cell>
           </tr>
-          <tr className="row-non-mobile">
+          <tr className="row-non-mobile" style={{display: 'none'}}>
             <td colSpan={9}>&nbsp;</td>
           </tr>
-          <tr className="red row-non-mobile">
+          <tr className="red row-non-mobile" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td rowSpan={2} style={{borderLeft: 'none'}}>Crvena zona</td>
             <td>Viša tarifa (VT)</td>
@@ -1843,14 +1843,14 @@ function App() {
             <td align="right">{utrosenaCrvenaTarifaVTCenaPoJedinici}</td>
             <Cell align="right">{periodCrvenaVTIznosBezPanela}</Cell>
           </tr>
-          <tr className="red row-non-mobile">
+          <tr className="red row-non-mobile" style={{display: 'none'}}>
             <td className="no-border"></td>
             <td>Niža tarifa (NT)</td>
             <Cell align="right">{periodCrvenaNTUtrosenoBezPanela}</Cell>
             <td align="right">{utrosenaCrvenaTarifaNTCenaPoJedinici}</td>
             <Cell align="right">{periodCrvenaNTIznosBezPanela}</Cell>
           </tr>
-          <tr className="dark row-non-mobile">
+          <tr className="dark row-non-mobile" style={{display: 'none'}}>
             <td>4.</td>
             <th colSpan={2}>UKUPNO ZA PREUZETU ELEKTRIČNU ENERGIJU U OBRAČUNSKOM PERIODU</th>
             <td style={{background: '#3e3e3e'}}></td>
@@ -1859,7 +1859,7 @@ function App() {
           </tr>
           <tr style={tdStyle} className="row-non-mobile">
             <td>5.</td>
-            <td colSpan={2} align="left">Popust 5% za plaćanje prethodnog računa u roku dospeća</td>
+            <td colSpan={2} align="left">Popust za plaćanje prethodnog računa u roku dospeća</td>
             <td></td>
             <td></td>
             <td align="right">
