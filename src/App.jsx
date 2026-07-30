@@ -430,18 +430,16 @@ function App() {
      * Plava
      */
     let _utrosenaPlavaTarifaVTUtroseno = 0;
-    if (_utrosenaZelenaTarifaVTUtroseno > _utrosakUtrosenoVT) {
+    if (_utrosenaZelenaTarifaVTUtroseno >= _utrosakUtrosenoVT) {
       _utrosenaPlavaTarifaVTUtroseno = 0
-      setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
     } else {
-      if (_utrosenaZelenaTarifaVTUtroseno < _donjaGranicaCrvenaTarifa) {
+      if (_utrosenaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
         _utrosenaPlavaTarifaVTUtroseno = _utrosakUtrosenoVT - _utrosenaZelenaTarifaVTUtroseno
-        setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
       } else {
         _utrosenaPlavaTarifaVTUtroseno = Math.round((_utrosakUtrosenoVT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaVTUtroseno);
-        setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
       }
     }
+    setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
 
     let _utrosenaPlavaTarifaNTUtroseno = 0;
     if (_utrosenaZelenaTarifaNTUtroseno >= _utrosakUtrosenoNT) {
