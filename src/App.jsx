@@ -333,51 +333,20 @@ function App() {
   }, [popustPlacanje]);
 
   const calculate = () => {
-    let _utrosakPreuzetoVT = utrosakPreuzetoVT;
+    let _utrosakPreuzetoVT = Number(utrosakPreuzetoVT) || 0;
     setUtrosakPreuzetoVT(_utrosakPreuzetoVT);
-    let _utrosakPreuzetoNT = utrosakPreuzetoNT;
+    let _utrosakPreuzetoNT = Number(utrosakPreuzetoNT) || 0;
     setUtrosakPreuzetoNT(_utrosakPreuzetoNT);
-    let _utrosakIsporucenoVT = utrosakIsporucenoVT;
+    let _utrosakIsporucenoVT = Number(utrosakIsporucenoVT) || 0;
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
-    let _utrosakIsporucenoNT = utrosakIsporucenoNT;
+    let _utrosakIsporucenoNT = Number(utrosakIsporucenoNT) || 0;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
-    let _isporucenaElEnergija = utrosakIsporucenoNT + utrosakIsporucenoVT;
+    let _isporucenaElEnergija = _utrosakIsporucenoNT + _utrosakIsporucenoVT;
     setIsporucenaElEnergija(_isporucenaElEnergija)
-    let _utrosakUtrosenoVT = utrosakUtrosenoVT
-    if (_utrosakPreuzetoVT < (_utrosakIsporucenoVT + utrosakVisakPrethodnoVT)) {
-      _utrosakUtrosenoVT = 0
-      // setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
-    } else {
-      _utrosakUtrosenoVT = _utrosakPreuzetoVT - _utrosakIsporucenoVT - utrosakVisakPrethodnoVT;
-      // setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
-    }
 
-    let _utrosakUtrosenoNT = utrosakUtrosenoNT
-    if (_utrosakPreuzetoNT < (_utrosakIsporucenoNT + utrosakVisakPrethodnoNT)) {
-      _utrosakUtrosenoNT = 0
-      // setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
-    } else {
-      _utrosakUtrosenoNT = _utrosakPreuzetoNT - _utrosakIsporucenoNT - utrosakVisakPrethodnoNT;
-      // setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
-    }
-
-    let _utrosakVisakSledeciVT = utrosakVisakSledeciVT;
-    if (_utrosakPreuzetoVT < _utrosakIsporucenoVT + utrosakVisakPrethodnoVT) {
-      _utrosakVisakSledeciVT = _utrosakIsporucenoVT + utrosakVisakPrethodnoVT - _utrosakPreuzetoVT
-    } else {
-      _utrosakVisakSledeciVT = 0;
-    }
-
-    // setUtrosakVisakSledeciVT(_utrosakVisakSledeciVT);
-
-    let _utrosakVisakSledeciNT = utrosakVisakSledeciNT;
-    if (_utrosakPreuzetoNT < _utrosakIsporucenoNT + utrosakVisakPrethodnoNT) {
-      _utrosakVisakSledeciNT = _utrosakIsporucenoNT + utrosakVisakPrethodnoNT - _utrosakPreuzetoNT
-    } else {
-      _utrosakVisakSledeciNT = 0;
-    }
-
-    // setUtrosakVisakSledeciNT(_utrosakVisakSledeciNT);
+    // Vrednosti sa računa (Stanje za obračun) – EPS: (preuzeto − utrošeno) × cena pristupa
+    let _utrosakUtrosenoVT = Number(utrosakUtrosenoVT) || 0;
+    let _utrosakUtrosenoNT = Number(utrosakUtrosenoNT) || 0;
 
     let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici);
     setObracunskaSnagaIznos(_obracunskaSnagaIznos.toFixed(2))
