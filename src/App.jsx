@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import './App.css'
 import {Button, FormControl, MenuItem, Select, styled, Switch, TextField, Tooltip,} from "@mui/material";
 import {tooltipClasses} from '@mui/material/Tooltip';
@@ -38,12 +38,6 @@ const emailValid = (email) => {
 const CustomTextField = styled(TextField)(({theme}) => ({
   '& .MuiInputBase-input': {
     padding: '5px', maxWidth: 70, minWidth: 70, background: '#fff', borderRadius: 30,
-  },
-}));
-
-const DerivedTextField = styled(CustomTextField)(() => ({
-  '& .MuiInputBase-input': {
-    background: '#eeeeee', color: '#555', fontWeight: 600, cursor: 'default',
   },
 }));
 
@@ -133,23 +127,39 @@ function App() {
   const [utrosakVisakPrethodnoVT, setUtrosakVisakPrethodnoVT] = useState('');
   const [utrosakVisakPrethodnoNT, setUtrosakVisakPrethodnoNT] = useState('');
 
-  const stanjeZaObracunUneto = [
-    utrosakPreuzetoVT,
-    utrosakPreuzetoNT,
-    utrosakIsporucenoVT,
-    utrosakIsporucenoNT,
-    utrosakVisakPrethodnoVT,
-    utrosakVisakPrethodnoNT,
-  ].every((value) => value !== '' && !Number.isNaN(value));
+  const [utrosakUtrosenoVT, setUtrosakUtrosenoVT] = useState('');
+  const [utrosakUtrosenoNT, setUtrosakUtrosenoNT] = useState('');
+  const [utrosakVisakSledeciVT, setUtrosakVisakSledeciVT] = useState('');
+  const [utrosakVisakSledeciNT, setUtrosakVisakSledeciNT] = useState('');
 
-  const netiranje = useMemo(() => netUtrosak({
-    preuzetoVT: utrosakPreuzetoVT,
-    preuzetoNT: utrosakPreuzetoNT,
-    isporucenoVT: utrosakIsporucenoVT,
-    isporucenoNT: utrosakIsporucenoNT,
-    visakPrethodnoVT: utrosakVisakPrethodnoVT,
-    visakPrethodnoNT: utrosakVisakPrethodnoNT,
-  }), [
+  // Utrošena energija i višak za sledeći obračun se predlažu netiranjem, ali
+  // ostaju izmenjivi ako se račun razlikuje od izračunatog.
+  useEffect(() => {
+    const uneto = [
+      utrosakPreuzetoVT,
+      utrosakPreuzetoNT,
+      utrosakIsporucenoVT,
+      utrosakIsporucenoNT,
+    ].every((value) => value !== '' && !Number.isNaN(value));
+
+    if (!uneto) {
+      return;
+    }
+
+    const netirano = netUtrosak({
+      preuzetoVT: utrosakPreuzetoVT,
+      preuzetoNT: utrosakPreuzetoNT,
+      isporucenoVT: utrosakIsporucenoVT,
+      isporucenoNT: utrosakIsporucenoNT,
+      visakPrethodnoVT: utrosakVisakPrethodnoVT,
+      visakPrethodnoNT: utrosakVisakPrethodnoNT,
+    });
+
+    setUtrosakUtrosenoVT(netirano.utrosenoVT);
+    setUtrosakUtrosenoNT(netirano.utrosenoNT);
+    setUtrosakVisakSledeciVT(netirano.visakSledeciVT);
+    setUtrosakVisakSledeciNT(netirano.visakSledeciNT);
+  }, [
     utrosakPreuzetoVT,
     utrosakPreuzetoNT,
     utrosakIsporucenoVT,
@@ -157,8 +167,6 @@ function App() {
     utrosakVisakPrethodnoVT,
     utrosakVisakPrethodnoNT,
   ]);
-
-  const izvedeno = (value) => (stanjeZaObracunUneto ? value : '');
 
   const [umanjenjeUgrozeniSaSolar, setUmanjenjeUgrozeniSaSolar] = useState(0);
   const [umanjenjeUgrozeniBezSolra, setUmanjenjeUgrozeniBezSolra] = useState(0);
@@ -392,6 +400,11 @@ function App() {
     let _utrosakVisakPrethodnoNT = Number(utrosakVisakPrethodnoNT) || 0;
     setUtrosakVisakPrethodnoNT(_utrosakVisakPrethodnoNT);
 
+    let _utrosakUtrosenoVT = Number(utrosakUtrosenoVT) || 0;
+    setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
+    let _utrosakUtrosenoNT = Number(utrosakUtrosenoNT) || 0;
+    setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+
     const result = calculateBill({
       obracunskaSnaga,
       brojDana,
@@ -402,6 +415,8 @@ function App() {
       isporucenoNT: _utrosakIsporucenoNT,
       visakPrethodnoVT: _utrosakVisakPrethodnoVT,
       visakPrethodnoNT: _utrosakVisakPrethodnoNT,
+      utrosenoVT: _utrosakUtrosenoVT,
+      utrosenoNT: _utrosakUtrosenoNT,
       elektronskaDostava,
       popustPlacanje: popustZaPlacanjePrethodnogRacuna,
       taksaMedijskiServis,
@@ -616,7 +631,7 @@ function App() {
   }
 
   const calculateDisabled = () => {
-    let values = [utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, proizvedenaElEnergija, brojDana, umanjenjeUgrozeniSaSolar, popustZaPlacanjePrethodnogRacuna, brojDana]
+    let values = [utrosakPreuzetoVT, utrosakPreuzetoNT, utrosakIsporucenoVT, utrosakIsporucenoNT, utrosakVisakPrethodnoVT, utrosakVisakPrethodnoNT, utrosakUtrosenoVT, utrosakUtrosenoNT, utrosakVisakSledeciVT, utrosakVisakSledeciNT, proizvedenaElEnergija, brojDana, umanjenjeUgrozeniSaSolar, popustZaPlacanjePrethodnogRacuna, brojDana]
 
     return values.some(value => Number.isNaN(value));
   }
@@ -771,7 +786,7 @@ function App() {
                 title={<React.Fragment>
                   Unesite količine električne energije iz tabele koja se nalazi na vrhu druge strane računa. Unose se
                   ISKLJUČIVO vrednosti iz reda UTROŠAK. Utrošena el. energija i višak za sledeći obračun se
-                  automatski izračunavaju netiranjem, odvojeno po tarifi (VT i NT).
+                  automatski predlažu netiranjem, odvojeno po tarifi (VT i NT), ali ih možete i ručno izmeniti.
                   <img src={'stanje-za-obračun.jpg'} style={{margin: '10px auto 0', display: 'block'}}/>
                 </React.Fragment>}
               >
@@ -845,37 +860,37 @@ function App() {
 
           <div className="flex" style={{alignItems: 'baseline'}}>
             <p style={{flexGrow: 1, textAlign: 'left'}}>Utrošena el. energija</p>
-            <DerivedTextField
+            <CustomTextField
               style={{marginRight: 10, width: 70}}
               type="number"
               variant="outlined"
-              InputProps={{readOnly: true}}
-              value={izvedeno(netiranje.utrosenoVT)}
+              value={utrosakUtrosenoVT}
+              onChange={(e) => setUtrosakUtrosenoVT(parseFloat(e.target.value))}
             />
-            <DerivedTextField
+            <CustomTextField
               type="number"
               style={{width: 70}}
               variant="outlined"
-              InputProps={{readOnly: true}}
-              value={izvedeno(netiranje.utrosenoNT)}
+              value={utrosakUtrosenoNT}
+              onChange={(e) => setUtrosakUtrosenoNT(parseFloat(e.target.value))}
             />
           </div>
 
           <div className="flex" style={{alignItems: 'baseline'}}>
             <p style={{flexGrow: 1, textAlign: 'left'}}>Višak el. en. za sledeći obr.</p>
-            <DerivedTextField
+            <CustomTextField
               style={{marginRight: 10, width: 70}}
               type="number"
               variant="outlined"
-              InputProps={{readOnly: true}}
-              value={izvedeno(netiranje.visakSledeciVT)}
+              value={utrosakVisakSledeciVT}
+              onChange={(e) => setUtrosakVisakSledeciVT(parseFloat(e.target.value))}
             />
-            <DerivedTextField
+            <CustomTextField
               type="number"
               style={{width: 70}}
               variant="outlined"
-              InputProps={{readOnly: true}}
-              value={izvedeno(netiranje.visakSledeciNT)}
+              value={utrosakVisakSledeciNT}
+              onChange={(e) => setUtrosakVisakSledeciNT(parseFloat(e.target.value))}
             />
           </div>
         </div>

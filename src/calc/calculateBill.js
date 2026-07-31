@@ -20,6 +20,10 @@ function n(value) {
   return Number(value) || 0;
 }
 
+function zadato(value) {
+  return value !== undefined && value !== null && value !== '' && !Number.isNaN(Number(value));
+}
+
 /**
  * @param {object} input
  * @param {number} input.obracunskaSnaga
@@ -31,6 +35,8 @@ function n(value) {
  * @param {number} input.isporucenoNT
  * @param {number} [input.visakPrethodnoVT]
  * @param {number} [input.visakPrethodnoNT]
+ * @param {number} [input.utrosenoVT] – ručno pregaženo netiranje
+ * @param {number} [input.utrosenoNT] – ručno pregaženo netiranje
  * @param {boolean} [input.elektronskaDostava]
  * @param {number} [input.popustPlacanje] – pozitivna vrednost (npr. 7% sa računa)
  * @param {boolean} [input.taksaMedijskiServis]
@@ -45,7 +51,10 @@ export function calculateBill(input) {
   const preuzetoNT = n(input.preuzetoNT);
   const isporucenoVT = n(input.isporucenoVT);
   const isporucenoNT = n(input.isporucenoNT);
-  const { utrosenoVT, utrosenoNT, visakSledeciVT, visakSledeciNT } = netUtrosak(input);
+  const netirano = netUtrosak(input);
+  const utrosenoVT = zadato(input.utrosenoVT) ? n(input.utrosenoVT) : netirano.utrosenoVT;
+  const utrosenoNT = zadato(input.utrosenoNT) ? n(input.utrosenoNT) : netirano.utrosenoNT;
+  const { visakSledeciVT, visakSledeciNT } = netirano;
   const popustPlacanje = Math.abs(n(input.popustPlacanje));
   const umanjenjeEUK = n(input.umanjenjeEUK);
   const umanjenjeEUKBezPanela = n(input.umanjenjeEUKBezPanela);

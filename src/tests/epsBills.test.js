@@ -70,6 +70,47 @@ describe('netUtrosak (neto merenje po tarifi)', () => {
   });
 });
 
+describe('calculateBill – ručno pregaženje utrošene energije', () => {
+  const osnova = {
+    obracunskaSnaga: 11.04,
+    brojDana: 31,
+    proizvedenaElEnergija: 1180,
+    preuzetoVT: 6000,
+    preuzetoNT: 187,
+    isporucenoVT: 934,
+    isporucenoNT: 4,
+    visakPrethodnoVT: 352,
+    visakPrethodnoNT: 0,
+  };
+
+  it('koristi netiranu vrednost kada utrošena nije zadata', () => {
+    const { totals } = calculateBill(osnova);
+
+    expect(totals.utrosenoVT).toBe(4714);
+    expect(totals.utrosena).toBe(4897);
+  });
+
+  it('poštuje ručno unetu utrošenu energiju', () => {
+    const { totals } = calculateBill({ ...osnova, utrosenoVT: 100, utrosenoNT: 50 });
+
+    expect(totals.utrosenoVT).toBe(100);
+    expect(totals.utrosena).toBe(150);
+  });
+
+  it('prazan unos ne gazi netiranje', () => {
+    const { totals } = calculateBill({ ...osnova, utrosenoVT: '', utrosenoNT: null });
+
+    expect(totals.utrosenoVT).toBe(4714);
+    expect(totals.utrosenoNT).toBe(183);
+  });
+
+  it('nula je validno pregaženje, ne prazna vrednost', () => {
+    const { totals } = calculateBill({ ...osnova, utrosenoVT: 0, utrosenoNT: 0 });
+
+    expect(totals.utrosena).toBe(0);
+  });
+});
+
 describe.each(bills)('EPS račun: $label', ({ input, expected }) => {
   it('netira utrošenu energiju kao na računu', () => {
     const { totals } = calculateBill(input);
