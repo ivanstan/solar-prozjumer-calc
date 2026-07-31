@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allocateZones, calculateBill, zoneLimits } from '../calc/index.js';
+import { allocateZones, calculateBill, netUtrosak, zoneLimits } from '../calc/index.js';
 import { bills } from './fixtures/epsBills.js';
 
 describe('zoneLimits', () => {
@@ -36,7 +36,52 @@ describe('allocateZones (EPS srazmerni model)', () => {
   });
 });
 
+describe('netUtrosak (neto merenje po tarifi)', () => {
+  it('ne preliva višak iz VT u NT', () => {
+    const result = netUtrosak({
+      preuzetoVT: 224,
+      preuzetoNT: 187,
+      isporucenoVT: 934,
+      isporucenoNT: 4,
+      visakPrethodnoVT: 352,
+      visakPrethodnoNT: 0,
+    });
+
+    expect(result.utrosenoNT).toBe(183);
+    expect(result.visakSledeciVT).toBe(1062);
+  });
+
+  it('veća preuzeta energija povećava utrošenu u istoj tarifi', () => {
+    const result = netUtrosak({
+      preuzetoVT: 6000,
+      preuzetoNT: 187,
+      isporucenoVT: 934,
+      isporucenoNT: 4,
+      visakPrethodnoVT: 352,
+      visakPrethodnoNT: 0,
+    });
+
+    expect(result).toEqual({
+      utrosenoVT: 4714,
+      utrosenoNT: 183,
+      visakSledeciVT: 0,
+      visakSledeciNT: 0,
+    });
+  });
+});
+
 describe.each(bills)('EPS račun: $label', ({ input, expected }) => {
+  it('netira utrošenu energiju kao na računu', () => {
+    const { totals } = calculateBill(input);
+
+    expect({
+      utrosenoVT: totals.utrosenoVT,
+      utrosenoNT: totals.utrosenoNT,
+      visakSledeciVT: totals.visakSledeciVT,
+      visakSledeciNT: totals.visakSledeciNT,
+    }).toEqual(expected.utroseno);
+  });
+
   it('poklapa se sa stavkama na računu (sa panelima)', () => {
     const { withSolar } = calculateBill(input);
 

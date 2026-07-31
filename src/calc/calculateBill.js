@@ -13,6 +13,7 @@ import {
   UGALJ_KG_PO_KWH,
 } from './constants.js';
 import { round2 } from './money.js';
+import { netUtrosak } from './netting.js';
 import { allocateZones, zoneAmounts, zoneLimits } from './zones.js';
 
 function n(value) {
@@ -28,8 +29,8 @@ function n(value) {
  * @param {number} input.preuzetoNT
  * @param {number} input.isporucenoVT
  * @param {number} input.isporucenoNT
- * @param {number} input.utrosenoVT
- * @param {number} input.utrosenoNT
+ * @param {number} [input.visakPrethodnoVT]
+ * @param {number} [input.visakPrethodnoNT]
  * @param {boolean} [input.elektronskaDostava]
  * @param {number} [input.popustPlacanje] – pozitivna vrednost (npr. 7% sa računa)
  * @param {boolean} [input.taksaMedijskiServis]
@@ -44,8 +45,7 @@ export function calculateBill(input) {
   const preuzetoNT = n(input.preuzetoNT);
   const isporucenoVT = n(input.isporucenoVT);
   const isporucenoNT = n(input.isporucenoNT);
-  const utrosenoVT = n(input.utrosenoVT);
-  const utrosenoNT = n(input.utrosenoNT);
+  const { utrosenoVT, utrosenoNT, visakSledeciVT, visakSledeciNT } = netUtrosak(input);
   const popustPlacanje = Math.abs(n(input.popustPlacanje));
   const umanjenjeEUK = n(input.umanjenjeEUK);
   const umanjenjeEUKBezPanela = n(input.umanjenjeEUKBezPanela);
@@ -128,6 +128,10 @@ export function calculateBill(input) {
     totals: {
       isporucena,
       utrosena,
+      utrosenoVT,
+      utrosenoNT,
+      visakSledeciVT,
+      visakSledeciNT,
       preuzeta,
       preuzetaBezSolar,
     },
