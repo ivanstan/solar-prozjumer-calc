@@ -8,6 +8,21 @@ import {PieChart} from "@mui/x-charts";
 import {reportEmail} from "./email.jsx";
 import NegativeNumberInput from "./components/NegativeNumberInput.jsx";
 import InfoIcon from '@mui/icons-material/Info';
+import {
+  calculateBill,
+  CENA_CRVENA_NT,
+  CENA_CRVENA_VT,
+  CENA_OBRACUNSKE_SNAGE,
+  CENA_PLAVA_NT,
+  CENA_PLAVA_VT,
+  CENA_ZELENA_NT,
+  CENA_ZELENA_VT,
+  NAKNADA_DS_NT,
+  NAKNADA_DS_VT,
+  NAKNADA_EE,
+  NAKNADA_PODSTICAJ,
+  TROSAK_GARANTOVANOG_SNABDEVACA,
+} from './calc/index.js';
 
 const emptyItem = " - ";
 const months = [emptyItem, "Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"];
@@ -63,8 +78,8 @@ const renderNumber = (value) => {
 }
 
 function App() {
-  const cenaPoJedinici = 60.8947;
-  const trosakGarantovanogSnabdevacaIznos = 160.67;
+  const cenaPoJedinici = CENA_OBRACUNSKE_SNAGE;
+  const trosakGarantovanogSnabdevacaIznos = TROSAK_GARANTOVANOG_SNABDEVACA;
 
   const [calculated, setCalculated] = useState(false);
   const [month, setMonth] = useState(emptyItem)
@@ -130,29 +145,29 @@ function App() {
 
     // Zelena
   const [utrosenaZelenaTarifaVTUtroseno, setUtrosenaZelenaTarifaVTUtroseno] = useState(0);
-  const utrosenaZelenaTarifaVTCenaPoJedinici = 9.6136;
+  const utrosenaZelenaTarifaVTCenaPoJedinici = CENA_ZELENA_VT;
   const [utrosenaZelenaTarifaVTIznos, setUtrosenaZelenaTarifaVTIznos] = useState(0);
 
   const [utrosenaZelenaTarifaNTUtroseno, setUtrosenaZelenaTarifaNTUtroseno] = useState(0);
-  const utrosenaZelenaTarifaNTCenaPoJedinici = 2.4034;
+  const utrosenaZelenaTarifaNTCenaPoJedinici = CENA_ZELENA_NT;
   const [utrosenaZelenaTarifaNTIznos, setUtrosenaZelenaTarifaNTIznos] = useState(0);
 
   // Plava
   const [utrosenaPlavaTarifaVTUtroseno, setUtrosenaPlavaTarifaVTUtroseno] = useState(0);
-  const utrosenaPlavaTarifaVTCenaPoJedinici = 14.4203;
+  const utrosenaPlavaTarifaVTCenaPoJedinici = CENA_PLAVA_VT;
   const [utrosenaPlavaTarifaVTIznos, setUtrosenaPlavaTarifaVTIznos] = useState(0);
 
   const [utrosenaPlavaTarifaNTUtroseno, setUtrosenaPlavaTarifaNTUtroseno] = useState(0);
-  const utrosenaPlavaTarifaNTCenaPoJedinici = 3.6051;
+  const utrosenaPlavaTarifaNTCenaPoJedinici = CENA_PLAVA_NT;
   const [utrosenaPlavaTarifaNTIznos, setUtrosenaPlavaTarifaNTIznos] = useState(0);
 
   // Crvena
   const [utrosenaCrvenaTarifaVTUtroseno, setUtrosenaCrvenaTarifaVTUtroseno] = useState(0);
-  const utrosenaCrvenaTarifaVTCenaPoJedinici = 28.8407;
+  const utrosenaCrvenaTarifaVTCenaPoJedinici = CENA_CRVENA_VT;
   const [utrosenaCrvenaTarifaVTIznos, setUtrosenaCrvenaTarifaVTIznos] = useState(0);
 
   const [utrosenaCrvenaTarifaNTUtroseno, setUtrosenaCrvenaTarifaNTUtroseno] = useState(0);
-  const utrosenaCrvenaTarifaNTCenaPoJedinici = 7.2102;
+  const utrosenaCrvenaTarifaNTCenaPoJedinici = CENA_CRVENA_NT;
   const [utrosenaCrvenaTarifaNTIznos, setUtrosenaCrvenaTarifaNTIznos] = useState(0);
 
   const [ukupnoZaElEnergijuUObracunskomPeriodu, setUkupnoZaElEnergijuUObracunskomPeriodu] = useState(0);
@@ -211,10 +226,10 @@ function App() {
   const [popustZaPlacanjePrethodnogRacuna, setPopustZaPlacanjePrethodnogRacuna] = useState(0);
   const [popustZaPlacanjePrethodnogRacunaBezPanela, setPopustZaPlacanjePrethodnogRacunaBezPanela] = useState(0);
 
-  const naknadaZaPodsticajPovlascenihProizvodjaca = 0.801;
-  const naknadaZaUnapredjenjeEnergetskeEfikasnosti = 0.015;
-  const naknadaZaObracunRazlikuPreuzeteUtrosene1 = 4.5784;
-  const naknadaZaObracunRazlikuPreuzeteUtrosene2 = 1.1446;
+  const naknadaZaPodsticajPovlascenihProizvodjaca = NAKNADA_PODSTICAJ;
+  const naknadaZaUnapredjenjeEnergetskeEfikasnosti = NAKNADA_EE;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene1 = NAKNADA_DS_VT;
+  const naknadaZaObracunRazlikuPreuzeteUtrosene2 = NAKNADA_DS_NT;
 
   const [naknadaZaPodsticajPovlascenihProizvodjacaIznos, setNaknadaZaPodsticajPovlascenihProizvodjacaIznos] = useState(0);
   const [naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela, setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela] = useState(0);
@@ -341,379 +356,116 @@ function App() {
     setUtrosakIsporucenoVT(_utrosakIsporucenoVT);
     let _utrosakIsporucenoNT = Number(utrosakIsporucenoNT) || 0;
     setUtrosakIsporucenoNT(_utrosakIsporucenoNT);
-    let _isporucenaElEnergija = _utrosakIsporucenoNT + _utrosakIsporucenoVT;
-    setIsporucenaElEnergija(_isporucenaElEnergija)
 
-    // Vrednosti sa računa (Stanje za obračun) – EPS: (preuzeto − utrošeno) × cena pristupa
     let _utrosakUtrosenoVT = Number(utrosakUtrosenoVT) || 0;
+    setUtrosakUtrosenoVT(_utrosakUtrosenoVT);
     let _utrosakUtrosenoNT = Number(utrosakUtrosenoNT) || 0;
-
-    let _obracunskaSnagaIznos = (obracunskaSnaga * cenaPoJedinici);
-    setObracunskaSnagaIznos(_obracunskaSnagaIznos.toFixed(2))
-
-    let _utrosenaElektricnaEnergija = _utrosakUtrosenoVT + _utrosakUtrosenoNT;
-    setUtrosenaElektricnaEnergija(_utrosenaElektricnaEnergija);
-
-    let _donjaGranicaPlavaTarifa = Math.round(brojDana * 11.667);
-    setDonjaGranicaPlavaTarifa(_donjaGranicaPlavaTarifa);
-    let _donjaGranicaCrvenaTarifa = Math.round(brojDana * 40);
-    setDonjaGranicaCrvenaTarifa(_donjaGranicaCrvenaTarifa);
-
-    /**
-     * Zelena
-     */
-    let _utrosenaZelenaTarifaVTUtroseno = 0;
-    if (_utrosakUtrosenoVT === 0) {
-      _utrosenaZelenaTarifaVTUtroseno = 0
-    } else {
-      if (_donjaGranicaPlavaTarifa < _utrosenaElektricnaEnergija) {
-        _utrosenaZelenaTarifaVTUtroseno = Math.round(_utrosakUtrosenoVT * _donjaGranicaPlavaTarifa / _utrosenaElektricnaEnergija);
-      } else {
-        _utrosenaZelenaTarifaVTUtroseno = _utrosakUtrosenoVT;
-      }
-    }
-
-    setUtrosenaZelenaTarifaVTUtroseno(_utrosenaZelenaTarifaVTUtroseno)
-
-    let _utrosenaZelenaTarifaNTUtroseno = 0;
-    if (_utrosakUtrosenoNT === 0) {
-      _utrosenaZelenaTarifaNTUtroseno = 0
-      setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno);
-    } else {
-      if (_donjaGranicaPlavaTarifa < _utrosenaElektricnaEnergija) {
-        _utrosenaZelenaTarifaNTUtroseno = Math.round(_utrosakUtrosenoNT * _donjaGranicaPlavaTarifa / _utrosenaElektricnaEnergija);
-        setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno)
-      } else {
-        _utrosenaZelenaTarifaNTUtroseno = _utrosakUtrosenoNT;
-        setUtrosenaZelenaTarifaNTUtroseno(_utrosenaZelenaTarifaNTUtroseno)
-      }
-    }
-
-    let _utrosenaZelenaTarifaVTIznos = _utrosenaZelenaTarifaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici
-    setUtrosenaZelenaTarifaVTIznos(_utrosenaZelenaTarifaVTIznos.toFixed(2));
-
-    let _utrosenaZelenaTarifaNTIznos = _utrosenaZelenaTarifaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici
-    setUtrosenaZelenaTarifaNTIznos(_utrosenaZelenaTarifaNTIznos.toFixed(2));
-
-    /**
-     * Plava
-     */
-    let _utrosenaPlavaTarifaVTUtroseno = 0;
-    if (_utrosenaZelenaTarifaVTUtroseno >= _utrosakUtrosenoVT) {
-      _utrosenaPlavaTarifaVTUtroseno = 0
-    } else {
-      if (_utrosenaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _utrosenaPlavaTarifaVTUtroseno = _utrosakUtrosenoVT - _utrosenaZelenaTarifaVTUtroseno
-      } else {
-        _utrosenaPlavaTarifaVTUtroseno = Math.round((_utrosakUtrosenoVT * _donjaGranicaCrvenaTarifa / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaVTUtroseno);
-      }
-    }
-    setUtrosenaPlavaTarifaVTUtroseno(_utrosenaPlavaTarifaVTUtroseno);
-
-    let _utrosenaPlavaTarifaNTUtroseno = 0;
-    if (_utrosenaZelenaTarifaNTUtroseno >= _utrosakUtrosenoNT) {
-      _utrosenaPlavaTarifaNTUtroseno = 0
-    } else {
-      if (_utrosenaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _utrosenaPlavaTarifaNTUtroseno = _utrosakUtrosenoNT - _utrosenaZelenaTarifaNTUtroseno
-      } else {
-        _utrosenaPlavaTarifaNTUtroseno = Math.round(((_utrosakUtrosenoNT * _donjaGranicaCrvenaTarifa) / _utrosenaElektricnaEnergija) - _utrosenaZelenaTarifaNTUtroseno);
-      }
-    }
-    setUtrosenaPlavaTarifaNTUtroseno(_utrosenaPlavaTarifaNTUtroseno);
-
-    let _utrosenaPlavaTarifaVTIznos = _utrosenaPlavaTarifaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici
-    setUtrosenaPlavaTarifaVTIznos(_utrosenaPlavaTarifaVTIznos.toFixed(2))
-
-    let _utrosenaPlavaTarifaNTIznos = _utrosenaPlavaTarifaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici
-    setUtrosenaPlavaTarifaNTIznos(_utrosenaPlavaTarifaNTIznos.toFixed(2))
-
-    /**
-     * Crvena
-     */
-    let _utrosenaCrvenaTarifaVTUtroseno = 0;
-    if (_utrosenaZelenaTarifaVTUtroseno + _utrosenaPlavaTarifaVTUtroseno < _utrosakUtrosenoVT) {
-      _utrosenaCrvenaTarifaVTUtroseno = _utrosakUtrosenoVT - _utrosenaZelenaTarifaVTUtroseno - _utrosenaPlavaTarifaVTUtroseno;
-      setUtrosenaCrvenaTarifaVTUtroseno(_utrosenaCrvenaTarifaVTUtroseno);
-    } else {
-      _utrosenaCrvenaTarifaVTUtroseno = 0
-      setUtrosenaCrvenaTarifaVTUtroseno(_utrosenaCrvenaTarifaVTUtroseno);
-    }
-
-    let _utrosenaCrvenaTarifaNTUtroseno = 0;
-    if (_utrosenaZelenaTarifaNTUtroseno + _utrosenaPlavaTarifaNTUtroseno < _utrosakUtrosenoNT) {
-      _utrosenaCrvenaTarifaNTUtroseno = _utrosakUtrosenoNT - _utrosenaZelenaTarifaNTUtroseno - _utrosenaPlavaTarifaNTUtroseno;
-      setUtrosenaCrvenaTarifaNTUtroseno(_utrosenaCrvenaTarifaNTUtroseno);
-    } else {
-      _utrosenaCrvenaTarifaNTUtroseno = 0;
-      setUtrosenaCrvenaTarifaNTUtroseno(_utrosenaCrvenaTarifaNTUtroseno);
-    }
-
-    let _utrosenaCrvenaTarifaVTIznos = _utrosenaCrvenaTarifaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici
-    setUtrosenaCrvenaTarifaVTIznos(_utrosenaCrvenaTarifaVTIznos.toFixed(2))
-    let _utrosenaCrvenaTarifaNTIznos = _utrosenaCrvenaTarifaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici
-    setUtrosenaCrvenaTarifaNTIznos(_utrosenaCrvenaTarifaNTIznos.toFixed(2))
-
-    let _ukupnoZaElEnergijuUObracunskomPeriodu = _utrosenaZelenaTarifaVTIznos + _utrosenaZelenaTarifaNTIznos + _utrosenaPlavaTarifaVTIznos + _utrosenaPlavaTarifaNTIznos + _utrosenaCrvenaTarifaVTIznos + _utrosenaCrvenaTarifaNTIznos;
-    setUkupnoZaElEnergijuUObracunskomPeriodu(_ukupnoZaElEnergijuUObracunskomPeriodu.toFixed(2));
-
-    let _preuzetaElektricnaEnergija = _utrosakPreuzetoVT + _utrosakPreuzetoNT;
-    setPreuzetaElektricnaEnergija(_preuzetaElektricnaEnergija)
-
-    let _preuzetaElektricnaEnergijaBezSolar = _preuzetaElektricnaEnergija + proizvedenaElEnergija - _isporucenaElEnergija;
-    setPreuzetaElektricnaEnergijaBezSolar(_preuzetaElektricnaEnergijaBezSolar);
-
-    /**
-     * Zelena
-     */
-    let _periodZelenaVTUtroseno = 0;
-    if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergija) {
-      _periodZelenaVTUtroseno = Math.floor(_utrosakPreuzetoVT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija);
-    } else {
-      _periodZelenaVTUtroseno = _utrosakPreuzetoVT;
-    }
-
-    let _periodZelenaVTIznos = _periodZelenaVTUtroseno * utrosenaZelenaTarifaVTCenaPoJedinici;
-    setPeriodZelenaVTUtroseno(_periodZelenaVTUtroseno.toFixed(0));
-    setPeriodZelenaVTIznos(_periodZelenaVTIznos.toFixed(2));
-
-    let _periodZelenaNTUtroseno = 0;
-    if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergija) {
-      _periodZelenaNTUtroseno = Math.round(_utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergija);
-    } else {
-      _periodZelenaNTUtroseno = _utrosakPreuzetoNT;
-    }
-
-    let _periodZelenaNTIznos = _periodZelenaNTUtroseno * utrosenaZelenaTarifaNTCenaPoJedinici;
-    setPeriodZelenaNTUtroseno(_periodZelenaNTUtroseno.toFixed(0));
-    setPeriodZelenaNTIznos(_periodZelenaNTIznos.toFixed(2));
-
-    /**
-     * Plava
-     */
-    let _periodPlavaVTUtroseno = 0;
-    if (_periodZelenaVTUtroseno > _utrosakPreuzetoVT || (_utrosakPreuzetoVT - _periodZelenaVTUtroseno === 0)) {
-      _periodPlavaVTUtroseno = 0
-    } else {
-      if (_preuzetaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaVTUtroseno = Math.round(_utrosakPreuzetoVT - _periodZelenaVTUtroseno)
-      } else {
-        _periodPlavaVTUtroseno = Math.round(_utrosakPreuzetoVT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaVTUtroseno);
-      }
-    }
-
-    let _periodPlavaVTIznos = _periodPlavaVTUtroseno * utrosenaPlavaTarifaVTCenaPoJedinici;
-    setPeriodPlavaVTUtroseno(_periodPlavaVTUtroseno.toFixed(0));
-    setPeriodPlavaVTIznos(_periodPlavaVTIznos.toFixed(2));
-
-    let _periodPlavaNTUtroseno = 0;
-    if (_periodZelenaNTUtroseno > _utrosakPreuzetoNT || (_utrosakPreuzetoNT - _periodZelenaNTUtroseno === 0)) {
-      _periodPlavaNTUtroseno = 0
-    } else {
-      if (_preuzetaElektricnaEnergija < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaNTUtroseno = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtroseno)
-      } else {
-        _periodPlavaNTUtroseno = Math.round(_utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergija - _periodZelenaNTUtroseno);
-      }
-    }
-
-    let _periodPlavaNTIznos = _periodPlavaNTUtroseno * utrosenaPlavaTarifaNTCenaPoJedinici;
-    setPeriodPlavaNTUtroseno(_periodPlavaNTUtroseno.toFixed(0));
-    setPeriodPlavaNTIznos(_periodPlavaNTIznos.toFixed(2));
-
-    /**
-     * Crvena
-     */
-    let _periodCrvenaVTUtroseno = 0;
-    if (_periodZelenaVTUtroseno + _periodPlavaVTUtroseno >= _utrosakPreuzetoVT) {
-      _periodCrvenaVTUtroseno = 0;
-    } else {
-      _periodCrvenaVTUtroseno = Math.round(_utrosakPreuzetoVT - _periodZelenaVTUtroseno - _periodPlavaVTUtroseno);
-    }
-
-    let _periodCrvenaVTIznos = _periodCrvenaVTUtroseno * utrosenaCrvenaTarifaVTCenaPoJedinici;
-    setPeriodCrvenaVTUtroseno(_periodCrvenaVTUtroseno.toFixed(0));
-    setPeriodCrvenaVTIznos(_periodCrvenaVTIznos.toFixed(2));
-
-    let _periodCrvenaNTUtroseno = 0;
-    if (_periodZelenaNTUtroseno + _periodPlavaNTUtroseno >= _utrosakPreuzetoNT) {
-      _periodCrvenaNTUtroseno = 0;
-    } else {
-      _periodCrvenaNTUtroseno = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtroseno - _periodPlavaNTUtroseno);
-    }
-
-    let _periodCrvenaNTIznos = _periodCrvenaNTUtroseno * utrosenaCrvenaTarifaNTCenaPoJedinici;
-    setPeriodCrvenaNTUtroseno(_periodCrvenaNTUtroseno.toFixed(0));
-    setPeriodCrvenaNTIznos(_periodCrvenaNTIznos.toFixed(2));
-
-    /**
-     * Bez solarnih celija
-     */
-      // Zelena
-    let _periodZelenaVTUtrosenoBezPanela = 0;
-    if (_utrosakPreuzetoVT + proizvedenaElEnergija - isporucenaElEnergija + _utrosakPreuzetoNT === 0) {
-      _periodZelenaVTUtrosenoBezPanela = 0;
-    } else {
-      if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
-        _periodZelenaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
-      } else {
-        _periodZelenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija);
-      }
-    }
-    setPeriodZelenaVTUtrosenoBezPanela(_periodZelenaVTUtrosenoBezPanela.toFixed(0));
-
-    let _periodZelenaVTIznosBezPanela = _periodZelenaVTUtrosenoBezPanela * utrosenaZelenaTarifaVTCenaPoJedinici;
-    setPeriodZelenaVTIznosBezPanela(_periodZelenaVTIznosBezPanela.toFixed(2));
-
-    let _periodZelenaNTUtrosenoBezPanela = 0;
-    if (_donjaGranicaPlavaTarifa < _preuzetaElektricnaEnergijaBezSolar) {
-      _periodZelenaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT * _donjaGranicaPlavaTarifa / _preuzetaElektricnaEnergijaBezSolar);
-    } else {
-      _periodZelenaNTUtrosenoBezPanela = 0;
-    }
-
-    setPeriodZelenaNTUtrosenoBezPanela(_periodZelenaNTUtrosenoBezPanela.toFixed(0));
-
-    let _periodZelenaNTIznosBezPanela = _periodZelenaNTUtrosenoBezPanela * utrosenaZelenaTarifaNTCenaPoJedinici;
-    setPeriodZelenaNTIznosBezPanela(_periodZelenaNTIznosBezPanela.toFixed(2));
-
-    // Plava
-    let _periodPlavaVTUtrosenoBezPanela = 0;
-    if (_periodZelenaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + _utrosakIsporucenoVT) {
-      _periodPlavaVTUtrosenoBezPanela = 0;
-    } else {
-      if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela);
-      } else {
-        _periodPlavaVTUtrosenoBezPanela = Math.round((_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaVTUtrosenoBezPanela);
-      }
-    }
-    setPeriodPlavaVTUtrosenoBezPanela(_periodPlavaVTUtrosenoBezPanela.toFixed(0));
-
-    let _periodPlavaVTIznosBezPanela = _periodPlavaVTUtrosenoBezPanela * utrosenaPlavaTarifaVTCenaPoJedinici;
-    setPeriodPlavaVTIznosBezPanela(_periodPlavaVTIznosBezPanela.toFixed(2));
-
-    let _periodPlavaNTUtrosenoBezPanela = 0;
-    if (_periodZelenaNTUtrosenoBezPanela >= _utrosakPreuzetoNT) {
-      _periodPlavaNTUtrosenoBezPanela = 0;
-    } else {
-      if (_preuzetaElektricnaEnergijaBezSolar < _donjaGranicaCrvenaTarifa) {
-        _periodPlavaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela);
-      } else {
-        _periodPlavaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT * _donjaGranicaCrvenaTarifa / _preuzetaElektricnaEnergijaBezSolar - _periodZelenaNTUtrosenoBezPanela);
-      }
-    }
-    setPeriodPlavaNTUtrosenoBezPanela(_periodPlavaNTUtrosenoBezPanela.toFixed(0));
-
-    let _periodPlavaNTIznosBezPanela = _periodPlavaNTUtrosenoBezPanela * utrosenaPlavaTarifaNTCenaPoJedinici;
-    setPeriodPlavaNTIznosBezPanela(_periodPlavaNTIznosBezPanela.toFixed(2));
-
-    // Crvena
-    let _periodCrvenaVTUtrosenoBezPanela = 0;
-    if (_periodZelenaVTUtrosenoBezPanela + _periodPlavaVTUtrosenoBezPanela >= _utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija) {
-      _periodCrvenaVTUtrosenoBezPanela = 0;
-    } else {
-      _periodCrvenaVTUtrosenoBezPanela = Math.round(_utrosakPreuzetoVT + proizvedenaElEnergija - _isporucenaElEnergija - _periodZelenaVTUtrosenoBezPanela - _periodPlavaVTUtrosenoBezPanela);
-    }
-    setPeriodCrvenaVTUtrosenoBezPanela(_periodCrvenaVTUtrosenoBezPanela.toFixed(0));
-
-    let _periodCrvenaVTIznosBezPanela = _periodCrvenaVTUtrosenoBezPanela * utrosenaCrvenaTarifaVTCenaPoJedinici;
-    setPeriodCrvenaVTIznosBezPanela(_periodCrvenaVTIznosBezPanela.toFixed(2));
-
-    let _periodCrvenaNTUtrosenoBezPanela = 0;
-    if (_periodZelenaNTUtrosenoBezPanela + _periodPlavaNTUtrosenoBezPanela >= _utrosakPreuzetoNT) {
-      _periodCrvenaNTUtrosenoBezPanela = 0;
-    } else {
-      _periodCrvenaNTUtrosenoBezPanela = Math.round(_utrosakPreuzetoNT - _periodZelenaNTUtrosenoBezPanela - _periodPlavaNTUtrosenoBezPanela);
-    }
-    setPeriodCrvenaNTUtrosenoBezPanela(_periodCrvenaNTUtrosenoBezPanela.toFixed(0));
-
-    let _periodCrvenaNTIznosBezPanela = _periodCrvenaNTUtrosenoBezPanela * utrosenaCrvenaTarifaNTCenaPoJedinici;
-    setPeriodCrvenaNTIznosBezPanela(_periodCrvenaNTIznosBezPanela.toFixed(2));
-
-    let _periodUkupnoPreuzetoIznos = _periodZelenaVTIznos + _periodZelenaNTIznos + _periodPlavaVTIznos + _periodPlavaNTIznos + _periodCrvenaVTIznos + _periodCrvenaNTIznos;
-    setPeriodUkupnoPreuzetoIznos(_periodUkupnoPreuzetoIznos.toFixed(2));
-
-    let _periodUkupnoPreuztoBezPanelaIznos = _periodZelenaVTIznosBezPanela + _periodZelenaNTIznosBezPanela + _periodPlavaVTIznosBezPanela + _periodPlavaNTIznosBezPanela + _periodCrvenaVTIznosBezPanela + _periodCrvenaNTIznosBezPanela;
-    setPeriodUkupnoPreuztoIznosBezPanela(_periodUkupnoPreuztoBezPanelaIznos.toFixed(2));
-
-    let _popustElektronskaDostava = 0;
-    if (elektronskaDostava) {
-      _popustElektronskaDostava = -50;
-    }
-
-    setPopustZaElektronskuDostavu(_popustElektronskaDostava);
-
-    let _naknadaZaPodsticajPovlascenihProizvodjacaIznos = _utrosenaElektricnaEnergija * naknadaZaPodsticajPovlascenihProizvodjaca;
-    setNaknadaZaPodsticajPovlascenihProizvodjacaIznos(_naknadaZaPodsticajPovlascenihProizvodjacaIznos.toFixed(2));
-
-    let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos = _utrosenaElektricnaEnergija * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
-    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznos(_naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos.toFixed(2));
-
-    let _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela = _preuzetaElektricnaEnergijaBezSolar * naknadaZaPodsticajPovlascenihProizvodjaca;
-    setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela(_naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela.toFixed(2));
-    let _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela = _preuzetaElektricnaEnergijaBezSolar * naknadaZaUnapredjenjeEnergetskeEfikasnosti;
-    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela(_naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela.toFixed(2));
-
-    let _naknadaZaObracunRazlikuPreuzeteUtroseneIznos = (_utrosakPreuzetoVT - _utrosakUtrosenoVT) * naknadaZaObracunRazlikuPreuzeteUtrosene1 + (_utrosakPreuzetoNT - _utrosakUtrosenoNT) * naknadaZaObracunRazlikuPreuzeteUtrosene2;
-    setNaknadaZaObracunRazlikuPreuzeteUtroseneIznos(_naknadaZaObracunRazlikuPreuzeteUtroseneIznos.toFixed(2));
-
-    let _osnovicaZaObracunAkcize = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _popustElektronskaDostava + _ukupnoZaElEnergijuUObracunskomPeriodu - popustZaPlacanjePrethodnogRacuna + _naknadaZaPodsticajPovlascenihProizvodjacaIznos + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznos + _naknadaZaObracunRazlikuPreuzeteUtroseneIznos;
-    setOsnovicaZaObracunAkcize(_osnovicaZaObracunAkcize.toFixed(2));
-
-    let _osnovicaZaObracunAkcizeBezPanela = _obracunskaSnagaIznos + trosakGarantovanogSnabdevacaIznos + _periodUkupnoPreuztoBezPanelaIznos - popustZaPlacanjePrethodnogRacuna + _popustElektronskaDostava + _naknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela + _naknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela;
-    setOsnovicaZaObracunAkcizeBezPanela(_osnovicaZaObracunAkcizeBezPanela.toFixed(2));
-
-    let _iznosAkcize = _osnovicaZaObracunAkcize * 0.075;
-    setIznosAkcize(_iznosAkcize.toFixed(2))
-
-    let _iznostAkcizeBezPanela = _osnovicaZaObracunAkcizeBezPanela * 0.075;
-    setIznosAkcizeBezPanela(_iznostAkcizeBezPanela.toFixed(2))
-
-    let _osnovicaZaPdv = _osnovicaZaObracunAkcize + _iznosAkcize;
-    setOsnovicaZaPdv(_osnovicaZaPdv.toFixed(2));
-
-    let _osnovicaZaPdvBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznostAkcizeBezPanela;
-    setOsnovicaZaPdvBezPanela(_osnovicaZaPdvBezPanela.toFixed(2));
-
-    let _iznosPdv = _osnovicaZaPdv * 0.2;
-    setIznosPdv(_iznosPdv.toFixed(2));
-
-    let _iznosPdvBezPanela = _osnovicaZaPdvBezPanela * 0.2;
-    setIznosPdvBezPanela(_iznosPdvBezPanela.toFixed(2));
-
-    let _zaduzenjeZaObracunskiPeriod = _osnovicaZaObracunAkcize + _iznosPdv + _iznosAkcize - umanjenjeUgrozeniSaSolar;
-    setZaduzenjeZaObracunskiPeriod(_zaduzenjeZaObracunskiPeriod.toFixed(2));
-
-    let zaduzenjeZaObracunskiPeriodBezPanela = _osnovicaZaObracunAkcizeBezPanela + _iznosPdvBezPanela + _iznostAkcizeBezPanela - umanjenjeUgrozeniBezSolra;
-    setZaduzenjeZaObracunskiPeriodBezPanela(zaduzenjeZaObracunskiPeriodBezPanela.toFixed(2));
-
-    let _ukupnoZaduzenje = _zaduzenjeZaObracunskiPeriod + taksaZaMedijskiServis;
-    setUkupnoZaduzenje(_ukupnoZaduzenje.toFixed(2));
-
-    let _ukupnoZaduzenjeBezPanela = zaduzenjeZaObracunskiPeriodBezPanela + taksaZaMedijskiServis;
-    setUkupnoZaduzenjeBezPanela(_ukupnoZaduzenjeBezPanela.toFixed(2));
-
-    let _usetedaUDinarima = _ukupnoZaduzenjeBezPanela - _ukupnoZaduzenje;
-    setUstedaUDinarima(_usetedaUDinarima.toFixed(2));
-
-    let _ustedaUProcentima = 100 - (_ukupnoZaduzenje / _ukupnoZaduzenjeBezPanela * 100);
-    setUstedaUProcentima(_ustedaUProcentima.toFixed(2));
-
-    let _direktnoPotroseno = proizvedenaElEnergija - _isporucenaElEnergija;
-    setDirektnoPotroseno(_direktnoPotroseno);
-
-    let _predatoKaoVisak = _isporucenaElEnergija;
-    setPredatoKaoVisak(_predatoKaoVisak);
-
-    let _procenatDirektnePotrosnje = _direktnoPotroseno / proizvedenaElEnergija * 100;
-    setDirektnoPotrosenoProcenata(_procenatDirektnePotrosnje.toFixed(2));
-
-    let _emisijaCO2 = proizvedenaElEnergija * 1.03;
-    setEmisijaCO2(_emisijaCO2);
-
-    let _kolicinaUglja = proizvedenaElEnergija * 0.8;
-    setKolicinaUglja(_kolicinaUglja);
+    setUtrosakUtrosenoNT(_utrosakUtrosenoNT);
+
+    const result = calculateBill({
+      obracunskaSnaga,
+      brojDana,
+      proizvedenaElEnergija,
+      preuzetoVT: _utrosakPreuzetoVT,
+      preuzetoNT: _utrosakPreuzetoNT,
+      isporucenoVT: _utrosakIsporucenoVT,
+      isporucenoNT: _utrosakIsporucenoNT,
+      utrosenoVT: _utrosakUtrosenoVT,
+      utrosenoNT: _utrosakUtrosenoNT,
+      elektronskaDostava,
+      popustPlacanje: popustZaPlacanjePrethodnogRacuna,
+      taksaMedijskiServis,
+      umanjenjeEUK: umanjenjeUgrozeniSaSolar,
+      umanjenjeEUKBezPanela: umanjenjeUgrozeniBezSolra,
+    });
+
+    const { withSolar, withoutSolar, savings, eco, totals, limits } = result;
+    const u = withSolar.zones;
+    const ua = withSolar.amounts;
+    const p = withSolar.preuzetaZones;
+    const pa = withSolar.preuzetaAmounts;
+    const b = withoutSolar.zones;
+    const ba = withoutSolar.amounts;
+
+    setIsporucenaElEnergija(totals.isporucena);
+    setObracunskaSnagaIznos(withSolar.obracunskaSnagaIznos.toFixed(2));
+    setUtrosenaElektricnaEnergija(totals.utrosena);
+    setDonjaGranicaPlavaTarifa(limits.plava);
+    setDonjaGranicaCrvenaTarifa(limits.crvena);
+
+    setUtrosenaZelenaTarifaVTUtroseno(u.zelenaVT);
+    setUtrosenaZelenaTarifaNTUtroseno(u.zelenaNT);
+    setUtrosenaZelenaTarifaVTIznos(ua.zelenaVTIznos.toFixed(2));
+    setUtrosenaZelenaTarifaNTIznos(ua.zelenaNTIznos.toFixed(2));
+    setUtrosenaPlavaTarifaVTUtroseno(u.plavaVT);
+    setUtrosenaPlavaTarifaNTUtroseno(u.plavaNT);
+    setUtrosenaPlavaTarifaVTIznos(ua.plavaVTIznos.toFixed(2));
+    setUtrosenaPlavaTarifaNTIznos(ua.plavaNTIznos.toFixed(2));
+    setUtrosenaCrvenaTarifaVTUtroseno(u.crvenaVT);
+    setUtrosenaCrvenaTarifaNTUtroseno(u.crvenaNT);
+    setUtrosenaCrvenaTarifaVTIznos(ua.crvenaVTIznos.toFixed(2));
+    setUtrosenaCrvenaTarifaNTIznos(ua.crvenaNTIznos.toFixed(2));
+    setUkupnoZaElEnergijuUObracunskomPeriodu(ua.ukupno.toFixed(2));
+
+    setPreuzetaElektricnaEnergija(totals.preuzeta);
+    setPreuzetaElektricnaEnergijaBezSolar(totals.preuzetaBezSolar);
+
+    setPeriodZelenaVTUtroseno(p.zelenaVT.toFixed(0));
+    setPeriodZelenaVTIznos(pa.zelenaVTIznos.toFixed(2));
+    setPeriodZelenaNTUtroseno(p.zelenaNT.toFixed(0));
+    setPeriodZelenaNTIznos(pa.zelenaNTIznos.toFixed(2));
+    setPeriodPlavaVTUtroseno(p.plavaVT.toFixed(0));
+    setPeriodPlavaVTIznos(pa.plavaVTIznos.toFixed(2));
+    setPeriodPlavaNTUtroseno(p.plavaNT.toFixed(0));
+    setPeriodPlavaNTIznos(pa.plavaNTIznos.toFixed(2));
+    setPeriodCrvenaVTUtroseno(p.crvenaVT.toFixed(0));
+    setPeriodCrvenaVTIznos(pa.crvenaVTIznos.toFixed(2));
+    setPeriodCrvenaNTUtroseno(p.crvenaNT.toFixed(0));
+    setPeriodCrvenaNTIznos(pa.crvenaNTIznos.toFixed(2));
+    setPeriodUkupnoPreuzetoIznos(pa.ukupno.toFixed(2));
+
+    setPeriodZelenaVTUtrosenoBezPanela(b.zelenaVT.toFixed(0));
+    setPeriodZelenaVTIznosBezPanela(ba.zelenaVTIznos.toFixed(2));
+    setPeriodZelenaNTUtrosenoBezPanela(b.zelenaNT.toFixed(0));
+    setPeriodZelenaNTIznosBezPanela(ba.zelenaNTIznos.toFixed(2));
+    setPeriodPlavaVTUtrosenoBezPanela(b.plavaVT.toFixed(0));
+    setPeriodPlavaVTIznosBezPanela(ba.plavaVTIznos.toFixed(2));
+    setPeriodPlavaNTUtrosenoBezPanela(b.plavaNT.toFixed(0));
+    setPeriodPlavaNTIznosBezPanela(ba.plavaNTIznos.toFixed(2));
+    setPeriodCrvenaVTUtrosenoBezPanela(b.crvenaVT.toFixed(0));
+    setPeriodCrvenaVTIznosBezPanela(ba.crvenaVTIznos.toFixed(2));
+    setPeriodCrvenaNTUtrosenoBezPanela(b.crvenaNT.toFixed(0));
+    setPeriodCrvenaNTIznosBezPanela(ba.crvenaNTIznos.toFixed(2));
+    setPeriodUkupnoPreuztoIznosBezPanela(ba.ukupno.toFixed(2));
+
+    setPopustZaElektronskuDostavu(withSolar.popustElektronska);
+    setNaknadaZaPodsticajPovlascenihProizvodjacaIznos(withSolar.naknadaPodsticaj.toFixed(2));
+    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznos(withSolar.naknadaEE.toFixed(2));
+    setNaknadaZaPodsticajPovlascenihProizvodjacaIznosBezPanela(withoutSolar.naknadaPodsticaj.toFixed(2));
+    setNaknadaZaUnapredjenjeEnergetskeEfikasnostiIznosBezPanela(withoutSolar.naknadaEE.toFixed(2));
+    setNaknadaZaObracunRazlikuPreuzeteUtroseneIznos(withSolar.naknadaDS.toFixed(2));
+
+    setOsnovicaZaObracunAkcize(withSolar.osnovicaAkcize.toFixed(2));
+    setOsnovicaZaObracunAkcizeBezPanela(withoutSolar.osnovicaAkcize.toFixed(2));
+    setIznosAkcize(withSolar.akciza.toFixed(2));
+    setIznosAkcizeBezPanela(withoutSolar.akciza.toFixed(2));
+    setOsnovicaZaPdv(withSolar.osnovicaPdv.toFixed(2));
+    setOsnovicaZaPdvBezPanela(withoutSolar.osnovicaPdv.toFixed(2));
+    setIznosPdv(withSolar.pdv.toFixed(2));
+    setIznosPdvBezPanela(withoutSolar.pdv.toFixed(2));
+    setZaduzenjeZaObracunskiPeriod(withSolar.zaduzenje.toFixed(2));
+    setZaduzenjeZaObracunskiPeriodBezPanela(withoutSolar.zaduzenje.toFixed(2));
+    setTaksaZaMedijskiServis(withSolar.taksa);
+    setUkupnoZaduzenje(withSolar.ukupno.toFixed(2));
+    setUkupnoZaduzenjeBezPanela(withoutSolar.ukupno.toFixed(2));
+
+    setUstedaUDinarima(savings.rsd.toFixed(2));
+    setUstedaUProcentima(savings.percent.toFixed(2));
+    setDirektnoPotroseno(eco.direktnoPotroseno);
+    setPredatoKaoVisak(eco.predatoKaoVisak);
+    setDirektnoPotrosenoProcenata(eco.direktnoPotrosenoProcenata.toFixed(2));
+    setEmisijaCO2(eco.emisijaCO2);
+    setKolicinaUglja(eco.kolicinaUglja);
 
     fixCharts();
   }
