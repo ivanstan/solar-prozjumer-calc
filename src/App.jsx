@@ -606,7 +606,7 @@ function App() {
       body += elements[i].innerHTML
     }
 
-    const url = "https://solar.sumeiklima.org/sr/solar/email";
+    const url = "https://prozjumer.rs/send-mail.php";
     try {
       const payload = JSON.stringify({
         to: email,
