@@ -12,7 +12,7 @@ return [
     'smtp_password' => 'CHANGE_ME',
 
     'from_email' => 'kalkulator.ustede@prozjumer.rs',
-    'from_name' => 'Solarni kalkulator',
+    'from_name' => 'Kalkulator uštede za domaćinstva na neto merenju',
 
     // Always BCC a copy (same as old Symfony endpoint)
     'bcc' => [

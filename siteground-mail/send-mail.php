@@ -125,7 +125,7 @@ function smtpSend(array $config, array $mail): void
     $username = $config['smtp_username'];
     $password = $config['smtp_password'];
     $from = $config['from_email'];
-    $fromName = $config['from_name'] ?? 'Solarni kalkulator';
+    $fromName = $config['from_name'] ?? 'Kalkulator uštede za domaćinstva na neto merenju';
 
     $remote = ($encryption === 'ssl' ? 'ssl://' : '') . $host . ':' . $port;
     $errno = 0;
